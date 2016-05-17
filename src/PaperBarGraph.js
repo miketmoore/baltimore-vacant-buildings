@@ -4,6 +4,7 @@ var ReactDOM = require('react-dom');
 var Drawing = React.createClass({
     getInitialState () {
         return {
+            data: [],
 
             min: 0,
             max: 0,
@@ -28,74 +29,9 @@ var Drawing = React.createClass({
             page: 0
         };
     },
-    map () {
-        var data = [];
-        var map = this.props.model.index.get('yyyy');
-        var size;
-        var min;
-        var max;
-        for ( var [year,idSet] of map ) {
-            size = idSet.size;
-            if (typeof min === 'undefined') min = size;
-            if (typeof max === 'undefined') max = size;
-            if (size > max) max = size;
-            if (size < min) min = size;
-            data.push({year:year,size:size});
-        }
-        this.state.min = min;
-        this.state.max = max;
-
-        // sort array of objects by obj.size
-        data = data.sort(function (a,b) {
-            a = a.size;
-            b = b.size;
-            if (a < b) return -1;
-            else if (a > b) return 1;
-            return 0;
-        });
-
-
-        // Normalize range
-        // Convert range A-B to scale of C-D
-        // y = 1 + (x-A)*(10-1)/(B-A)
-
-        var minNormal;
-        var maxNormal;
-        if (data.length) {
-
-            var A = data[0].size;
-            var B = data[data.length-1].size;
-            var C = this.state.barMin;
-            var D = this.state.barMax;
-            var x;
-            var y;
-            for ( var i = 0; i < data.length; i++ ) {
-                x = data[i].size;
-                y = C + (x-A)*(D-C)/(B-A);
-                data[i].normalized = y;
-                if (typeof minNormal === 'undefined') minNormal = y;
-                if (typeof maxNormal === 'undefined') maxNormal = y;
-                if (y > maxNormal) maxNormal = y;
-                else if (y < minNormal) minNormal = y;
-            }
-        }
-
-        this.state.minY = this.state.viewHeight - Math.ceil(maxNormal);
-        this.state.maxY = this.state.viewHeight - Math.ceil(minNormal);
-
-        // Sort by year
-        data = data.sort(function (a,b) {
-            a = a.year;
-            b = b.year;
-            if (a < b) return -1;
-            if (a > b ) return 1;
-            return 0;
-        });
-
-        this.state.data = data;
-    },
     _getPage () {
         var data = this.state.data;
+        console.log('Drawing._getPage() data: ', data);
         var a = this.state.page * this.state.limit;
         var b = a + this.state.limit;
         return data.slice(a, b);
@@ -105,12 +41,12 @@ var Drawing = React.createClass({
         var barWidth = this.state.barWidth;
         var barHeight; // diff per bar
         var x = (this.state.viewWidth - ((this.state.barWidth + this.state.barMargin) * this.state.limit)) / 2;
-        console.log("X: ", x);
         var y = 0;
         var rect;
         var rectB;
         var text;
         var data = this._getPage();
+        console.log('Drawing._drawBars() data: ', data);
         var thisY;
         for ( var i = 0; i < data.length; i++ ) {
 
@@ -213,6 +149,7 @@ var Drawing = React.createClass({
         });
     },
     draw () {
+        console.log('Drawing.draw()');
         this._drawBackground();
         this._drawBars();
         paper.project.view.viewSize = new paper.Size({
@@ -228,18 +165,30 @@ var Drawing = React.createClass({
             this.state.canvas = ReactDOM.findDOMNode(this);
         }
         paper.setup(this.state.canvas);
-        this.map();
         this.draw();
         paper.view.draw();
     },
     componentDidMount () {
+        console.log('Drawing.componentDidMount()');
         this.init(true);
     },
     componentWillReceiveProps: function(props) {
-      this.setState({
-          page: props.page,
-          limit: props.limit
-      });
+        console.log('Drawing.componentWillReceiveProps() props: ', props);
+        this.setState({
+            limit: props.limit,
+            page: props.page,
+            min: props.min,
+            max: props.max,
+            minY: props.minY,
+            maxY: props.maxY,
+            viewWidth: props.viewWidth,
+            viewHeight: props.viewHeight,
+            barMin: props.barMin,
+            barMax: props.barMax,
+            data: props.data,
+            page: props.page,
+            limit: props.limit
+        });
     },
     render () {
         this.init();
@@ -265,9 +214,19 @@ var Button = React.createClass({
 module.exports = React.createClass ({
     getInitialState () {
         return {
+            data: [],
+            min: 0,
+            max: 0,
+            minY: 0,
+            maxY: 0,
+            viewWidth: 600,
+            viewHeight: 400,
+            barMin: 40,
+            barMax: 350,
             page: 0,
             limit: 5,
-            totalPages: 0
+            totalPages: 0,
+            distinctAddresses: false
         };
     },
     back () {
@@ -293,7 +252,84 @@ module.exports = React.createClass ({
         var totalPages = Math.ceil(total/limit);
         this.state.totalPages = totalPages;
     },
+    distinctAddressesChange () {
+        console.log('distinctAddressesChange() (0): ', this.state.distinctAddresses);
+        this.setState({
+            distinctAddresses: !this.state.distinctAddresses
+        });
+    },
+    componentWillReceiveProps (props) {
+        console.log('PaperBarGraph.componentWillReceiveProps()', props);
+        this.map();
+    },
+    map () {
+        var data = [];
+        var map = this.props.model.index.get('yyyy');
+        console.log('PaperBarGraph.map() year map: ', map);
+        var size;
+        var min;
+        var max;
+        for ( var [year,idSet] of map ) {
+            size = idSet.size;
+            if (typeof min === 'undefined') min = size;
+            if (typeof max === 'undefined') max = size;
+            if (size > max) max = size;
+            if (size < min) min = size;
+            data.push({year:year,size:size});
+        }
+        this.state.min = min;
+        this.state.max = max;
+
+        // sort array of objects by obj.size
+        data = data.sort(function (a,b) {
+            a = a.size;
+            b = b.size;
+            if (a < b) return -1;
+            else if (a > b) return 1;
+            return 0;
+        });
+
+        // Normalize range
+        // Convert range A-B to scale of C-D
+        // y = 1 + (x-A)*(10-1)/(B-A)
+
+        var minNormal;
+        var maxNormal;
+        if (data.length) {
+
+            var A = data[0].size;
+            var B = data[data.length-1].size;
+            var C = this.state.barMin;
+            var D = this.state.barMax;
+            var x;
+            var y;
+            for ( var i = 0; i < data.length; i++ ) {
+                x = data[i].size;
+                y = C + (x-A)*(D-C)/(B-A);
+                data[i].normalized = y;
+                if (typeof minNormal === 'undefined') minNormal = y;
+                if (typeof maxNormal === 'undefined') maxNormal = y;
+                if (y > maxNormal) maxNormal = y;
+                else if (y < minNormal) minNormal = y;
+            }
+        }
+
+        this.state.minY = this.state.viewHeight - Math.ceil(maxNormal);
+        this.state.maxY = this.state.viewHeight - Math.ceil(minNormal);
+
+        // Sort by year
+        data = data.sort(function (a,b) {
+            a = a.year;
+            b = b.year;
+            if (a < b) return -1;
+            if (a > b ) return 1;
+            return 0;
+        });
+
+        this.state.data = data;
+    },
     render () {
+        console.log('PaperBarGraph.render() props, state: ', this.props, this.state);
         this._determineTotalPages();
         return (
             <div className="row">
@@ -316,9 +352,28 @@ module.exports = React.createClass ({
                     </div>
                     <div className="row">
                         <div className="col-md-8">
-                            <Drawing limit={this.state.limit} page={this.state.page} model={this.props.model} />
+                            <Drawing
+                                data={this.state.data}
+                                limit={this.state.limit}
+                                page={this.state.page}
+                                min={this.state.min}
+                                max={this.state.max}
+                                minY={this.state.minY}
+                                maxY={this.state.maxY}
+                                viewWidth={this.state.viewWidth}
+                                viewHeight={this.state.viewHeight}
+                                barMin={this.state.barMin}
+                                barMax={this.state.barMax}
+                            />
                         </div>
                     </div>
+                </div>
+                <div className="col-md-4">
+                    <h4>Distinct Addresses</h4>
+                    <input
+                        onChange={this.distinctAddressesChange}
+                        type="checkbox"
+                        name="distinct-addresses"/>
                 </div>
             </div>
         );
