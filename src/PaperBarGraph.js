@@ -148,7 +148,7 @@ var Drawing = React.createClass({
                 fontSize: 38,
                 fontWeight: 'bold',
                 fontFamily: 'sans-serif',
-                fillColor: '#BF4C0A',
+                fillColor: '#731007',
                 blendMode: 'multiply'
             });
             text = new paper.PointText({
