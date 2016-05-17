@@ -5,7 +5,6 @@ var Location = Router.Location;
 var Model = require('./Model');
 var PageHome = require('./PageHome');
 var PageBasicInfo = require('./PageBasicInfo');
-var PageBarGraph = require('./PageBarGraph');
 var PageDataGrid = require('./PageDataGrid');
 
 module.exports = React.createClass({
@@ -40,7 +39,6 @@ module.exports = React.createClass({
               <Location path="/" handler={PageHome} />
               <Location path="/data-grid" handler={PageDataGrid} />
               <Location path="/basic-info" handler={PageBasicInfo} />
-              <Location path="/bar-graph" handler={PageBarGraph} />
             </Locations>
         )
     }

@@ -19,7 +19,6 @@ module.exports = React.createClass ({
                             <li><Link href="/">Home</Link></li>
                             <li><Link href="/data-grid">Data Grid</Link></li>
                             <li><Link href="/basic-info">Basic Info</Link></li>
-                            <li><Link href="/bar-graph">Bar Graph</Link></li>
                         </ul>
                     </div>
                 </div>
