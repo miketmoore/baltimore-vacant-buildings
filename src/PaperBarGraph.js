@@ -9,7 +9,7 @@ var Drawing = React.createClass({
             viewHeight: 500,
 
             // width of bar when vertical, height when horizontal
-            barWidth: 100,
+            barWidth: 125,
 
             barMin: 90,
             barMax: 400,
@@ -17,8 +17,7 @@ var Drawing = React.createClass({
             // Margin after each bar
             barMargin: 5,
 
-            // Total bars displayed at one time
-            barTotal: 4,
+            limit: 5,
 
             page: 0
         };
@@ -66,28 +65,10 @@ var Drawing = React.createClass({
 
         this.state.data = data;
     },
-    _drawRect (obj, w, h, x, y) {
-        return new paper.Path.Rectangle({
-            point: new paper.Point(x,y),
-            size: new paper.Size(w,h),
-            style: {
-                fillColor: 'blue'
-            }
-        });
-    },
-    _drawLabel (obj, x, y) {
-        return new paper.PointText({
-            point: new paper.Point(x, y),
-            content: obj.year + ' (' + obj.size + ')',
-            justification: 'left',
-            fontFamily: 'sans-serif',
-            fillColor: 'white'
-        });
-    },
     _getPage () {
         var data = this.state.data;
-        var a = this.state.page * this.state.barTotal;
-        var b = a + this.state.barTotal;
+        var a = this.state.page * this.state.limit;
+        var b = a + this.state.limit;
         return data.slice(a, b);
     },
     _drawBars () {
@@ -108,15 +89,16 @@ var Drawing = React.createClass({
                 point: new paper.Point(x,y),
                 size: new paper.Size(barWidth, barHeight),
                 style: {
-                    fillColor: 'blue'
+                    fillColor: '#F29F05'
                 }
             });
             text = new paper.PointText({
                 point: new paper.Point(x, y + 20),
-                content: obj.year + ' (' + obj.size + ')',
+                content: obj.year + '\n' + obj.size + '',
                 justification: 'left',
+                fontSize: 24,
                 fontFamily: 'sans-serif',
-                fillColor: 'white'
+                fillColor: '#731007'
             });
             x += barWidth + this.state.barMargin;
         }
@@ -147,11 +129,22 @@ var Drawing = React.createClass({
             }),
             style: {
                 strokeWidth: 1,
-                strokeColor: 'black'
+                strokeColor: '#400101'
+            }
+        });
+    },
+    _drawBackground () {
+        new paper.Path.Rectangle({
+            point: [0,0],
+            size: [this.state.viewWidth, this.state.viewHeight],
+            style: {
+                strokeWidth: 0,
+                fillColor: '#BF6B04'
             }
         });
     },
     draw () {
+        this._drawBackground();
         this._drawBars();
         paper.project.view.viewSize = new paper.Size({
             width: this.state.viewWidth,
@@ -173,7 +166,8 @@ var Drawing = React.createClass({
     },
     componentWillReceiveProps: function(props) {
       this.setState({
-          page: props.page
+          page: props.page,
+          limit: props.limit
       });
     },
     render () {
@@ -190,7 +184,7 @@ var Button = React.createClass({
   },
   render: function() {
     return (
-      <button className="btn btn-default" type="submit" onClick={this.handleClick}>
+      <button disabled={this.props.disabled} className="btn btn-default" type="submit" onClick={this.handleClick}>
         {this.props.text}
       </button>
     );
@@ -200,26 +194,38 @@ var Button = React.createClass({
 module.exports = React.createClass ({
     getInitialState () {
         return {
-            page: 0
+            page: 0,
+            limit: 5
         };
     },
     back () {
-        this.setState({ page: this.state.page - 1 });
+        if (this.state.page > 0)
+            this.setState({ page: this.state.page - 1 });
     },
     forward () {
         this.setState({ page: this.state.page + 1 });
+    },
+    isBackDisabled () {
+        return this.state.page == 0;
+    },
+    isForwardDisabled () {
+        var total = this.props.model.index.get('yyyy').size;
+        var limit = this.state.limit;
+        var page = this.state.page;
+        var offset = (limit * page) + limit;
+        return total == offset;
     },
     render () {
         return (
             <div className="row">
                 <div className="col-md-12">
                     <div className="row">
-                        <Button callback={this.back} text="Back"/>
+                        <Button disabled={this.isBackDisabled()} callback={this.back} text="Back"/>
                         <p>Page: {this.state.page}</p>
-                        <Button callback={this.forward} text="Forward"/>
+                        <Button disabled={this.isForwardDisabled()} callback={this.forward} text="Forward"/>
                     </div>
                     <div className="row">
-                        <Drawing page={this.state.page} model={this.props.model} />
+                        <Drawing limit={this.state.limit} page={this.state.page} model={this.props.model} />
                     </div>
                 </div>
             </div>
