@@ -190,7 +190,7 @@ var Button = React.createClass({
   },
   render: function() {
     return (
-      <button disabled={this.props.disabled} className="btn btn-default" type="submit" onClick={this.handleClick}>
+      <button disabled={this.props.disabled} className="btn btn-default" type="button" onClick={this.handleClick}>
         {this.props.text}
       </button>
     );
@@ -234,12 +234,20 @@ module.exports = React.createClass ({
             <div className="row">
                 <div className="col-md-12">
                     <div className="row">
-                        <Button disabled={this.isBackDisabled()} callback={this.back} text="Back"/>
-                        <p>Page: {this.state.page + 1}/{this.state.totalPages}</p>
-                        <Button disabled={this.isForwardDisabled()} callback={this.forward} text="Forward"/>
+                        <div className="col-md-6">
+                            <div className="btn-group" role="group">
+                                <Button disabled={this.isBackDisabled()} callback={this.back} text="Back"/>
+                                <Button disabled={this.isForwardDisabled()} callback={this.forward} text="Forward"/>
+                            </div>
+                        </div>
+                        <div className="col-md-2">
+                            <p>Page: {this.state.page + 1}/{this.state.totalPages}</p>
+                        </div>
                     </div>
                     <div className="row">
-                        <Drawing limit={this.state.limit} page={this.state.page} model={this.props.model} />
+                        <div className="col-md-12">
+                            <Drawing limit={this.state.limit} page={this.state.page} model={this.props.model} />
+                        </div>
                     </div>
                 </div>
             </div>
