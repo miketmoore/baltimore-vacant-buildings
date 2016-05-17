@@ -1,0 +1,23 @@
+{
+  "name": "baltimore-vacant-buildings-data-vis",
+  "description": "Single page app, data visulization of Baltimore vacant buildings",
+  "main": "index.js",
+  "authors": [
+    "Michael Moore"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.3",
+    "bootstrap": "^3.3.6",
+    "paper": "^0.9.25"
+  }
+}
