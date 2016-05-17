@@ -195,7 +195,8 @@ module.exports = React.createClass ({
     getInitialState () {
         return {
             page: 0,
-            limit: 5
+            limit: 5,
+            totalPages: 0
         };
     },
     back () {
@@ -215,13 +216,20 @@ module.exports = React.createClass ({
         var offset = (limit * page) + limit;
         return total == offset;
     },
+    _determineTotalPages () {
+        var total = this.props.model.index.get('yyyy').size;
+        var limit = this.state.limit;
+        var totalPages = Math.ceil(total/limit);
+        this.state.totalPages = totalPages;
+    },
     render () {
+        this._determineTotalPages();
         return (
             <div className="row">
                 <div className="col-md-12">
                     <div className="row">
                         <Button disabled={this.isBackDisabled()} callback={this.back} text="Back"/>
-                        <p>Page: {this.state.page}</p>
+                        <p>Page: {this.state.page + 1}/{this.state.totalPages}</p>
                         <Button disabled={this.isForwardDisabled()} callback={this.forward} text="Forward"/>
                     </div>
                     <div className="row">
