@@ -6,7 +6,8 @@
     "start": "node ./bin/www",
     "postinstall": "bower install && ./node_modules/.bin/webpack -d",
     "build": "./node_modules/.bin/webpack -d",
-    "watch": "./node_modules/.bin/webpack -d --watch"
+    "run": "DEBUG=baltimore-vacant-buildings-express:* npm start",
+    "watch": "forever start --minUptime 1000 --spinSleepTime 1000 ./bin/www && ./node_modules/.bin/webpack -d --watch"
   },
   "dependencies": {
     "babel-loader": "^6.2.4",
