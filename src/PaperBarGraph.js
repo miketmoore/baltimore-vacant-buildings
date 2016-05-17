@@ -172,7 +172,7 @@ var Drawing = React.createClass({
             to: [this.state.viewWidth, y],
             style: {
                 strokeWidth: 1,
-                strokeColor: '#731007'
+                strokeColor: '#F29F05'
             }
         });
         var text = new paper.PointText({
@@ -180,11 +180,12 @@ var Drawing = React.createClass({
                 x: path.bounds.topLeft.x + 5,
                 y: path.bounds.topLeft.y - 2
             }),
-            content: content,
+            content: parseInt(content).toLocaleString(),
             justification: 'left',
-            fontSize: 16,
+            fontSize: 18,
+            fontWeight: 'bold',
             fontFamily: 'sans-serif',
-            fillColor: '#731007'
+            fillColor: '#F29F05'
         });
     },
     // Draw a border around the canvas
@@ -213,13 +214,13 @@ var Drawing = React.createClass({
     },
     draw () {
         this._drawBackground();
-        this._drawMinMaxLine(this.state.minY, this.state.max);
-        this._drawMinMaxLine(this.state.maxY, this.state.min);
         this._drawBars();
         paper.project.view.viewSize = new paper.Size({
             width: this.state.viewWidth,
             height: this.state.viewHeight
         });
+        this._drawMinMaxLine(this.state.minY, this.state.max);
+        this._drawMinMaxLine(this.state.maxY, this.state.min);
         this._drawBorder();
     },
     init (setup) {
