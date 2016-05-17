@@ -15,7 +15,12 @@ module.exports = React.createClass ({
             barMax: 400,
 
             // Margin after each bar
-            barMargin: 5
+            barMargin: 5,
+
+            // Total bars displayed at one time
+            barTotal: 4,
+
+            barPage: 1
         };
     },
     map () {
@@ -79,7 +84,44 @@ module.exports = React.createClass ({
             fillColor: 'white'
         });
     },
+    _getPage () {
+        var data = this.state.data;
+        var a = this.state.barPage * this.state.barTotal;
+        var b = a + this.state.barTotal;
+        return data.slice(a, b);
+    },
     _drawBars () {
+        var obj;
+        var barWidth = this.state.barWidth;
+        var barHeight; // diff per bar
+        var x = 0;
+        var y = 40;
+        var rect;
+        var text;
+        var data = this._getPage();
+        for ( var i = 0; i < data.length; i++ ) {
+
+            obj = data[i];
+            barHeight = Math.ceil(obj.normalized);
+            console.log('Paper/BarGraph._drawBars() i, x, obj.normalized: ', i, x, barHeight);
+            rect = new paper.Path.Rectangle({
+                point: new paper.Point(x,y),
+                size: new paper.Size(barWidth, barHeight),
+                style: {
+                    fillColor: 'blue'
+                }
+            });
+            text = new paper.PointText({
+                point: new paper.Point(x, y + 20),
+                content: obj.year + ' (' + obj.size + ')',
+                justification: 'left',
+                fontFamily: 'sans-serif',
+                fillColor: 'white'
+            });
+            x += barWidth + this.state.barMargin;
+        }
+    },
+    _drawBarsOld () {
         var data = this.state.data;
         var obj;
         var h = this.state.barWidth;
@@ -96,10 +138,13 @@ module.exports = React.createClass ({
         }
     },
     // Draw a border around the canvas
-    _drawBorder (w, h) {
+    _drawBorder () {
         var path = new paper.Path.Rectangle({
             point: [0,0],
-            size: [w,h],
+            size: new paper.Size({
+                width: this.state.viewWidth,
+                height: this.state.viewHeight
+            }),
             style: {
                 strokeWidth: 1,
                 strokeColor: 'black'
@@ -108,12 +153,11 @@ module.exports = React.createClass ({
     },
     draw () {
         this._drawBars();
-        var viewHeight = (this.state.barWidth + this.state.barMargin) * this.state.data.length;
         paper.project.view.viewSize = new paper.Size({
             width: this.state.viewWidth,
-            height: viewHeight
+            height: this.state.viewHeight
         });
-        this._drawBorder(this.state.viewWidth, viewHeight);
+        this._drawBorder();
     },
     componentDidMount () {
         var canvas = ReactDOM.findDOMNode(this);
