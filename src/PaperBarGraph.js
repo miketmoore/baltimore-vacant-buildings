@@ -11,14 +11,14 @@ var Drawing = React.createClass({
             minY: 0,
             maxY: 0,
 
-            viewWidth: 800,
-            viewHeight: 500,
+            viewWidth: 600,
+            viewHeight: 400,
 
             // width of bar when vertical, height when horizontal
-            barWidth: 125,
+            barWidth: 90,
 
             barMin: 40,
-            barMax: 400,
+            barMax: 350,
 
             // Margin after each bar
             barMargin: 5,
@@ -145,7 +145,7 @@ var Drawing = React.createClass({
                 }),
                 content: obj.year,
                 justification: 'center',
-                fontSize: 38,
+                fontSize: 32,
                 fontWeight: 'bold',
                 fontFamily: 'sans-serif',
                 fillColor: '#731007',
@@ -158,7 +158,7 @@ var Drawing = React.createClass({
                 }),
                 content: parseInt(obj.size).toLocaleString(),
                 justification: 'center',
-                fontSize: 38,
+                fontSize: 32,
                 fontWeight: 'bold',
                 fontFamily: 'sans-serif',
                 fillColor: '#F29F05'
