@@ -1,7 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-module.exports = React.createClass ({
+var Drawing = React.createClass({
     getInitialState () {
         return {
 
@@ -9,7 +9,7 @@ module.exports = React.createClass ({
             viewHeight: 500,
 
             // width of bar when vertical, height when horizontal
-            barWidth: 50,
+            barWidth: 100,
 
             barMin: 90,
             barMax: 400,
@@ -20,7 +20,7 @@ module.exports = React.createClass ({
             // Total bars displayed at one time
             barTotal: 4,
 
-            barPage: 1
+            page: 0
         };
     },
     map () {
@@ -86,7 +86,7 @@ module.exports = React.createClass ({
     },
     _getPage () {
         var data = this.state.data;
-        var a = this.state.barPage * this.state.barTotal;
+        var a = this.state.page * this.state.barTotal;
         var b = a + this.state.barTotal;
         return data.slice(a, b);
     },
@@ -103,7 +103,7 @@ module.exports = React.createClass ({
 
             obj = data[i];
             barHeight = Math.ceil(obj.normalized);
-            console.log('Paper/BarGraph._drawBars() i, x, obj.normalized: ', i, x, barHeight);
+            //console.log('Paper/BarGraph._drawBars() i, x, obj.normalized: ', i, x, barHeight);
             rect = new paper.Path.Rectangle({
                 point: new paper.Point(x,y),
                 size: new paper.Size(barWidth, barHeight),
@@ -159,16 +159,70 @@ module.exports = React.createClass ({
         });
         this._drawBorder();
     },
-    componentDidMount () {
-        var canvas = ReactDOM.findDOMNode(this);
-        paper.setup(canvas);
+    init (setup) {
+        if (setup) {
+            this.state.canvas = ReactDOM.findDOMNode(this);
+        }
+        paper.setup(this.state.canvas);
         this.map();
         this.draw();
         paper.view.draw();
     },
+    componentDidMount () {
+        this.init(true);
+    },
+    componentWillReceiveProps: function(props) {
+      this.setState({
+          page: props.page
+      });
+    },
     render () {
+        this.init();
         return (
             <canvas id="canvas" resize></canvas>
+        );
+    }
+});
+
+var Button = React.createClass({
+  handleClick: function(event) {
+      if (this.props.callback) this.props.callback();
+  },
+  render: function() {
+    return (
+      <button className="btn btn-default" type="submit" onClick={this.handleClick}>
+        {this.props.text}
+      </button>
+    );
+  }
+});
+
+module.exports = React.createClass ({
+    getInitialState () {
+        return {
+            page: 0
+        };
+    },
+    back () {
+        this.setState({ page: this.state.page - 1 });
+    },
+    forward () {
+        this.setState({ page: this.state.page + 1 });
+    },
+    render () {
+        return (
+            <div className="row">
+                <div className="col-md-12">
+                    <div className="row">
+                        <Button callback={this.back} text="Back"/>
+                        <p>Page: {this.state.page}</p>
+                        <Button callback={this.forward} text="Forward"/>
+                    </div>
+                    <div className="row">
+                        <Drawing page={this.state.page} model={this.props.model} />
+                    </div>
+                </div>
+            </div>
         );
     }
 });
