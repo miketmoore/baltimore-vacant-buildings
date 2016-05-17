@@ -108,6 +108,7 @@ var Drawing = React.createClass({
         console.log("X: ", x);
         var y = 0;
         var rect;
+        var rectB;
         var text;
         var data = this._getPage();
         var thisY;
@@ -126,27 +127,41 @@ var Drawing = React.createClass({
                     fillColor: '#F29F05'
                 }
             });
+            rectB = new paper.Path.Rectangle({
+                point: new paper.Point({
+                    x: x,
+                    y: thisY - (this.state.viewHeight - rect.bounds.height)
+                }),
+                size: new paper.Size(barWidth, this.state.viewHeight - rect.bounds.height),
+                style: {
+                    fillColor: '#F29F05'
+                },
+                blendMode: 'multiply'
+            });
             text = new paper.PointText({
                 point: new paper.Point({
                     x: rect.bounds.bottomCenter.x,
-                    y: rect.bounds.bottomCenter.y - 10
+                    y: rect.bounds.bottomCenter.y
                 }),
                 content: obj.year,
-                    justification: 'center',
-                fontSize: 24,
+                justification: 'center',
+                fontSize: 38,
+                fontWeight: 'bold',
                 fontFamily: 'sans-serif',
-                fillColor: '#400101'
+                fillColor: '#BF4C0A',
+                blendMode: 'multiply'
             });
             text = new paper.PointText({
                 point: new paper.Point({
                     x: rect.bounds.topCenter.x,
-                    y: rect.bounds.topCenter.y -2
+                    y: rect.bounds.topCenter.y
                 }),
                 content: parseInt(obj.size).toLocaleString(),
                 justification: 'center',
-                fontSize: 24,
+                fontSize: 38,
+                fontWeight: 'bold',
                 fontFamily: 'sans-serif',
-                fillColor: '#400101'
+                fillColor: '#F29F05'
             });
             x += barWidth + this.state.barMargin;
         }
