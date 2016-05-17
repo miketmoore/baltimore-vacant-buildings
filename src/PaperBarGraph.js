@@ -297,25 +297,25 @@ module.exports = React.createClass ({
         this._determineTotalPages();
         return (
             <div className="row">
-                <div className="col-md-12">
+                <div className="col-md-8">
                     <div className="row">
-                        <div className="col-md-12">
+                        <div className="col-md-8">
                             <h4>Total vacant buildings per year</h4>
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-3">
                             <div className="btn-group" role="group">
                                 <Button disabled={this.isBackDisabled()} callback={this.back} text="Back"/>
                                 <Button disabled={this.isForwardDisabled()} callback={this.forward} text="Forward"/>
                             </div>
                         </div>
-                        <div className="col-md-2">
+                        <div className="col-md-3">
                             <p>Page: {this.state.page + 1}/{this.state.totalPages}</p>
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-md-12">
+                        <div className="col-md-8">
                             <Drawing limit={this.state.limit} page={this.state.page} model={this.props.model} />
                         </div>
                     </div>
