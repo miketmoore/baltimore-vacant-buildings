@@ -5,13 +5,19 @@ var Drawing = React.createClass({
     getInitialState () {
         return {
 
+            min: 0,
+            max: 0,
+
+            minY: 0,
+            maxY: 0,
+
             viewWidth: 800,
             viewHeight: 500,
 
             // width of bar when vertical, height when horizontal
             barWidth: 125,
 
-            barMin: 90,
+            barMin: 40,
             barMax: 400,
 
             // Margin after each bar
@@ -26,14 +32,18 @@ var Drawing = React.createClass({
         var data = [];
         var map = this.props.model.index.get('yyyy');
         var size;
-        var min = 0;
-        var max = 0;
+        var min;
+        var max;
         for ( var [year,idSet] of map ) {
             size = idSet.size;
+            if (typeof min === 'undefined') min = size;
+            if (typeof max === 'undefined') max = size;
             if (size > max) max = size;
             if (size < min) min = size;
             data.push({year:year,size:size});
         }
+        this.state.min = min;
+        this.state.max = max;
 
         // sort array of objects by obj.size
         data = data.sort(function (a,b) {
@@ -49,7 +59,10 @@ var Drawing = React.createClass({
         // Convert range A-B to scale of C-D
         // y = 1 + (x-A)*(10-1)/(B-A)
 
+        var minNormal;
+        var maxNormal;
         if (data.length) {
+
             var A = data[0].size;
             var B = data[data.length-1].size;
             var C = this.state.barMin;
@@ -60,8 +73,24 @@ var Drawing = React.createClass({
                 x = data[i].size;
                 y = C + (x-A)*(D-C)/(B-A);
                 data[i].normalized = y;
+                if (typeof minNormal === 'undefined') minNormal = y;
+                if (typeof maxNormal === 'undefined') maxNormal = y;
+                if (y > maxNormal) maxNormal = y;
+                else if (y < minNormal) minNormal = y;
             }
         }
+
+        this.state.minY = this.state.viewHeight - Math.ceil(maxNormal);
+        this.state.maxY = this.state.viewHeight - Math.ceil(minNormal);
+
+        // Sort by year
+        data = data.sort(function (a,b) {
+            a = a.year;
+            b = b.year;
+            if (a < b) return -1;
+            if (a > b ) return 1;
+            return 0;
+        });
 
         this.state.data = data;
     },
@@ -81,14 +110,16 @@ var Drawing = React.createClass({
         var rect;
         var text;
         var data = this._getPage();
+        var thisY;
         for ( var i = 0; i < data.length; i++ ) {
 
             obj = data[i];
             barHeight = Math.ceil(obj.normalized);
+            thisY = this.state.viewHeight - barHeight;
             rect = new paper.Path.Rectangle({
                 point: new paper.Point({
                     x: x,
-                    y: this.state.viewHeight - barHeight
+                    y: thisY
                 }),
                 size: new paper.Size(barWidth, barHeight),
                 style: {
@@ -98,32 +129,48 @@ var Drawing = React.createClass({
             text = new paper.PointText({
                 point: new paper.Point({
                     x: rect.bounds.bottomCenter.x,
-                    y: rect.bounds.bottomCenter.y - 48
+                    y: rect.bounds.bottomCenter.y - 10
                 }),
-                content: obj.year + '\n' + obj.size + '',
+                content: obj.year,
+                    justification: 'center',
+                fontSize: 24,
+                fontFamily: 'sans-serif',
+                fillColor: '#400101'
+            });
+            text = new paper.PointText({
+                point: new paper.Point({
+                    x: rect.bounds.topCenter.x,
+                    y: rect.bounds.topCenter.y -2
+                }),
+                content: parseInt(obj.size).toLocaleString(),
                 justification: 'center',
                 fontSize: 24,
                 fontFamily: 'sans-serif',
-                fillColor: '#731007'
+                fillColor: '#400101'
             });
             x += barWidth + this.state.barMargin;
         }
     },
-    _drawBarsOld () {
-        var data = this.state.data;
-        var obj;
-        var h = this.state.barWidth;
-        var x = 0;
-        var y = 0;
-        var rect;
-        var text;
-        for ( var i = 0; i < data.length; i++ ) {
-            obj = data[i];
-            rect = this._drawRect(obj, obj.normalized, h, x, y);
-            text = this._drawLabel(obj, x, y);
-            text.bounds.point = rect.bounds.topLeft;
-            y += h + this.state.barMargin;
-        }
+    _drawMinMaxLine (y, content) {
+        var path = new paper.Path.Line({
+            from: [0,y],
+            to: [this.state.viewWidth, y],
+            style: {
+                strokeWidth: 1,
+                strokeColor: '#731007'
+            }
+        });
+        var text = new paper.PointText({
+            point: new paper.Point({
+                x: path.bounds.topLeft.x + 5,
+                y: path.bounds.topLeft.y - 2
+            }),
+            content: content,
+            justification: 'left',
+            fontSize: 16,
+            fontFamily: 'sans-serif',
+            fillColor: '#731007'
+        });
     },
     // Draw a border around the canvas
     _drawBorder () {
@@ -151,6 +198,8 @@ var Drawing = React.createClass({
     },
     draw () {
         this._drawBackground();
+        this._drawMinMaxLine(this.state.minY, this.state.max);
+        this._drawMinMaxLine(this.state.maxY, this.state.min);
         this._drawBars();
         paper.project.view.viewSize = new paper.Size({
             width: this.state.viewWidth,
