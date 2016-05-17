@@ -28,6 +28,7 @@
     "webpack": "^1.13.0"
   },
   "devDependencies": {
-    "file-loader": "^0.8.5"
+    "file-loader": "^0.8.5",
+    "forever-monitor": "^1.7.0"
   }
 }
