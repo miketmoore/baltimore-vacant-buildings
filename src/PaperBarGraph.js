@@ -1,24 +1,24 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 module.exports = React.createClass ({
     getInitialState () {
-        console.log('Paper/BarGraph.getInitialState()');
         return {
-            // Default width of paper view
+
             viewWidth: 800,
+            viewHeight: 500,
 
             // width of bar when vertical, height when horizontal
-            barWidth: 15,
+            barWidth: 50,
 
             barMin: 90,
-            barMax: 750,
+            barMax: 400,
 
             // Margin after each bar
-            barMargin: 2
+            barMargin: 5
         };
     },
     map () {
-        console.log('Paper/BarGraph.map()');
         var data = [];
         var map = this.props.model.index.get('yyyy');
         var size;
@@ -60,11 +60,6 @@ module.exports = React.createClass ({
         }
 
         this.state.data = data;
-    },
-    setup () {
-        console.log('Paper/BarGraph.setup()');
-        var canvas = document.getElementById('canvas');
-        paper.setup(canvas);
     },
     _drawRect (obj, w, h, x, y) {
         return new paper.Path.Rectangle({
@@ -112,7 +107,6 @@ module.exports = React.createClass ({
         });
     },
     draw () {
-        console.log('Paper/BarGraph.draw()');
         this._drawBars();
         var viewHeight = (this.state.barWidth + this.state.barMargin) * this.state.data.length;
         paper.project.view.viewSize = new paper.Size({
@@ -121,12 +115,14 @@ module.exports = React.createClass ({
         });
         this._drawBorder(this.state.viewWidth, viewHeight);
     },
-    render () {
-        console.log('Paper/BarGraph.render() this.props.model: ', this.props.model);
+    componentDidMount () {
+        var canvas = ReactDOM.findDOMNode(this);
+        paper.setup(canvas);
         this.map();
-        this.setup();
         this.draw();
         paper.view.draw();
+    },
+    render () {
         return (
             <canvas id="canvas" resize></canvas>
         );
