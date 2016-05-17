@@ -75,8 +75,9 @@ var Drawing = React.createClass({
         var obj;
         var barWidth = this.state.barWidth;
         var barHeight; // diff per bar
-        var x = 0;
-        var y = 40;
+        var x = (this.state.viewWidth - ((this.state.barWidth + this.state.barMargin) * this.state.limit)) / 2;
+        console.log("X: ", x);
+        var y = 0;
         var rect;
         var text;
         var data = this._getPage();
@@ -84,18 +85,23 @@ var Drawing = React.createClass({
 
             obj = data[i];
             barHeight = Math.ceil(obj.normalized);
-            //console.log('Paper/BarGraph._drawBars() i, x, obj.normalized: ', i, x, barHeight);
             rect = new paper.Path.Rectangle({
-                point: new paper.Point(x,y),
+                point: new paper.Point({
+                    x: x,
+                    y: this.state.viewHeight - barHeight
+                }),
                 size: new paper.Size(barWidth, barHeight),
                 style: {
                     fillColor: '#F29F05'
                 }
             });
             text = new paper.PointText({
-                point: new paper.Point(x, y + 20),
+                point: new paper.Point({
+                    x: rect.bounds.bottomCenter.x,
+                    y: rect.bounds.bottomCenter.y - 48
+                }),
                 content: obj.year + '\n' + obj.size + '',
-                justification: 'left',
+                justification: 'center',
                 fontSize: 24,
                 fontFamily: 'sans-serif',
                 fillColor: '#731007'
