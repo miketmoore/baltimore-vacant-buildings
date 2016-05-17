@@ -234,6 +234,11 @@ module.exports = React.createClass ({
             <div className="row">
                 <div className="col-md-12">
                     <div className="row">
+                        <div className="col-md-12">
+                            <h4>Total vacant buildings per year</h4>
+                        </div>
+                    </div>
+                    <div className="row">
                         <div className="col-md-6">
                             <div className="btn-group" role="group">
                                 <Button disabled={this.isBackDisabled()} callback={this.back} text="Back"/>
