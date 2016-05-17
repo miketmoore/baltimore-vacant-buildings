@@ -1,5 +1,6 @@
 var React = require('react');
 var ListItem = require('./ListItem');
+var Layout = require('./Layout');
 
 module.exports = React.createClass ({
     getDefaultProps () {
@@ -20,20 +21,22 @@ module.exports = React.createClass ({
     render () {
         var years = this.props.model.getDistinct('yyyy');
         return (
-            <div className="row">
-                <div className="col-md-6">
-                    <h3>Fields</h3>
-                    <ol>
-                        {this.buildList.call(this, this.props.model.columns, 'key')}
-                    </ol>
+            <Layout>
+                <div className="row">
+                    <div className="col-md-6">
+                        <h3>Fields</h3>
+                        <ol>
+                            {this.buildList.call(this, this.props.model.columns, 'key')}
+                        </ol>
+                    </div>
+                    <div className="col-md-6">
+                        <h3>Years</h3>
+                        <ol>
+                            {this.buildList.call(this, years)}
+                        </ol>
+                    </div>
                 </div>
-                <div className="col-md-6">
-                    <h3>Years</h3>
-                    <ol>
-                        {this.buildList.call(this, years)}
-                    </ol>
-                </div>
-            </div>
+            </Layout>
         )
     }
 });

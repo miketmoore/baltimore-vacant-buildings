@@ -16,8 +16,8 @@ module.exports = React.createClass ({
                     </div>
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul className="nav navbar-nav">
-                            <li><Link href="/">App</Link></li>
-                            <li><Link href="/foo">Foo</Link></li>
+                            <li><Link href="/">Home</Link></li>
+                            <li><Link href="/data-grid">Data Grid</Link></li>
                             <li><Link href="/basic-info">Basic Info</Link></li>
                             <li><Link href="/bar-graph">Bar Graph</Link></li>
                         </ul>
