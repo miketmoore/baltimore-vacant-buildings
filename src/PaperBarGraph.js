@@ -290,12 +290,13 @@ module.exports = React.createClass ({
     },
     _renderYearTimeline (timelineData) {
         var colorScale = d3.scale.ordinal().range(['#F29F05']);
-
+        var margin = 1;
         var chart = d3
             .timeline()
             .colors(colorScale)
             .showBorderLine()
-            .showBorderFormat({marginTop: 50, marginBottom: 100, width: 2, color: '#fff'})
+            .showBorderFormat({marginTop: 1, marginBottom: 23, width: 1, color: '#ffffff'})
+            .margin({left: margin, right: margin, top: margin, bottom: margin})
             .tickFormat({
                 format: d3.time.format("%y"),
                 tickTime: d3.time.years,
