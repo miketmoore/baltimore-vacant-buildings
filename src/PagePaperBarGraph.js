@@ -6,7 +6,7 @@ module.exports = React.createClass({
     render () {
         return (
             <Layout>
-                <PaperBarGraph model={this.props.model} />
+                <PaperBarGraph modelVacancies={this.props.modelVacancies} />
             </Layout>
         );
     }

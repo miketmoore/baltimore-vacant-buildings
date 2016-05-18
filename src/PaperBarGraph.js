@@ -31,7 +31,6 @@ var Drawing = React.createClass({
     },
     _getPage () {
         var data = this.state.data;
-        console.log('Drawing._getPage() data: ', data);
         var a = this.state.page * this.state.limit;
         var b = a + this.state.limit;
         return data.slice(a, b);
@@ -46,7 +45,6 @@ var Drawing = React.createClass({
         var rectB;
         var text;
         var data = this._getPage();
-        console.log('Drawing._drawBars() data: ', data);
         var thisY;
         for ( var i = 0; i < data.length; i++ ) {
 
@@ -226,7 +224,7 @@ module.exports = React.createClass ({
             page: 0,
             limit: 5,
             totalPages: 0,
-            distinctAddresses: false
+            distinctAddresses: true
         };
     },
     back () {
@@ -240,22 +238,22 @@ module.exports = React.createClass ({
         return this.state.page == 0;
     },
     isForwardDisabled () {
-        var total = this.props.model.index.get('yyyy').size;
+        var total = this.props.modelVacancies.index.get('yyyy').size;
         var limit = this.state.limit;
         var page = this.state.page;
         var offset = (limit * page) + limit;
         return total == offset;
     },
     _determineTotalPages () {
-        var total = this.props.model.index.get('yyyy').size;
+        var total = this.props.modelVacancies.index.get('yyyy').size;
         var limit = this.state.limit;
         var totalPages = Math.ceil(total/limit);
         this.state.totalPages = totalPages;
     },
-    distinctAddressesChange () {
+    distinctAddressesChange (ev) {
         console.log('distinctAddressesChange() (0): ', this.state.distinctAddresses);
         this.setState({
-            distinctAddresses: !this.state.distinctAddresses
+            distinctAddresses: ev.target.checked
         });
     },
     componentWillReceiveProps (props) {
@@ -264,7 +262,7 @@ module.exports = React.createClass ({
     },
     map () {
         var data = [];
-        var map = this.props.model.index.get('yyyy');
+        var map = this.props.modelVacancies.index.get('yyyy');
         console.log('PaperBarGraph.map() year map: ', map);
         var size;
         var min;
@@ -371,6 +369,8 @@ module.exports = React.createClass ({
                 <div className="col-md-4">
                     <h4>Distinct Addresses</h4>
                     <input
+                        ref="distinctAddresses"
+                        defaultChecked={this.state.distinctAddresses}
                         onChange={this.distinctAddressesChange}
                         type="checkbox"
                         name="distinct-addresses"/>

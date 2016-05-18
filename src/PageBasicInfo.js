@@ -5,7 +5,7 @@ var Layout = require('./Layout');
 module.exports = React.createClass ({
     getDefaultProps () {
         return {
-            model: {}
+            modelVacancies: {}
         };
     },
     buildList (dataArray, objKey) {
@@ -19,14 +19,14 @@ module.exports = React.createClass ({
         return colList;
     },
     render () {
-        var years = this.props.model.getDistinct('yyyy');
+        var years = this.props.modelVacancies.getDistinct('yyyy');
         return (
             <Layout>
                 <div className="row">
                     <div className="col-md-6">
                         <h3>Fields</h3>
                         <ol>
-                            {this.buildList.call(this, this.props.model.columns, 'key')}
+                            {this.buildList.call(this, this.props.modelVacancies.columns, 'key')}
                         </ol>
                     </div>
                     <div className="col-md-6">

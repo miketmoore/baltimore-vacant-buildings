@@ -1,0 +1,355 @@
+{
+  "meta" : {
+    "view" : {
+      "id" : "6ayg-3z5z",
+      "name" : "Crime by Neighborhood",
+      "attribution" : "Baltimore Police Department",
+      "attributionLink" : "http://www.baltimorepolice.org/",
+      "averageRating" : 0,
+      "category" : "Crime",
+      "createdAt" : 1384871977,
+      "description" : "All BPD data on Open Baltimore is preliminary data and subject to change.  The information presented through Open Baltimore represents Part I victim based crime data. The data do not represent statistics submitted to the FBI's Uniform Crime Report (UCR); therefore any comparisons are strictly prohibited. For further clarification of UCR data, please visit http://www.fbi.gov/about-us/cjis/ucr/ucr. Please note that this data is preliminary and subject to change. Prior month data is likely to show changes when it is refreshed on a monthly basis.  All data is geocoded to the approximate latitude/longitude location of the incident and excludes those records for which an address could not be geocoded. Any attempt to match the approximate location of the incident to an exact address is strictly prohibited.",
+      "displayType" : "table",
+      "downloadCount" : 643,
+      "licenseId" : "CC_30_BY",
+      "newBackend" : false,
+      "numberOfComments" : 0,
+      "oid" : 20984062,
+      "publicationAppendEnabled" : false,
+      "publicationDate" : 1463498599,
+      "publicationGroup" : 260782,
+      "publicationStage" : "published",
+      "rowsUpdatedAt" : 1463498273,
+      "rowsUpdatedBy" : "qu49-kjvy",
+      "tableId" : 10783113,
+      "totalTimesRated" : 0,
+      "viewCount" : 4859,
+      "viewLastModified" : 1384871977,
+      "viewType" : "tabular",
+      "columns" : [ {
+        "id" : -1,
+        "name" : "sid",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":sid",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : { }
+      }, {
+        "id" : -1,
+        "name" : "id",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":id",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : { }
+      }, {
+        "id" : -1,
+        "name" : "position",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":position",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : { }
+      }, {
+        "id" : -1,
+        "name" : "created_at",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":created_at",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : { }
+      }, {
+        "id" : -1,
+        "name" : "created_meta",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":created_meta",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : { }
+      }, {
+        "id" : -1,
+        "name" : "updated_at",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":updated_at",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : { }
+      }, {
+        "id" : -1,
+        "name" : "updated_meta",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":updated_meta",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : { }
+      }, {
+        "id" : -1,
+        "name" : "meta",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":meta",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : { }
+      }, {
+        "id" : 255184877,
+        "name" : "CrimeDate",
+        "dataTypeName" : "calendar_date",
+        "fieldName" : "crimedate",
+        "position" : 1,
+        "renderTypeName" : "calendar_date",
+        "tableColumnId" : 1792582,
+        "width" : 90,
+        "format" : {
+          "view" : "date",
+          "align" : "left"
+        }
+      }, {
+        "id" : 255184879,
+        "name" : "CrimeCode",
+        "dataTypeName" : "text",
+        "fieldName" : "crimecode",
+        "position" : 2,
+        "renderTypeName" : "text",
+        "tableColumnId" : 1792583,
+        "width" : 80,
+        "format" : { }
+      }, {
+        "id" : 255184880,
+        "name" : "Location",
+        "dataTypeName" : "text",
+        "fieldName" : "location",
+        "position" : 3,
+        "renderTypeName" : "text",
+        "tableColumnId" : 1792584,
+        "width" : 196,
+        "format" : { }
+      }, {
+        "id" : 255184881,
+        "name" : "Description",
+        "dataTypeName" : "text",
+        "fieldName" : "description",
+        "position" : 4,
+        "renderTypeName" : "text",
+        "tableColumnId" : 1792585,
+        "width" : 162,
+        "format" : { }
+      }, {
+        "id" : 255184882,
+        "name" : "Weapon",
+        "dataTypeName" : "text",
+        "fieldName" : "weapon",
+        "position" : 5,
+        "renderTypeName" : "text",
+        "tableColumnId" : 1792586,
+        "width" : 102,
+        "format" : { }
+      }, {
+        "id" : 255184884,
+        "name" : "District",
+        "dataTypeName" : "text",
+        "fieldName" : "district",
+        "position" : 6,
+        "renderTypeName" : "text",
+        "tableColumnId" : 1792588,
+        "width" : 145,
+        "format" : { }
+      }, {
+        "id" : 255184885,
+        "name" : "Neighborhood",
+        "dataTypeName" : "text",
+        "fieldName" : "neighborhood",
+        "position" : 7,
+        "renderTypeName" : "text",
+        "tableColumnId" : 1792589,
+        "width" : 174,
+        "format" : { }
+      } ],
+      "grants" : [ {
+        "inherited" : true,
+        "type" : "viewer",
+        "flags" : [ "public" ]
+      } ],
+      "license" : {
+        "name" : "Creative Commons Attribution 3.0 Unported",
+        "logoUrl" : "images/licenses/cc30by.png",
+        "termsLink" : "http://creativecommons.org/licenses/by/3.0/legalcode"
+      },
+      "metadata" : {
+        "renderTypeConfig" : {
+          "visible" : {
+            "table" : true
+          }
+        },
+        "availableDisplayTypes" : [ "table", "fatrow", "page" ],
+        "thumbnail" : {
+          "page" : {
+            "created" : true,
+            "filename" : "page.png-501.268.447.0.png",
+            "selection" : {
+              "height" : 268,
+              "width" : 501,
+              "y1" : 0,
+              "y2" : 268,
+              "x2" : 948,
+              "x1" : 447
+            }
+          }
+        },
+        "sidebar" : {
+          "width" : 300.2
+        }
+      },
+      "owner" : {
+        "id" : "2v2u-uig5",
+        "displayName" : "jhill152",
+        "screenName" : "jhill152"
+      },
+      "query" : {
+        "filterCondition" : {
+          "type" : "operator",
+          "value" : "AND",
+          "children" : [ {
+            "type" : "operator",
+            "value" : "OR",
+            "children" : [ {
+              "type" : "operator",
+              "value" : "BETWEEN",
+              "children" : [ {
+                "columnId" : 255184877,
+                "type" : "column"
+              }, {
+                "type" : "literal",
+                "value" : "01/01/2012"
+              }, {
+                "type" : "literal",
+                "value" : "12/31/2012"
+              } ],
+              "metadata" : {
+                "freeform" : true
+              }
+            } ],
+            "metadata" : {
+              "operator" : "BETWEEN",
+              "tableColumnId" : {
+                "260782" : 1792582
+              }
+            }
+          }, {
+            "type" : "operator",
+            "value" : "OR",
+            "children" : [ {
+              "type" : "operator",
+              "value" : "IS_NOT_BLANK",
+              "children" : [ {
+                "columnId" : 255184884,
+                "type" : "column"
+              } ]
+            } ],
+            "metadata" : {
+              "operator" : "blank?",
+              "tableColumnId" : {
+                "260782" : 1792588
+              },
+              "customValues" : [ "IS_BLANK" ]
+            }
+          }, {
+            "type" : "operator",
+            "value" : "OR",
+            "metadata" : {
+              "operator" : "CONTAINS",
+              "tableColumnId" : {
+                "260782" : 1792583
+              }
+            }
+          } ],
+          "metadata" : {
+            "unifiedVersion" : 2
+          }
+        },
+        "orderBys" : [ {
+          "ascending" : true,
+          "expression" : {
+            "columnId" : 255184885,
+            "type" : "column"
+          }
+        } ]
+      },
+      "rights" : [ "read" ],
+      "sortBys" : [ {
+        "id" : 0,
+        "viewColumnId" : 255184885,
+        "flags" : [ "asc" ]
+      } ],
+      "tableAuthor" : {
+        "id" : "ye7n-cr57",
+        "displayName" : "Jeffrey Cooper",
+        "roleName" : "publisher",
+        "screenName" : "Jeffrey Cooper",
+        "rights" : [ "create_datasets", "edit_others_datasets", "edit_nominations", "approve_nominations", "moderate_comments", "manage_stories", "feature_items", "change_configurations", "view_domain", "view_others_datasets", "create_pages", "edit_pages", "view_goals", "view_dashboards", "edit_goals", "edit_dashboards", "manage_provenance", "view_story", "view_unpublished_story", "view_all_dataset_status_logs" ]
+      },
+      "tags" : [ "crime", "police", "victim" ],
+      "viewFilters" : {
+        "type" : "operator",
+        "value" : "AND",
+        "children" : [ {
+          "type" : "operator",
+          "value" : "OR",
+          "children" : [ {
+            "type" : "operator",
+            "value" : "BETWEEN",
+            "children" : [ {
+              "columnId" : 255184877,
+              "type" : "column"
+            }, {
+              "type" : "literal",
+              "value" : "01/01/2012"
+            }, {
+              "type" : "literal",
+              "value" : "12/31/2012"
+            } ],
+            "metadata" : {
+              "freeform" : true
+            }
+          } ],
+          "metadata" : {
+            "operator" : "BETWEEN",
+            "tableColumnId" : {
+              "260782" : 1792582
+            }
+          }
+        }, {
+          "type" : "operator",
+          "value" : "OR",
+          "children" : [ {
+            "type" : "operator",
+            "value" : "IS_NOT_BLANK",
+            "children" : [ {
+              "columnId" : 255184884,
+              "type" : "column"
+            } ]
+          } ],
+          "metadata" : {
+            "operator" : "blank?",
+            "tableColumnId" : {
+              "260782" : 1792588
+            },
+            "customValues" : [ "IS_BLANK" ]
+          }
+        }, {
+          "type" : "operator",
+          "value" : "OR",
+          "metadata" : {
+            "operator" : "CONTAINS",
+            "tableColumnId" : {
+              "260782" : 1792583
+            }
+          }
+        } ],
+        "metadata" : {
+          "unifiedVersion" : 2
+        }
+      }
+    }
+  },
+  "data" : [ ]
+}

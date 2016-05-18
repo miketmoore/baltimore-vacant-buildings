@@ -4,10 +4,11 @@ require("react-data-grid/themes/react-data-grid.css");
 
 var Top = require('./Top');
 
-
-var dataSource = "data/baltimore-vacant-buildings.json";
+var dataSources = new Map();
+dataSources.set('vacancies', "data/baltimore-vacant-buildings.json");
+dataSources.set('crime', "data/bpd-part-1-victim-based-crime.json");
 
 render(
-    <Top source={dataSource} />,
+    <Top dataSources={dataSources} />,
     document.getElementById('app')
 );
