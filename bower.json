@@ -19,6 +19,7 @@
     "jquery": "^2.2.3",
     "bootstrap": "^3.3.6",
     "paper": "^0.9.25",
-    "bootstrap-switch": "^3.3.2"
+    "bootstrap-switch": "^3.3.2",
+    "d3-timeline": "^0.0.5"
   }
 }

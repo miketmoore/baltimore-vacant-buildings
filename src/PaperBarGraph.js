@@ -31,7 +31,6 @@ var Drawing = React.createClass({
     },
     _getPage () {
         var data = this.state.data;
-        console.log('Drawing._getPage() data: ', data);
         var a = this.state.page * this.state.limit;
         var b = a + this.state.limit;
         return data.slice(a, b);
@@ -46,7 +45,6 @@ var Drawing = React.createClass({
         var rectB;
         var text;
         var data = this._getPage();
-        console.log('Drawing._drawBars() data: ', data);
         var thisY;
         for ( var i = 0; i < data.length; i++ ) {
 
@@ -149,7 +147,6 @@ var Drawing = React.createClass({
         });
     },
     draw () {
-        console.log('Drawing.draw()');
         this._drawBackground();
         this._drawBars();
         paper.project.view.viewSize = new paper.Size({
@@ -169,11 +166,9 @@ var Drawing = React.createClass({
         paper.view.draw();
     },
     componentDidMount () {
-        console.log('Drawing.componentDidMount()');
         this.init(true);
     },
     componentWillReceiveProps: function(props) {
-        console.log('Drawing.componentWillReceiveProps() props: ', props);
         this.setState({
             limit: props.limit,
             page: props.page,
@@ -253,19 +248,74 @@ module.exports = React.createClass ({
         this.state.totalPages = totalPages;
     },
     distinctAddressesChange () {
-        console.log('distinctAddressesChange() (0): ', this.state.distinctAddresses);
         this.setState({
             distinctAddresses: !this.state.distinctAddresses
         });
     },
+    /**
+     * @description Converts YYYY string to a Array(startDate, endDate)
+     * @param year
+     * @returns {Array}
+     * @private
+     */
+    _convertYear (year) {
+        var a = '01/01/' + year;
+        var start = new Date(a);
+        var end = new Date(new Date(a).setYear(new Date(a).getFullYear() + 1));
+        return [start, end];
+    },
+    _buildYearTimelineData (model) {
+        var index = model.index;
+        var years = index.get('yyyy').keys();
+        var year;
+        var timelineData = [];
+        var range;
+        var convertedObj;
+        var startingTime;
+        var endingTime;
+        while ( year = years.next().value ) {
+            range = this._convertYear(year);
+            convertedObj = {
+                "label": year,
+                "times": [
+                    {
+                        "starting_time": range[0].getTime(),
+                        "ending_time": range[1].getTime()
+                    }
+                ]
+            };
+            timelineData.push(convertedObj);
+        }
+        return timelineData;
+    },
+    _renderYearTimeline (timelineData) {
+        var colorScale = d3.scale.ordinal().range(['#F29F05']);
+
+        var chart = d3
+            .timeline()
+            .colors(colorScale)
+            .showBorderLine()
+            .showBorderFormat({marginTop: 50, marginBottom: 100, width: 2, color: '#fff'})
+            .tickFormat({
+                format: d3.time.format("%y"),
+                tickTime: d3.time.years,
+                tickInterval: 1,
+                tickSize: 6
+            });
+        var svg = d3.select("#timeline")
+            .append("svg")
+            .attr("width", 800)
+            .datum(timelineData)
+            .call(chart);
+    },
     componentWillReceiveProps (props) {
-        console.log('PaperBarGraph.componentWillReceiveProps()', props);
         this.map();
+        var timelineData = this._buildYearTimelineData(props.model);
+        this._renderYearTimeline(timelineData);
     },
     map () {
         var data = [];
         var map = this.props.model.index.get('yyyy');
-        console.log('PaperBarGraph.map() year map: ', map);
         var size;
         var min;
         var max;
@@ -329,51 +379,64 @@ module.exports = React.createClass ({
         this.state.data = data;
     },
     render () {
-        console.log('PaperBarGraph.render() props, state: ', this.props, this.state);
         this._determineTotalPages();
         return (
             <div className="row">
-                <div className="col-md-8">
+                <div className="col-md-12">
                     <div className="row">
                         <div className="col-md-8">
-                            <h4>Total vacant buildings per year</h4>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-3">
-                            <div className="btn-group" role="group">
-                                <Button disabled={this.isBackDisabled()} callback={this.back} text="Back"/>
-                                <Button disabled={this.isForwardDisabled()} callback={this.forward} text="Forward"/>
+                            <div className="row">
+                                <div className="col-md-8">
+                                    <h4>Total vacant buildings per year</h4>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-3">
+                                    <div className="btn-group" role="group">
+                                        <Button disabled={this.isBackDisabled()} callback={this.back} text="Back"/>
+                                        <Button disabled={this.isForwardDisabled()} callback={this.forward} text="Forward"/>
+                                    </div>
+                                </div>
+                                <div className="col-md-3">
+                                    <p>Page: {this.state.page + 1}/{this.state.totalPages}</p>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-8">
+                                    <Drawing
+                                        data={this.state.data}
+                                        limit={this.state.limit}
+                                        page={this.state.page}
+                                        min={this.state.min}
+                                        max={this.state.max}
+                                        minY={this.state.minY}
+                                        maxY={this.state.maxY}
+                                        viewWidth={this.state.viewWidth}
+                                        viewHeight={this.state.viewHeight}
+                                        barMin={this.state.barMin}
+                                        barMax={this.state.barMax}
+                                    />
+                                </div>
                             </div>
                         </div>
-                        <div className="col-md-3">
-                            <p>Page: {this.state.page + 1}/{this.state.totalPages}</p>
+                        <div className="col-md-4">
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <h4>Distinct Addresses</h4>
+                                    <input
+                                        onChange={this.distinctAddressesChange}
+                                        type="checkbox"
+                                        name="distinct-addresses"/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-md-8">
-                            <Drawing
-                                data={this.state.data}
-                                limit={this.state.limit}
-                                page={this.state.page}
-                                min={this.state.min}
-                                max={this.state.max}
-                                minY={this.state.minY}
-                                maxY={this.state.maxY}
-                                viewWidth={this.state.viewWidth}
-                                viewHeight={this.state.viewHeight}
-                                barMin={this.state.barMin}
-                                barMax={this.state.barMax}
-                            />
+                        <div className="col-md-12">
+                            <h4>Years Available</h4>
+                            <div id="timeline"></div>
                         </div>
                     </div>
-                </div>
-                <div className="col-md-4">
-                    <h4>Distinct Addresses</h4>
-                    <input
-                        onChange={this.distinctAddressesChange}
-                        type="checkbox"
-                        name="distinct-addresses"/>
                 </div>
             </div>
         );
