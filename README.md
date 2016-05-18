@@ -1,5 +1,12 @@
 # Baltimore Vacant Buildings - Data Visualization
 
+## TODO
+
+- distinct filters in visualization page
+- google maps
+- automated tests and coverage
+- fix npm run run on windows
+
 ## Description
 
 This is a single page application that displays information about Baltimore vacant buildings.
