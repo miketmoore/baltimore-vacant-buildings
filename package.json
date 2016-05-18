@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "postinstall": "./node_modules/.bin/bower install && ./node_modules/.bin/webpack -d",
+    "postinstall": "bower install && webpack -d",
     "build": "./node_modules/.bin/webpack -d",
     "run": "DEBUG=baltimore-vacant-buildings-express:* npm start",
-    "watch": "forever start --minUptime 1000 --spinSleepTime 1000 ./bin/www && ./node_modules/.bin/webpack -d --watch"
+    "watch": "forever start --minUptime 1000 --spinSleepTime 1000 ./bin/www && webpack -d --watch"
   },
   "dependencies": {
     "babel-loader": "^6.2.4",
