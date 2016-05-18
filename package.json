@@ -25,6 +25,7 @@
     "react": "^15.0.2",
     "react-data-grid": "^0.14.35",
     "react-dom": "^15.0.2",
+    "react-google-maps": "^4.10.1",
     "react-router-component": "^0.32.2",
     "serve-favicon": "~2.3.0",
     "style-loader": "^0.13.1",

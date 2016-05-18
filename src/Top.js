@@ -7,6 +7,7 @@ var PageHome = require('./PageHome');
 var PageBasicInfo = require('./PageBasicInfo');
 var PageDataGrid = require('./PageDataGrid');
 var PagePaperBarGraph = require('./PagePaperBarGraph');
+var PageMap = require('./PageMap');
 
 module.exports = React.createClass({
     getInitialState () {
@@ -37,6 +38,7 @@ module.exports = React.createClass({
               <Location path="/data-grid" handler={PageDataGrid} />
               <Location path="/basic-info" handler={PageBasicInfo} />
               <Location path="/paper-bar-graph" handler={PagePaperBarGraph} />
+                <Location path="/map" handler={PageMap} />
             </Locations>
         )
     }
