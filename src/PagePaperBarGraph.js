@@ -1,12 +1,12 @@
 var React = require('react');
 var Layout = require('./Layout');
-var PaperBarGraph = require('./PaperBarGraph');
+var BarGraphMain = require('./BarGraph/Main');
 
 module.exports = React.createClass({
     render () {
         return (
             <Layout>
-                <PaperBarGraph model={this.props.model} />
+                <BarGraphMain model={this.props.model} />
             </Layout>
         );
     }
