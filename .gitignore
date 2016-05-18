@@ -31,3 +31,4 @@ npm-debug.log
 
 bower_components
 public/dist
+.idea
