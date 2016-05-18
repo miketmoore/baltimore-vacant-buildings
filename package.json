@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "postinstall": "bower install && ./node_modules/.bin/webpack -d",
+    "postinstall": "./node_modules/.bin/bower install && ./node_modules/.bin/webpack -d",
     "build": "./node_modules/.bin/webpack -d",
     "run": "DEBUG=baltimore-vacant-buildings-express:* npm start",
     "watch": "forever start --minUptime 1000 --spinSleepTime 1000 ./bin/www && ./node_modules/.bin/webpack -d --watch"
@@ -15,6 +15,7 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.3.13",
     "body-parser": "~1.13.2",
+    "bower": "^1.7.9",
     "cookie-parser": "~1.3.5",
     "css-loader": "^0.23.1",
     "debug": "~2.2.0",
