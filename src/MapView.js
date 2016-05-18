@@ -46,29 +46,29 @@ module.exports = React.createClass({
                 <div className="col-md-6">
                     <GoogleMapLoader
                         containerElement={
-                    <div
-                        style={{
-                            display: 'block',
-                            height: '400px',
-                            width: '400px'
-                        }}
-                    />
-                }
+                            <div
+                                style={{
+                                    display: 'block',
+                                    height: '400px',
+                                    width: '400px'
+                                }}
+                            />
+                        }
                         googleMapElement={
-                    <GoogleMap
-                        ref={(map) => console.log('map: ', map)}
-                        defaultZoom={3}
-                        defaultCenter={{ lat: this.state.coords[0], lng: this.state.coords[1] }}
-                        onClick={props.onMapClick}
-                    >
-                        {props.markers.map((marker, index) => {
-                            return (
-                                <Marker
-                                    onRightclick={() => props.onMarkerRightclick(index)} />
-                            );
-                        })}
-                    </GoogleMap>
-                }
+                            <GoogleMap
+                                ref={(map) => console.log('map: ', map)}
+                                defaultZoom={3}
+                                defaultCenter={{ lat: this.state.coords[0], lng: this.state.coords[1] }}
+                                onClick={props.onMapClick}
+                            >
+                                {props.markers.map((marker, index) => {
+                                    return (
+                                        <Marker
+                                            onRightclick={() => props.onMarkerRightclick(index)} />
+                                    );
+                                })}
+                            </GoogleMap>
+                        }
                     />
                 </div>
             </div>
