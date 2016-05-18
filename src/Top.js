@@ -16,7 +16,9 @@ module.exports = React.createClass({
             columns: []
         }
     },
-    componentWillMount () {},
+    componentWillMount () {
+        console.log('Top.componentWillMount()');
+    },
     componentDidMount () {
         this.serverRequest = $.get(this.props.source, function (result) {
             this.state.model.setRaw(result);
