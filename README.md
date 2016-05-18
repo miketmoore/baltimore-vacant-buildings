@@ -12,16 +12,14 @@ This project came about from my desire to learn some new technologies for modern
 
 ## Dependencies
 
-- You will need `node.js` and the `npm` package manager first. 
-- You will also need `bower`, which I install globally: `npm install bower -g`.
-
+- You will need `node.js` and the `npm` package manager
 
 ## Installation
 
 1. Clone this repository!
 
     ```
-    git clone https://github.com/miketmoore/baltimore-vacant-buildings.git
+    git clone https://github.com/miketmoore/baltimore-vacant-buildings-express.git
     ```
 
 2. Install! This will install npm and bower dependencies and build the app.
