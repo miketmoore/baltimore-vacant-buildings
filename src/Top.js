@@ -16,13 +16,9 @@ module.exports = React.createClass({
             columns: []
         }
     },
-    componentWillMount () {
-        console.log('Top.componentWillMount()');
-    },
+    componentWillMount () {},
     componentDidMount () {
-        console.log('Top.componentDidMount() this.props.source: ', this.props.source);
         this.serverRequest = $.get(this.props.source, function (result) {
-            console.log('loaded data source: ', result);
             this.state.model.setRaw(result);
             this.setState({
                 columns: this.state.model.columns
@@ -30,11 +26,9 @@ module.exports = React.createClass({
         }.bind(this));
     },
     componentWillUnmount () {
-        console.log('Top.componentWillUnmount()');
         this.serverRequest.abort();
     },
     render () {
-        console.log('Top.render()');
         return (
             <Locations hash childProps={{model: this.state.model}}>
               <Location path="/" handler={PageHome} />
