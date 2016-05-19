@@ -1,7 +1,6 @@
 var React = require('react');
 var Drawing = require('./Drawing');
 var Button = require('./Button');
-var Timeline = require('./Timeline');
 
 module.exports = React.createClass ({
     getInitialState () {
@@ -10,8 +9,7 @@ module.exports = React.createClass ({
             limit: 5,
             page: 0,
             
-            totalPages: 0,
-            distinctAddresses: false
+            totalPages: 0
         };
     },
     back () {
@@ -41,47 +39,6 @@ module.exports = React.createClass ({
         var limit = this.state.limit;
         return Math.ceil(total/limit);
     },
-    distinctAddressesChange () {
-        this.setState({
-            distinctAddresses: !this.state.distinctAddresses
-        });
-    },
-    /**
-     * @description Converts YYYY string to a Array(startDate, endDate)
-     * @param year
-     * @returns {Array}
-     * @private
-     */
-    _convertYear (year) {
-        var a = '01/01/' + year;
-        var start = new Date(a);
-        var end = new Date(new Date(a).setYear(new Date(a).getFullYear() + 1));
-        return [start, end];
-    },
-    _buildYearTimelineData (model) {
-        var index = model.index;
-        var years = index.get('yyyy').keys();
-        var year;
-        var timelineData = [];
-        var range;
-        var convertedObj;
-        var startingTime;
-        var endingTime;
-        while ( year = years.next().value ) {
-            range = this._convertYear(year);
-            convertedObj = {
-                "label": year,
-                "times": [
-                    {
-                        "starting_time": range[0].getTime(),
-                        "ending_time": range[1].getTime()
-                    }
-                ]
-            };
-            timelineData.push(convertedObj);
-        }
-        return timelineData;
-    },
     _init () {
         var data = [];
         var map = this.props.model.index.get('yyyy');
@@ -97,9 +54,7 @@ module.exports = React.createClass ({
             size = idSet.size;
             data.push({year:year,size:size});
         }
-        var timelineData = this._buildYearTimelineData(this.props.model);
         this.setState({
-            timelineData: timelineData,
             data: data,
             totalPages: this._determineTotalPages()
         });
@@ -125,14 +80,12 @@ module.exports = React.createClass ({
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="col-md-3">
+                                <div className="col-md-8">
                                     <div className="btn-group" role="group">
                                         <Button disabled={this.isBackDisabled()} callback={this.back} text="Back"/>
                                         <Button disabled={this.isForwardDisabled()} callback={this.forward} text="Forward"/>
                                     </div>
-                                </div>
-                                <div className="col-md-3">
-                                    <p>Page: {this.state.page+1}/{this.state.totalPages}</p>
+                                    <span className="pull-right">Page {this.state.page+1}/{this.state.totalPages}</span>
                                 </div>
                             </div>
                             <div className="row">
@@ -144,23 +97,6 @@ module.exports = React.createClass ({
                                     />
                                 </div>
                             </div>
-                        </div>
-                        <div className="col-md-4">
-                            <div className="row">
-                                <div className="col-md-4">
-                                    <h4>Distinct Addresses</h4>
-                                    <input
-                                        onChange={this.distinctAddressesChange}
-                                        type="checkbox"
-                                        name="distinct-addresses"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-12">
-                            <h4>Years Available</h4>
-                            <Timeline data={this.state.timelineData} />
                         </div>
                     </div>
                 </div>
