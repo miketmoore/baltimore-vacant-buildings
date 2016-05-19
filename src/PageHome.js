@@ -129,12 +129,14 @@ module.exports = React.createClass({
                         <p>{this.state.currentEntries.length}</p>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-md-12">
-                        <h4>Years Available <small>Click to change dataset</small></h4>
-                        <Timeline cb={this.changeHandler} data={this.state.timelineData} />
+                {/*
+                    <div className="row">
+                        <div className="col-md-12">
+                            <h4>Years Available <small>Click to change dataset</small></h4>
+                            <Timeline cb={this.changeHandler} data={this.state.timelineData} />
+                        </div>
                     </div>
-                </div>
+                */}
                 <div className="row">
                     <div className="col-md-12">
                         <ReactDataGrid
