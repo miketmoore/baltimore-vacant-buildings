@@ -39,11 +39,15 @@ module.exports = React.createClass({
             markersByYear.get(year).add(marker);
         }
 
-        this.setState({
+        var stateObj = {
             sampleObj: obj,
             centerCoords: centerCoords,
-            markers: Array.from(markersByYear.get(props.year).values())
-        });
+            markers: []
+        };
+        if (markersByYear.has(props.year)) {
+            stateObj.markers = Array.from(markersByYear.get(props.year).values())
+        }
+        this.setState(stateObj);
 
     },
     render () {
