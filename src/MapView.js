@@ -10,24 +10,25 @@ module.exports = React.createClass({
     },
     getDefaultProps () {
         return {
-
+            entries: []
         };
     },
     _init (props) {
         if (!props) props = this.props;
         // extract centerCoords
-        var obj = props.model.index.get(':id').values().next().value;
-        var loc = obj.location;
-        var centerCoords = [parseFloat(loc[1]), parseFloat(loc[2])];
-        console.log('sample obj and centerCoords ', obj, centerCoords);
-
-        var markersByYear = new Map();
-        var marker, lat, lng, year;
-        var values = props.model.index.get(':id').values();
-        while ( obj = values.next().value ) {
+        var centerCoords = [39.290, -76.6122];
+        console.log('centerCoords: ', centerCoords);
+        var markersByDate = new Map();
+        var obj, marker, lat, lng, year, month, key;
+        var values = props.entries;
+        console.log('MapView._init values.length: ', values.length);
+        for ( var i = 0; i < values.length; i++ ) {
+            obj = values[i];
             lat = parseFloat(obj.location[1]);
-            lng = parseFloat(obj.location[2]);
+            lng = parseFloat(obj.location[2]);f
             year = obj.year;
+            month = obj.month;
+            key = year + '-' + month;
             marker = {
                 position: {
                     lat: lat,
@@ -36,8 +37,9 @@ module.exports = React.createClass({
                 key: obj[':id'],
                 defaultAnimation: 2
             };
-            if (!markersByYear.has(year)) markersByYear.set(year, new Set());
-            markersByYear.get(year).add(marker);
+            console.log('marker: ', marker);
+            if (!markersByDate.has(key)) markersByDate.set(key, new Set());
+            markersByDate.get(key).add(marker);
         }
 
         var stateObj = {
@@ -45,8 +47,8 @@ module.exports = React.createClass({
             centerCoords: centerCoords,
             markers: []
         };
-        if (markersByYear.has(props.year)) {
-            stateObj.markers = Array.from(markersByYear.get(props.year).values())
+        if (markersByDate.has(props.year + '-' + props.month)) {
+            stateObj.markers = Array.from(markersByDate.get(props.year + '-' + props.month).values())
         }
         this.setState(stateObj);
     },
@@ -55,7 +57,7 @@ module.exports = React.createClass({
 
     },
     componentWillMount () {
-        if (this.props.model.index.get('yyyy').size) this._init();
+        if (this.props.entries.length) this._init();
     },
     render () {
         if (!this.state.centerCoords.length) return null;

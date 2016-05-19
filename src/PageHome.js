@@ -21,6 +21,8 @@ module.exports = React.createClass({
         return {
             years: [],
             currentYear: '',
+            months: ['01','02','03','04','05','06','07','08','09','10','11','12'],
+            currentMonth: '',
             currentEntries: [],
             timelineData: []
         };
@@ -37,14 +39,30 @@ module.exports = React.createClass({
         }
         return entries;
     },
-    changeHandler (newCurrentYear) {
-        var byYear = this.props.model.index.get('yyyy');
-        var ids = Array.from(byYear.get(newCurrentYear).values());
+    _getNewIds (y, m) {
+        var byDate = this.props.model.index.get('yyyy-mm');
+        var key = y + '-' + m;
+        console.log('PageHome._getNewIds() key: ', key);
+        if (!byDate.has(key)) return [];
+        var idSet = byDate.get(key);
+        return Array.from(idSet.values());
+    },
+    yearSelectChangeHandler (newCurrentYear) {
+        var ids = this._getNewIds(newCurrentYear, this.state.currentMonth);
         var entries = this._getCurrentEntriesFromIds(ids);
         this.setState({
             currentYear: newCurrentYear,
             currentEntries: entries
         });
+    },
+    monthSelectChangeHandler (newCurrentMonth) {
+        console.log('PageHome.monthSelectChangeHandler()', newCurrentMonth);
+        var ids = this._getNewIds(this.state.currentYear, newCurrentMonth);
+        var entries = this._getCurrentEntriesFromIds(ids);
+        this.setState({
+            currentMonth: newCurrentMonth,
+            currentEntries: entries
+        })
     },
     /**
      * @description Converts YYYY string to a Array(startDate, endDate)
@@ -84,13 +102,16 @@ module.exports = React.createClass({
     _init () {
         var byYear = this.props.model.index.get('yyyy');
         var years = Array.from(byYear.keys()).sort();
-        var currentYear = years[years.length-1];
-        var ids = Array.from(byYear.get(currentYear).values());
+        var currentYear = years[0];
+        var currentMonth = '01';
+
+        var ids = this._getNewIds(currentYear, currentMonth);
         var entries = this._getCurrentEntriesFromIds(ids);
         var timelineData = this._buildYearTimelineData(years);
         this.setState({
             years: years,
             currentYear: currentYear,
+            currentMonth: currentMonth,
             currentEntries: entries,
             timelineData: timelineData
         });
@@ -120,14 +141,23 @@ module.exports = React.createClass({
             <Layout>
                 <div className="row">
                     <div className="col-md-8">
-                        <MapView width="700px" year={this.state.currentYear} model={this.props.model} />
+                        <MapView
+                            width="700px"
+                            year={this.state.currentYear}
+                            month={this.state.currentMonth}
+                            entries={this.state.currentEntries} />
                     </div>
                     <div className="col-md-4">
                         <h4>Current Year</h4>
                         <Select
                             currentVal={this.state.currentYear}
-                            changeHandler={this.changeHandler}
+                            changeHandler={this.yearSelectChangeHandler}
                             values={this.state.years} />
+                        <h4>Current Month</h4>
+                        <Select
+                            currentVal={this.state.currentMonth}
+                            changeHandler={this.monthSelectChangeHandler}
+                            values={this.state.months} />
                         <h4>Total Entries</h4>
                         <p>{this.state.currentEntries.length}</p>
                     </div>
@@ -136,7 +166,7 @@ module.exports = React.createClass({
                     <div className="row">
                         <div className="col-md-12">
                             <h4>Years Available <small>Click to change dataset</small></h4>
-                            <Timeline cb={this.changeHandler} data={this.state.timelineData} />
+                            <Timeline cb={this.yearSelectChangeHandler} data={this.state.timelineData} />
                         </div>
                     </div>
                 */}
