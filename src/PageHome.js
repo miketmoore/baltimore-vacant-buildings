@@ -79,11 +79,10 @@ module.exports = React.createClass({
             };
             timelineData.push(convertedObj);
         }
-        console.log('_buildYearTimelineData() ', timelineData);
         return timelineData;
     },
-    componentWillReceiveProps (props) {
-        var byYear = props.model.index.get('yyyy');
+    _init () {
+        var byYear = this.props.model.index.get('yyyy');
         var years = Array.from(byYear.keys()).sort();
         var currentYear = years[years.length-1];
         var ids = Array.from(byYear.get(currentYear).values());
@@ -95,6 +94,16 @@ module.exports = React.createClass({
             currentEntries: entries,
             timelineData: timelineData
         });
+    },
+    componentWillReceiveProps (props) {
+        this._init();
+    },
+    componentWillMount () {
+        var map = this.props.model.index.get('yyyy');
+        if (map.size) {
+            this._init();
+        }
+
     },
     gridRowGetter (i) {
         var row = this.state.currentEntries[i];

@@ -13,8 +13,8 @@ module.exports = React.createClass({
 
         };
     },
-    componentWillReceiveProps (props) {
-        console.log('MapView.componentWillReceiveProps() props: ', props);
+    _init (props) {
+        if (!props) props = this.props;
         // extract centerCoords
         var obj = props.model.index.get(':id').values().next().value;
         var loc = obj.location;
@@ -48,21 +48,25 @@ module.exports = React.createClass({
             stateObj.markers = Array.from(markersByYear.get(props.year).values())
         }
         this.setState(stateObj);
+    },
+    componentWillReceiveProps (props) {
+        this._init(props);
 
     },
+    componentWillMount () {
+        if (this.props.model.index.get('yyyy').size) this._init();
+    },
     render () {
-        console.log('Map.render()');
         if (!this.state.centerCoords.length) return null;
         var props = {
             markers: this.state.markers,
             onMapClick: function () {
-                console.log('onMapClick(): ', arguments);
+                //console.log('onMapClick(): ', arguments);
             },
             onMarkerRightclick: function (index) {
-                console.log('onMarkerRightclick() index: ', index);
+                //console.log('onMarkerRightclick() index: ', index);
             }
         };
-        console.log('MapView.render() currentYear: ', this.props.currentYear);
         return (
 
             <div className="row" style={{height: "100%"}}>
