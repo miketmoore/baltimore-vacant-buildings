@@ -23,7 +23,8 @@ module.exports = React.createClass({
 
         var markersByYear = new Map();
         var marker, lat, lng, year;
-        for ( var obj of props.model.index.get(':id').values() ) {
+        var values = props.model.index.get(':id').values();
+        while ( obj = values.next().value ) {
             lat = parseFloat(obj.location[1]);
             lng = parseFloat(obj.location[2]);
             year = obj.year;
