@@ -3,6 +3,7 @@ var Layout = require('./Layout');
 var MapView = require('./MapView');
 var YearSelect = require('./YearSelect');
 import ReactDataGrid from 'react-data-grid/addons';
+var Timeline = require('./BarGraph/Timeline');
 
 module.exports = React.createClass({
     getDefaultProps () {
@@ -20,28 +21,83 @@ module.exports = React.createClass({
         return {
             years: [],
             currentYear: '',
-            totalEntries: 0
+            currentEntries: [],
+            timelineData: []
         };
     },
-    yearChange () {
-        console.log('PageMap.yearChange() ', this, arguments);
+    _getCurrentEntriesFromIds (entryIds) {
+        var entries = [];
+        var id;
+        var entry;
+        var map = this.props.model.index.get(':id');
+        for ( var i = 0; i < entryIds.length; i++ ) {
+            id = entryIds[i];
+            entry = map.get(id);
+            entries.push(entry);
+        }
+        return entries;
     },
-    changeHandler (year) {
-        this.setState({ currentYear: year });
+    changeHandler (newCurrentYear) {
+        var byYear = this.props.model.index.get('yyyy');
+        var ids = Array.from(byYear.get(newCurrentYear).values());
+        var entries = this._getCurrentEntriesFromIds(ids);
+        this.setState({
+            currentYear: newCurrentYear,
+            currentEntries: entries
+        });
+    },
+    /**
+     * @description Converts YYYY string to a Array(startDate, endDate)
+     * @param year
+     * @returns {Array}
+     * @private
+     */
+    _convertYear (year) {
+        var a = '01/01/' + year;
+        var start = new Date(a);
+        var end = new Date(new Date(a).setYear(new Date(a).getFullYear() + 1));
+        return [start, end];
+    },
+    _buildYearTimelineData (years) {
+        var year;
+        var timelineData = [];
+        var range;
+        var convertedObj;
+        var startingTime;
+        var endingTime;
+        for ( var i = 0; i < years.length; i++ ) {
+            year = years[i];
+            range = this._convertYear(year);
+            convertedObj = {
+                "label": year,
+                "times": [
+                    {
+                        "starting_time": range[0].getTime(),
+                        "ending_time": range[1].getTime()
+                    }
+                ]
+            };
+            timelineData.push(convertedObj);
+        }
+        console.log('_buildYearTimelineData() ', timelineData);
+        return timelineData;
     },
     componentWillReceiveProps (props) {
         var byYear = props.model.index.get('yyyy');
         var years = Array.from(byYear.keys()).sort();
         var currentYear = years[years.length-1];
-        var totalEntries = byYear.get(currentYear).size;
+        var ids = Array.from(byYear.get(currentYear).values());
+        var entries = this._getCurrentEntriesFromIds(ids);
+        var timelineData = this._buildYearTimelineData(years);
         this.setState({
             years: years,
             currentYear: currentYear,
-            totalEntries: totalEntries
+            currentEntries: entries,
+            timelineData: timelineData
         });
     },
     gridRowGetter (i) {
-        var row = this.props.model.rows[i];
+        var row = this.state.currentEntries[i];
         return {
             "buildingaddress":row['buildingaddress'],
             "noticedate":row['noticedate'],
@@ -55,21 +111,27 @@ module.exports = React.createClass({
             <Layout>
                 <div className="row">
                     <div className="col-md-8">
-                        <h4>Vacancies by Year</h4>
                         <MapView width="700px" year={this.state.currentYear} model={this.props.model} />
                     </div>
                     <div className="col-md-4">
                         <h4>Current Year</h4>
                         <YearSelect currentYear={this.state.currentYear} changeHandler={this.changeHandler} years={this.state.years} />
+                        <h4>Total Entries</h4>
+                        <p>{this.state.currentEntries.length}</p>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-md-12">
-                        <h4>List <small>{this.state.totalEntries}</small></h4>
+                        <h4>Years Available <small>Click to change dataset</small></h4>
+                        <Timeline cb={this.changeHandler} data={this.state.timelineData} />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-md-12">
                         <ReactDataGrid
                             columns={this.props.gridColumns}
                             rowGetter={this.gridRowGetter}
-                            rowsCount={this.props.model.rows.length}
+                            rowsCount={this.state.currentEntries.length}
                             minHeight={500} />
                     </div>
                 </div>

@@ -114,4 +114,8 @@ Model.prototype._mapRows = function () {
         rows.push(row);
     }
     this._mapped.rows = rows;
+
+    console.log('Distinct neighborhood: ', this.index.get('neighborhood').size);
+    console.log('Distinct policedistrict: ', this.index.get('policedistrict').size);
+    console.log('Distinct councildistrict: ', this.index.get('councildistrict').size);
 };
