@@ -4,8 +4,6 @@ var Locations = Router.Locations;
 var Location = Router.Location;
 var Model = require('./Model');
 var PageHome = require('./PageHome');
-var PageBasicInfo = require('./PageBasicInfo');
-var PageDataGrid = require('./PageDataGrid');
 var PagePaperBarGraph = require('./PagePaperBarGraph');
 var PageMap = require('./PageMap');
 
@@ -35,7 +33,7 @@ module.exports = React.createClass({
         return (
             <Locations hash childProps={{model: this.state.model}}>
               <Location path="/" handler={PageMap} />
-              <Location path="/paper-bar-graph" handler={PagePaperBarGraph} />
+              <Location path="/bar-graph" handler={PagePaperBarGraph} />
             </Locations>
         )
     }
