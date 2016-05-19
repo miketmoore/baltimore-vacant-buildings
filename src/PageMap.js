@@ -1,31 +1,31 @@
 var React = require('react');
 var Layout = require('./Layout');
 var MapView = require('./MapView');
+var YearSelect = require('./YearSelect');
 
 module.exports = React.createClass({
-    getInitialState () {
+    getInitialState() {
         return {
             years: [],
-            currentYear: ''
+            currentYear: '',
+            totalEntries: 0
         };
     },
-    _getYearOptions () {
-        return this.state.years.map((year) => {
-            return (
-                <option value={year}  key={year}>{year}</option>
-            );
-        });
+    yearChange () {
+        console.log('PageMap.yearChange() ', this, arguments);
     },
-    change (event) {
-        console.log(event.target.value);
-        this.setState({ currentYear: event.target.value });
+    changeHandler (year) {
+        this.setState({ currentYear: year });
     },
     componentWillReceiveProps (props) {
-        console.log('PageMap.componentWillReceiveProps() props: ', props);
-        var years = props.model.getDistinct('yyyy');
+        var byYear = props.model.index.get('yyyy');
+        var years = Array.from(byYear.keys()).sort();
+        var currentYear = years[years.length-1];
+        var totalEntries = byYear.get(currentYear).size;
         this.setState({
             years: years,
-            currentYear: years[years.length-1]
+            currentYear: currentYear,
+            totalEntries: totalEntries
         });
     },
     render () {
@@ -37,10 +37,9 @@ module.exports = React.createClass({
                         <MapView year={this.state.currentYear} model={this.props.model} />
                     </div>
                     <div className="col-md-6">
-                        <h4>Current Year</h4>
-                        <select value={this.state.currentYear} onChange={this.change}>
-                            {this._getYearOptions()}
-                        </select>
+                        <h4>Current Year <YearSelect currentYear={this.state.currentYear} changeHandler={this.changeHandler} years={this.state.years} /></h4>
+
+                        <h4>Total Entries: <small>{this.state.totalEntries}</small></h4>
                     </div>
                 </div>
             </Layout>
