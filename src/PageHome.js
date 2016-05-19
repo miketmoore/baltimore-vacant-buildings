@@ -1,7 +1,7 @@
 var React = require('react');
 var Layout = require('./Layout');
 var MapView = require('./MapView');
-var YearSelect = require('./YearSelect');
+var Select = require('./Select');
 var Timeline = require('./Timeline');
 import ReactDataGrid from 'react-data-grid/addons';
 
@@ -124,7 +124,10 @@ module.exports = React.createClass({
                     </div>
                     <div className="col-md-4">
                         <h4>Current Year</h4>
-                        <YearSelect currentYear={this.state.currentYear} changeHandler={this.changeHandler} years={this.state.years} />
+                        <Select
+                            currentVal={this.state.currentYear}
+                            changeHandler={this.changeHandler}
+                            values={this.state.years} />
                         <h4>Total Entries</h4>
                         <p>{this.state.currentEntries.length}</p>
                     </div>
