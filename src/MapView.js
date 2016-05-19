@@ -72,7 +72,7 @@ module.exports = React.createClass({
                             <div
                                 style={{
                                     display: 'block',
-                                    width: '500px',
+                                    width: this.props.width,
                                     height: '500px'
                                 }}
                             />
