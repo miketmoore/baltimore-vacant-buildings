@@ -34,11 +34,8 @@ module.exports = React.createClass({
     render () {
         return (
             <Locations hash childProps={{model: this.state.model}}>
-              <Location path="/" handler={PageHome} />
-              <Location path="/data-grid" handler={PageDataGrid} />
-              <Location path="/basic-info" handler={PageBasicInfo} />
+              <Location path="/" handler={PageMap} />
               <Location path="/paper-bar-graph" handler={PagePaperBarGraph} />
-                <Location path="/map" handler={PageMap} />
             </Locations>
         )
     }
