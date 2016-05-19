@@ -21,27 +21,28 @@ module.exports = React.createClass({
         var centerCoords = [parseFloat(loc[1]), parseFloat(loc[2])];
         console.log('sample obj and centerCoords ', obj, centerCoords);
 
-        var markers = new Set();
-        var count = 0;
+        var markersByYear = new Map();
+        var marker, lat, lng, year;
         for ( var obj of props.model.index.get(':id').values() ) {
-            if (count == 50) break;
-            var lat = parseFloat(obj.location[1]);
-            var lng = parseFloat(obj.location[2]);
-            markers.add({
+            lat = parseFloat(obj.location[1]);
+            lng = parseFloat(obj.location[2]);
+            year = obj.year;
+            marker = {
                 position: {
                     lat: lat,
                     lng: lng
                 },
                 key: obj[':id'],
                 defaultAnimation: 2
-            });
-            count++;
+            };
+            if (!markersByYear.has(year)) markersByYear.set(year, new Set());
+            markersByYear.get(year).add(marker);
         }
 
         this.setState({
             sampleObj: obj,
             centerCoords: centerCoords,
-            markers: Array.from(markers.values())
+            markers: Array.from(markersByYear.get(props.year).values())
         });
 
     },
@@ -57,6 +58,7 @@ module.exports = React.createClass({
                 console.log('onMarkerRightclick() index: ', index);
             }
         };
+        console.log('MapView.render() currentYear: ', this.props.currentYear);
         return (
 
             <div className="row" style={{height: "100%"}}>
@@ -66,7 +68,7 @@ module.exports = React.createClass({
                             <div
                                 style={{
                                     display: 'block',
-                                    width: '100%',
+                                    width: '500px',
                                     height: '500px'
                                 }}
                             />
@@ -74,7 +76,7 @@ module.exports = React.createClass({
                         googleMapElement={
                             <GoogleMap
                                 ref={(map) => console.log('GoogleMap component ref map: ', map)}
-                                defaultZoom={20}
+                                defaultZoom={12}
                                 defaultCenter={{ lat: this.state.centerCoords[0], lng: this.state.centerCoords[1] }}
                                 onClick={props.onMapClick}
                             >
