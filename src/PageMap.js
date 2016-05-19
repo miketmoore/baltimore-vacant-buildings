@@ -2,8 +2,8 @@ var React = require('react');
 var Layout = require('./Layout');
 var MapView = require('./MapView');
 var YearSelect = require('./YearSelect');
+var Timeline = require('./Timeline');
 import ReactDataGrid from 'react-data-grid/addons';
-var Timeline = require('./BarGraph/Timeline');
 
 module.exports = React.createClass({
     getDefaultProps () {
