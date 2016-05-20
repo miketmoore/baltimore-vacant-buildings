@@ -3,7 +3,7 @@
 ## TODO
 
 - distinct filters in visualization page
-- google maps
+- more visualizations!
 - automated tests and coverage
 - fix npm run run on windows
 
