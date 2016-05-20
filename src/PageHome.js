@@ -103,7 +103,7 @@ module.exports = React.createClass({
     _init () {
         var byYear = this.props.model.index.get('yyyy');
         var years = Array.from(byYear.keys()).sort();
-        var currentYear = years[0];
+        var currentYear = years[years.length-1];
         var currentMonth = '01';
 
         var ids = this._getNewIds(currentYear, currentMonth);
@@ -125,7 +125,6 @@ module.exports = React.createClass({
         if (map.size) {
             this._init();
         }
-
     },
     gridRowGetter (i) {
         var row = this.state.currentEntries[i];
@@ -149,18 +148,28 @@ module.exports = React.createClass({
                             entries={this.state.currentEntries} />
                     </div>
                     <div className="col-md-4">
-                        <h4>Current Year</h4>
-                        <Select
-                            currentVal={this.state.currentYear}
-                            changeHandler={this.yearSelectChangeHandler}
-                            values={this.state.years} />
-                        <h4>Current Month</h4>
-                        <Select
-                            currentVal={this.state.currentMonth}
-                            changeHandler={this.monthSelectChangeHandler}
-                            values={this.state.months} />
-                        <h4>Total Entries</h4>
-                        <p>{this.state.currentEntries.length}</p>
+                        <div className="row">
+                            <div className="col-md-2">
+                                <h4>Year</h4>
+                                <Select
+                                    currentVal={this.state.currentYear}
+                                    changeHandler={this.yearSelectChangeHandler}
+                                    values={this.state.years} />
+                            </div>
+                            <div className="col-md-2">
+                                <h4>Month</h4>
+                                <Select
+                                    currentVal={this.state.currentMonth}
+                                    changeHandler={this.monthSelectChangeHandler}
+                                    values={this.state.months} />
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-4">
+                                <h4>Total Entries</h4>
+                                <p>{this.state.currentEntries.length}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {/*
