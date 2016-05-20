@@ -5,6 +5,7 @@ var Location = Router.Location;
 var Model = require('./Model');
 var PageHome = require('./PageHome');
 var PagePaperBarGraph = require('./PagePaperBarGraph');
+var PageAbout = require('./PageAbout');
 
 module.exports = React.createClass({
     getInitialState () {
@@ -32,7 +33,7 @@ module.exports = React.createClass({
         return (
             <Locations hash childProps={{model: this.state.model}}>
               <Location path="/" handler={PageHome} />
-              <Location path="/bar-graph" handler={PagePaperBarGraph} />
+              <Location path="/about" handler={PageAbout} />
             </Locations>
         )
     }
