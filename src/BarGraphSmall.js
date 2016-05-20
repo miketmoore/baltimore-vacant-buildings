@@ -122,6 +122,12 @@ module.exports = React.createClass({
                     fillColor: '#F29F05'
                 }
             });
+            rect.on('mouseenter', function () {
+                this.fillColor = '#F2AF5C';
+            });
+            rect.on('mouseleave', function () {
+                this.fillColor = '#F29F05';
+            });
             text = new paper.PointText({
                 point: new paper.Point({
                     x: rect.bounds.bottomCenter.x,
