@@ -56,10 +56,12 @@ Model.prototype._indexRow = function (row) {
 
     // Index row ID by year
     var y = row['noticedate'].slice(0,4);
+    var m = row['noticedate'].slice(5,7);
     var ym = row['noticedate'].slice(0,7);
     var ymd = row['noticedate'].slice(0,10);
 
     row.year = y;
+    row.month = m;
     row.yearMonth = ym;
     row.yearMonthDay = ymd;
 
