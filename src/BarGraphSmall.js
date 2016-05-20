@@ -125,27 +125,25 @@ module.exports = React.createClass({
             text = new paper.PointText({
                 point: new paper.Point({
                     x: rect.bounds.bottomCenter.x,
-                    y: rect.bounds.bottomCenter.y
+                    y: rect.bounds.bottomCenter.y - 2
                 }),
                 content: obj.label,
                 justification: 'center',
                 fontSize: 14,
-                fontWeight: 'bold',
                 fontFamily: 'sans-serif',
-                fillColor: '#731007',
+                fillColor: this.props.fontcolora,
                 blendMode: 'multiply'
             });
             text = new paper.PointText({
                 point: new paper.Point({
                     x: rect.bounds.topCenter.x,
-                    y: rect.bounds.topCenter.y
+                    y: rect.bounds.topCenter.y - 1
                 }),
                 content: parseInt(obj.size).toLocaleString(),
                 justification: 'center',
                 fontSize: 14,
-                fontWeight: 'bold',
                 fontFamily: 'sans-serif',
-                fillColor: '#F29F05',
+                fillColor: this.props.fontcolorb,
                 blendMode: 'multiply'
             });
             x += barWidth + this.props.barMargin;
