@@ -1,14 +1,14 @@
 var React = require('react');
 
 module.exports = React.createClass({
-    getInitialState () {
+    getDefaultProps () {
         return {
             values: [],
             currentVal: ''
         };
     },
     _getOptions () {
-        return this.state.values.map((val) => {
+        return this.props.values.map((val) => {
             return (
                 <option value={val}  key={val}>{val}</option>
             );
@@ -27,7 +27,7 @@ module.exports = React.createClass({
     },
     render () {
         return (
-           <select value={this.state.currentVal} onChange={this.changeHandler}>
+           <select value={this.props.currentVal} onChange={this.changeHandler}>
                {this._getOptions()}
            </select>
         )

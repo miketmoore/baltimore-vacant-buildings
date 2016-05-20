@@ -42,14 +42,12 @@ module.exports = React.createClass({
     _getNewIds (y, m) {
         var byDate = this.props.model.index.get('yyyy-mm');
         var key = y + '-' + m;
-        console.log('PageHome._getNewIds() key: ', key);
         if (!byDate.has(key)) return [];
         var idSet = byDate.get(key);
         return Array.from(idSet.values());
     },
     yearSelectChangeHandler (newCurrentYear) {
         var ids = this._getNewIds(newCurrentYear, this.state.currentMonth);
-        console.log('PageHome.yearSelectChangeHandler()', newCurrentYear, ids.length);
         var entries = this._getCurrentEntriesFromIds(ids);
         this.setState({
             currentYear: newCurrentYear,
@@ -58,7 +56,6 @@ module.exports = React.createClass({
     },
     monthSelectChangeHandler (newCurrentMonth) {
         var ids = this._getNewIds(this.state.currentYear, newCurrentMonth);
-        console.log('PageHome.monthSelectChangeHandler()', newCurrentMonth, ids.length);
         var entries = this._getCurrentEntriesFromIds(ids);
         this.setState({
             currentMonth: newCurrentMonth,
@@ -120,6 +117,8 @@ module.exports = React.createClass({
     componentWillReceiveProps (props) {
         this._init();
     },
+    // called before render
+    // setting state here will not trigger re-rendering
     componentWillMount () {
         var map = this.props.model.index.get('yyyy');
         if (map.size) {
