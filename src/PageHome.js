@@ -25,6 +25,7 @@ module.exports = React.createClass({
             currentYear: '',
             months: ['01','02','03','04','05','06','07','08','09','10','11','12'],
             currentMonth: '',
+            currentCouncilDistrict: '',
             currentEntries: [],
             timelineData: []
         };
@@ -135,6 +136,7 @@ module.exports = React.createClass({
         var years = Array.from(byYear.keys()).sort();
         var currentYear = years[years.length-1];
         var currentMonth = '01';
+        var currentCouncilDistrict = '';
 
         var ids = this._getNewIds(currentYear, currentMonth);
         var entries = this._getCurrentEntriesFromIds(ids);
@@ -146,8 +148,27 @@ module.exports = React.createClass({
             years: years,
             currentYear: currentYear,
             currentMonth: currentMonth,
+            currentCouncilDistrict: currentCouncilDistrict,
             currentEntries: entries,
             timelineData: timelineData
+        });
+    },
+    _councilGraphClickHandler (data) {
+        var newVal = data.label;
+        var ids = this._getNewIds(this.state.currentYear, this.state.currentMonth, newVal);
+        var entries = this._getCurrentEntriesFromIds(ids);
+
+        if (newVal != '') {
+            // filter entries list by councildistrict
+            entries = entries.filter(function (entry) {
+                return entry.councildistrict == newVal;
+            });
+        }
+
+        this.setState({
+
+            currentEntries: entries,
+            currentCouncilDistrict: data.label
         });
     },
     componentWillReceiveProps (props) {
@@ -205,6 +226,7 @@ module.exports = React.createClass({
                                 <h5>Vacancies per Council District</h5>
                                 <BarGraphSmall
                                     data={this.state.entriesPerCouncilDistrict}
+                                    clickHandler={this._councilGraphClickHandler}
                                     bgroundcolor={'#A3BFD9'}
                                     bordercolor={'#7790D9'}
                                     fontcolora="#F24535"
