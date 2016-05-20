@@ -3,6 +3,7 @@ var Layout = require('./Layout');
 var MapView = require('./MapView');
 var Select = require('./Select');
 var Timeline = require('./Timeline');
+var BarGraphSmall = require('./BarGraphSmall');
 import ReactDataGrid from 'react-data-grid/addons';
 
 module.exports = React.createClass({
@@ -20,6 +21,7 @@ module.exports = React.createClass({
     getInitialState() {
         return {
             years: [],
+            entriesPerCouncilDistrict: [],
             currentYear: '',
             months: ['01','02','03','04','05','06','07','08','09','10','11','12'],
             currentMonth: '',
@@ -50,6 +52,7 @@ module.exports = React.createClass({
         var ids = this._getNewIds(newCurrentYear, this.state.currentMonth);
         var entries = this._getCurrentEntriesFromIds(ids);
         this.setState({
+            entriesPerCouncilDistrict: this._getEntriesPerCouncilDistrict(entries),
             currentYear: newCurrentYear,
             currentEntries: entries
         });
@@ -58,6 +61,7 @@ module.exports = React.createClass({
         var ids = this._getNewIds(this.state.currentYear, newCurrentMonth);
         var entries = this._getCurrentEntriesFromIds(ids);
         this.setState({
+            entriesPerCouncilDistrict: this._getEntriesPerCouncilDistrict(entries),
             currentMonth: newCurrentMonth,
             currentEntries: entries
         })
@@ -97,6 +101,35 @@ module.exports = React.createClass({
         }
         return timelineData;
     },
+    _getFullCouncilDistrictList () {
+        var model = this.props.model;
+        var map = model.index.get('councildistrict');
+        // sort strings numerically
+        return Array.from(map.keys()).sort(function (a,b) {
+            a = parseInt(a);
+            b = parseInt(b);
+            if (a < b) return -1;
+            if (a > b) return 1;
+            return 0;
+        });
+    },
+    _getEntriesPerCouncilDistrict (entries) {
+        var fullCouncilDistrictList = this._getFullCouncilDistrictList();
+        var fullCouncilDistrictMap = new Map();
+        fullCouncilDistrictList.forEach(cd => fullCouncilDistrictMap.set(cd, new Set()));
+        entries.forEach((entry) => {
+            fullCouncilDistrictMap.get(entry.councildistrict).add(entry[':id']);
+        });
+        var entriesPerCouncilDistrict = [];
+
+        fullCouncilDistrictMap.forEach((v, k) => {
+            entriesPerCouncilDistrict.push({
+                label: k,
+                size: v.size
+            });
+        });
+        return entriesPerCouncilDistrict;
+    },
     _init () {
         var byYear = this.props.model.index.get('yyyy');
         var years = Array.from(byYear.keys()).sort();
@@ -105,8 +138,11 @@ module.exports = React.createClass({
 
         var ids = this._getNewIds(currentYear, currentMonth);
         var entries = this._getCurrentEntriesFromIds(ids);
+
         var timelineData = this._buildYearTimelineData(years);
+
         this.setState({
+            entriesPerCouncilDistrict: this._getEntriesPerCouncilDistrict(entries),
             years: years,
             currentYear: currentYear,
             currentMonth: currentMonth,
@@ -139,16 +175,16 @@ module.exports = React.createClass({
         return (
             <Layout>
                 <div className="row">
-                    <div className="col-md-8">
+                    <div className="col-md-7">
                         <MapView
-                            width="700px"
+                            width="600px"
                             year={this.state.currentYear}
                             month={this.state.currentMonth}
                             entries={this.state.currentEntries} />
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-5">
                         <div className="row">
-                            <div className="col-md-2">
+                            <div className="col-md-3">
                                 <h4>Year</h4>
                                 <Select
                                     currentVal={this.state.currentYear}
@@ -164,9 +200,14 @@ module.exports = React.createClass({
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col-md-4">
-                                <h4>Total Entries</h4>
-                                <p>{this.state.currentEntries.length}</p>
+                            <div className="col-md-5">
+                                <p>Total Entries: {this.state.currentEntries.length}</p>
+                                <h5>Vacancies per Council District</h5>
+                                <BarGraphSmall
+                                    data={this.state.entriesPerCouncilDistrict}
+                                    bgroundcolor={'#FFC20E'}
+                                    bordercolor={'#231718'}
+                                />
                             </div>
                         </div>
                     </div>
