@@ -49,6 +49,7 @@ module.exports = React.createClass({
     },
     yearSelectChangeHandler (newCurrentYear) {
         var ids = this._getNewIds(newCurrentYear, this.state.currentMonth);
+        console.log('PageHome.yearSelectChangeHandler()', newCurrentYear, ids.length);
         var entries = this._getCurrentEntriesFromIds(ids);
         this.setState({
             currentYear: newCurrentYear,
@@ -56,8 +57,8 @@ module.exports = React.createClass({
         });
     },
     monthSelectChangeHandler (newCurrentMonth) {
-        console.log('PageHome.monthSelectChangeHandler()', newCurrentMonth);
         var ids = this._getNewIds(this.state.currentYear, newCurrentMonth);
+        console.log('PageHome.monthSelectChangeHandler()', newCurrentMonth, ids.length);
         var entries = this._getCurrentEntriesFromIds(ids);
         this.setState({
             currentMonth: newCurrentMonth,
