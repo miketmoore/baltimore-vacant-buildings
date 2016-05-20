@@ -205,8 +205,10 @@ module.exports = React.createClass({
                                 <h5>Vacancies per Council District</h5>
                                 <BarGraphSmall
                                     data={this.state.entriesPerCouncilDistrict}
-                                    bgroundcolor={'#FFC20E'}
-                                    bordercolor={'#231718'}
+                                    bgroundcolor={'#A3BFD9'}
+                                    bordercolor={'#7790D9'}
+                                    fontcolora="#F24535"
+                                    fontcolorb="#F2AF5C"
                                 />
                             </div>
                         </div>
