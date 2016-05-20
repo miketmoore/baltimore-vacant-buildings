@@ -122,6 +122,11 @@ module.exports = React.createClass({
                     fillColor: '#F29F05'
                 }
             });
+            rect.data = obj;
+            var clickHandler = this.props.clickHandler;
+            rect.on('mousedown', function () {
+                clickHandler(this.data);
+            });
             rect.on('mouseenter', function () {
                 this.fillColor = '#F2AF5C';
             });
