@@ -6,7 +6,7 @@ module.exports = React.createClass({
         return {
             data: [],
             bgroundcolor: '#000000',
-            viewWidth: 290,
+            viewWidth: 300,
             viewHeight: 100,
             barMargin: 5,
             barWidth: 16,
@@ -101,7 +101,7 @@ module.exports = React.createClass({
         var barWidth = this.props.barWidth;
         var barHeight; // diff per bar
         //var x = (this.props.viewWidth - (this.props.barWidth + this.props.barMargin)) / 2;
-        var x = 0;
+        var x = this.props.barMargin;
         var y = 0;
         var rect;
         var text;
