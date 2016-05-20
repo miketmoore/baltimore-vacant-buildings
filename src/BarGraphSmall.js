@@ -119,7 +119,7 @@ module.exports = React.createClass({
                 }),
                 size: new paper.Size(barWidth, barHeight),
                 style: {
-                    fillColor: '#F29F05'
+                    fillColor: (obj.label == this.props.selectedLabel) ? 'yellow' : '#F29F05'
                 }
             });
             rect.data = obj;
@@ -128,10 +128,10 @@ module.exports = React.createClass({
                 clickHandler(this.data);
             });
             rect.on('mouseenter', function () {
-                this.fillColor = '#F2AF5C';
+                //this.fillColor = '#F2AF5C';
             });
             rect.on('mouseleave', function () {
-                this.fillColor = '#F29F05';
+                //this.fillColor = '#F29F05';
             });
             text = new paper.PointText({
                 point: new paper.Point({
@@ -203,7 +203,10 @@ module.exports = React.createClass({
     },
     render () {
         return (
-            <canvas id="canvas" resize></canvas>
+            <div>
+                <p>selectedLabel: {this.props.selectedLabel}</p>
+                <canvas id="canvas" resize></canvas>
+            </div>
         );
     }
 });
