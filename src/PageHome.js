@@ -210,7 +210,8 @@ module.exports = React.createClass({
                 <div className="row">
                     <div className="col-md-7">
                         <MapView
-                            width="600px"
+                            width="350px"
+                            height="350px"
                             year={this.state.currentYear}
                             month={this.state.currentMonth}
                             entries={this.state.currentEntries} />
@@ -239,7 +240,7 @@ module.exports = React.createClass({
                                 <Button
                                     disabled={this.state.currentCouncilDistrict == ''}
                                     clickHandler={this._clearCouncilHandler}
-                                    label="Clear Council District Filter"
+                                    label="Clear Filter"
                                 />
                                 <BarGraphSmall
                                     data={this.state.entriesPerCouncilDistrict}
