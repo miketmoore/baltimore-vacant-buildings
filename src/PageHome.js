@@ -32,26 +32,17 @@ module.exports = React.createClass({
     },
     _getCurrentEntriesFromIds (entryIds) {
         var entries = [];
-        var id;
-        var entry;
-        var map = this.props.model.index.get(':id');
         for ( var i = 0; i < entryIds.length; i++ ) {
-            id = entryIds[i];
-            entry = map.get(id);
+            entry = this.props.model.getById(entryIds[i]);
             entries.push(entry);
         }
         return entries;
     },
-    _getNewIds (y, m) {
-        var byDate = this.props.model.index.get('yyyy-mm');
-        var key = y + '-' + m;
-        if (!byDate.has(key)) return [];
-        var idSet = byDate.get(key);
-        return Array.from(idSet.values());
-    },
     yearSelectChangeHandler (newCurrentYear) {
-        var ids = this._getNewIds(newCurrentYear, this.state.currentMonth);
-        var entries = this._getCurrentEntriesFromIds(ids);
+        var entries = this.props.model.filter({
+            year: newCurrentYear,
+            month: this.state.currentMonth
+        });
         this.setState({
             entriesPerCouncilDistrict: this._getEntriesPerCouncilDistrict(entries),
             currentYear: newCurrentYear,
@@ -59,8 +50,10 @@ module.exports = React.createClass({
         });
     },
     monthSelectChangeHandler (newCurrentMonth) {
-        var ids = this._getNewIds(this.state.currentYear, newCurrentMonth);
-        var entries = this._getCurrentEntriesFromIds(ids);
+        var entries = this.props.model.filter({
+            year: this.state.currentYear,
+            month: newCurrentMonth
+        });
         this.setState({
             entriesPerCouncilDistrict: this._getEntriesPerCouncilDistrict(entries),
             currentMonth: newCurrentMonth,
@@ -137,8 +130,10 @@ module.exports = React.createClass({
         var currentYear = years[years.length-1];
         var currentMonth = '01';
 
-        var ids = this._getNewIds(currentYear, currentMonth);
-        var entries = this._getCurrentEntriesFromIds(ids);
+        var entries = this.props.model.filter({
+            year: currentYear,
+            month: currentMonth
+        });
 
         var timelineData = this._buildYearTimelineData(years);
 
