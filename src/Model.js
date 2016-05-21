@@ -23,8 +23,12 @@ Object.defineProperties(Model.prototype, {
 Model.prototype.setRaw = function (raw) {
     if (!raw) return Promise.reject('setRaw failed - no raw data passed');
     if (!raw.meta) return Promise.reject('setRaw failed - raw data is missing "meta" property');
+    if (!raw.meta.view) return Promise.reject('setRaw failed - raw data is missing "meta.view" property');
+    if (!raw.meta.view.columns) return Promise.reject('setRaw failed - raw data is missing "meta.view.columns" property');
+    if (!raw.data) return Promise.reject('setRaw failed - raw data is missing "data" property');
     this._raw = raw;
     this.map();
+    return Promise.resolve();
 };
 Model.prototype.map = function () {
     this._mapColumns();
