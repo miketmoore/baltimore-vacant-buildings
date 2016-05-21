@@ -17,19 +17,40 @@ describe('Model', function () {
         model.should.have.property('setRaw');
     });
     describe('setRaw', function () {
-        it('should fail w/out required args', function (done) {
-            model.setRaw().catch(function (err) {
-                done();
-            });
+        it('should reject w/out required args', function (done) {
+            model.setRaw().catch(e => done());
         });
-        it('should fail w/invalid raw data', function (done) {
-            var invalid = {};
-            model.setRaw(invalid).catch(function (err) {
-                done();
-            });
+        it('should reject w/invalid raw data', function (done) {
+            var rejections = 0;
+            var total = 4;
+            var isDone = function (e) {
+                rejections++;
+                if (rejections == total) done();
+            };
+            model.setRaw({}).catch(isDone);
+            model.setRaw({ meta: {} }).catch(isDone);
+            model.setRaw({ meta: { view: {} } }).catch(isDone);
+            model.setRaw({ meta: { view: { columns: [] } } }).catch(isDone);
         });
+        // it('should resolve w/valid raw data', function (done) {
+        //     var valid = {
+        //         meta: {
+        //             view: {
+        //                 columns: [{
+        //                     fieldName: ':id'
+        //                 }]
+        //             }
+        //         },
+        //         data: [
+        //
+        //         ]
+        //     };
+        //     model.setRaw(valid).then(function () {
+        //         done();
+        //     });
+        // });
     })
-  // it('should fail - no raw data passed', function (done) {
+  // it('should reject - no raw data passed', function (done) {
   //   var model = new Model();
   //   model.setRaw().catch(function (err) {
   //       err.should.equal('setRaw failed - no raw data passed');
