@@ -6,75 +6,88 @@ var should = require('should');
 var Model = require('../Model');
 
 var sampleDataColDefs = [
-    null,
-    { fieldName: ':id' },
-    null,
-    null,
-    null,
+    null, {
+        fieldName: ':id'
+    },
     null,
     null,
     null,
     null,
     null,
     null,
-    { fieldName: 'buildingaddress'},
-    {fieldName: 'noticedate'},
-    {fieldName: 'neighborhood'},
-    {fieldName: 'policedistrict'},
-    {fieldName: 'councildistrict'},
-    {fieldName: 'location'}
+    null,
+    null,
+    null, {
+        fieldName: 'buildingaddress'
+    }, {
+        fieldName: 'noticedate'
+    }, {
+        fieldName: 'neighborhood'
+    }, {
+        fieldName: 'policedistrict'
+    }, {
+        fieldName: 'councildistrict'
+    }, {
+        fieldName: 'location'
+    }
 ];
 
 var sampleData = [
     [
+        2954,
+        "29040AAA-3EE2-4068-8FB6-BB2A913921F7",
+        2954,
+        1457621734,
+        "697390",
+        1457949655,
+        "697390",
         null,
-        "67F0BF20-05D7-40D4-89AE-4D323757158D",
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        "2017 W NORTH AVE",
-        '2016-01-14T00:00:00',
-        "EASTERWOOD",
-        "WESTERN",
-        "7",
-        [
-            null,
-            "39.30943944",
-            "-76.65044524",
-            null,
-            false
-        ]
-    ],
-    [
-        null,
-        "2F623C7A-85E2-42AC-A9CB-C6C241BAD890",
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        "1041 N FULTON AVE",
-        "2016-01-08T00:00:00",
-        "SANDTOWN-WINCHESTER",
+        "0209 003 012916",
+        "0209",
+        "003",
+        "1707 W BALTIMORE ST",
+        "2016-01-29T00:00:00",
+        "FRANKLIN SQUARE",
         "WESTERN",
         "9",
-        [
-            null,
-            "39.30077843",
-            "-76.64556524",
-            null,
-            false
-        ]
+        [null, "39.28809997", "-76.64432508", null, false]
+    ],
+    [
+        11737,
+        "20DF27E8-7666-457E-A573-B62090C05E6B",
+        11737,
+        1457621953,
+        "697390",
+        1457949781,
+        "697390",
+        null,
+        "3205 046 020316",
+        "3205",
+        "046",
+        "2110 HERBERT ST",
+        "2016-02-03T00:00:00",
+        "MONDAWMIN",
+        "WESTERN",
+        "7",
+        [null, "39.31033313", "-76.65199363", null, false]
+    ],
+    [
+        3070,
+        "9FEFF7FE-D255-4683-9714-0783AC07F70E",
+        3070,
+        1457621737,
+        "697390",
+        1457949654,
+        "697390",
+        null,
+        "0223 019 052093",
+        "0223",
+        "019",
+        "2037 HOLLINS ST",
+        "1993-05-20T00:00:00",
+        "BOYD-BOOTH",
+        "SOUTHWESTERN",
+        "9", [null, "39.2868309", "-76.64959404", null, false]
     ]
 ];
 
@@ -87,87 +100,96 @@ var validData = {
     data: sampleData
 };
 
-var expectedData = [
-    {
-        ':id': "67F0BF20-05D7-40D4-89AE-4D323757158D",
-        'buildingaddress':"2017 W NORTH AVE",
-        'noticedate':'2016-01-14T00:00:00',
-        'neighborhood':'EASTERWOOD',
-        'policedistrict':'WESTERN',
-        'councildistrict':'7',
-        'location':[
-            null,
-            "39.30943944",
-            "-76.65044524",
-            null,
-            false
-        ],
-        'year': '2016',
-        'month': '01',
-        'yearMonth': '2016-01',
-        'yearMonthDay': '2016-01-14'
-    },
-    {
-        ':id':"2F623C7A-85E2-42AC-A9CB-C6C241BAD890",
-        'buildingaddress':"1041 N FULTON AVE",
-        'noticedate':"2016-01-08T00:00:00",
-        'neighborhood':"SANDTOWN-WINCHESTER",
+var expectedData = [{
+        ':id': "29040AAA-3EE2-4068-8FB6-BB2A913921F7",
+        'buildingaddress':"1707 W BALTIMORE ST",
+        'noticedate':"2016-01-29T00:00:00",
+        'neighborhood':"FRANKLIN SQUARE",
         'policedistrict':"WESTERN",
         'councildistrict':"9",
-        'location':[
-            null,
-            "39.30077843",
-            "-76.64556524",
-            null,
-            false
-        ],
+        'location':[null, "39.28809997", "-76.64432508", null, false],
         'year':'2016',
         'month':'01',
         'yearMonth':'2016-01',
-        'yearMonthDay':'2016-01-08'
-    }
-];
+        'yearMonthDay':'2016-01-29'
+}, {
+        ':id':"20DF27E8-7666-457E-A573-B62090C05E6B",
+        'buildingaddress':"2110 HERBERT ST",
+        'noticedate':"2016-02-03T00:00:00",
+        'neighborhood':"MONDAWMIN",
+        'policedistrict':"WESTERN",
+        'councildistrict':"7",
+        'location':[null, "39.31033313", "-76.65199363", null, false],
+        'year':'2016',
+        'month':'02',
+        'yearMonth':'2016-02',
+        'yearMonthDay':'2016-02-03'
+}, {
+        ':id':"9FEFF7FE-D255-4683-9714-0783AC07F70E",
+        'buildingaddress':"2037 HOLLINS ST",
+        'noticedate':"1993-05-20T00:00:00",
+        'neighborhood':"BOYD-BOOTH",
+        'policedistrict':"SOUTHWESTERN",
+        'councildistrict':"9",
+        'location':[null, "39.2868309", "-76.64959404", null, false],
+        'year':'1993',
+        'month':'05',
+        'yearMonth':'1993-05',
+        'yearMonthDay':'1993-05-20'
+}];
 
-describe('Model ', function () {
+describe('Model ', function() {
     var model;
-    beforeEach(function () {
+    beforeEach(function() {
         model = new Model();
     })
-    it('should be instantiated', function () {
+    it('should be instantiated', function() {
         model.should.be.instanceof(Model);
     });
     it('should have expected public api', function() {
         model.should.have.property('setRaw');
     });
-    describe('setRaw rejections', function () {
-        it('should reject w/out required args', function (done) {
+    describe('setRaw rejections', function() {
+        it('should reject w/out required args', function(done) {
             model.setRaw().catch(e => done());
         });
-        it('should reject w/invalid raw data', function (done) {
+        it('should reject w/invalid raw data', function(done) {
             var rejections = 0;
             var total = 4;
-            var isDone = function (e) {
+            var isDone = function(e) {
                 rejections++;
                 if (rejections == total) done();
             };
             model.setRaw({}).catch(isDone);
-            model.setRaw({ meta: {} }).catch(isDone);
-            model.setRaw({ meta: { view: {} } }).catch(isDone);
-            model.setRaw({ meta: { view: { columns: [] } } }).catch(isDone);
+            model.setRaw({
+                meta: {}
+            }).catch(isDone);
+            model.setRaw({
+                meta: {
+                    view: {}
+                }
+            }).catch(isDone);
+            model.setRaw({
+                meta: {
+                    view: {
+                        columns: []
+                    }
+                }
+            }).catch(isDone);
         });
     });
-    describe('setRaw resolves', function () {
-        it('should resolve w/valid raw data', function (done) {
+    describe('setRaw resolves', function() {
+        it('should resolve w/valid raw data', function(done) {
             model.setRaw(validData).then(done);
         });
-        it('should map data', function (done) {
-            model.setRaw(validData).then(function () {
+        it('should map data', function(done) {
+            model.setRaw(validData).then(function() {
                 model.rows.should.eql(expectedData);
                 done();
             });
         });
-        it('should index data', function (done) {
-            model.setRaw(validData).then(function () {
+        it('should index data', function(done) {
+            model.setRaw(validData).then(function() {
                 model.should.have.property('index');
                 var index = model.index;
                 index.should.be.instanceof(Map);
@@ -176,10 +198,10 @@ describe('Model ', function () {
             });
         });
     });
-    describe('debug mode', function (done) {
+    describe('debug mode', function(done) {
         var stub = sinon.stub(console, 'log');
         model = new Model(true);
-        model.setRaw(validData).then(function () {
+        model.setRaw(validData).then(function() {
             console.log.callCount.should.equal(3);
             sinon.restore();
             done();
