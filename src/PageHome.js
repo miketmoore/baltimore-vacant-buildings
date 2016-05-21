@@ -24,7 +24,7 @@ module.exports = React.createClass({
             entriesPerCouncilDistrict: [],
             currentYear: '',
             months: ['01','02','03','04','05','06','07','08','09','10','11','12'],
-            currentMonth: '',
+            currentMonth: '01',
             currentCouncilDistrict: '',
             currentEntries: [],
             timelineData: []
@@ -43,6 +43,13 @@ module.exports = React.createClass({
             year: newCurrentYear,
             month: this.state.currentMonth
         });
+        var entriesPerCouncilDistrict = this._getEntriesPerCouncilDistrict(entries);
+        if (this.state.currentCouncilDistrict != '') {
+            // Limit current entries by councildistrict
+            entries = this.props.model.filter({
+                councildistrict: this.state.currentCouncilDistrict
+            }, entries);
+        }
         this.setState({
             entriesPerCouncilDistrict: this._getEntriesPerCouncilDistrict(entries),
             currentYear: newCurrentYear,
@@ -54,6 +61,13 @@ module.exports = React.createClass({
             year: this.state.currentYear,
             month: newCurrentMonth
         });
+        var entriesPerCouncilDistrict = this._getEntriesPerCouncilDistrict(entries);
+        if (this.state.currentCouncilDistrict != '') {
+            // Limit current entries by councildistrict
+            entries = this.props.model.filter({
+                councildistrict: this.state.currentCouncilDistrict
+            }, entries);
+        }
         this.setState({
             entriesPerCouncilDistrict: this._getEntriesPerCouncilDistrict(entries),
             currentMonth: newCurrentMonth,
@@ -124,15 +138,15 @@ module.exports = React.createClass({
         });
         return entriesPerCouncilDistrict;
     },
+    // Update state with actual data
     _init () {
         var byYear = this.props.model.index.get('yyyy');
         var years = Array.from(byYear.keys()).sort();
         var currentYear = years[years.length-1];
-        var currentMonth = '01';
 
         var entries = this.props.model.filter({
             year: currentYear,
-            month: currentMonth
+            month: this.state.currentMonth
         });
 
         var timelineData = this._buildYearTimelineData(years);
@@ -141,11 +155,11 @@ module.exports = React.createClass({
             entriesPerCouncilDistrict: this._getEntriesPerCouncilDistrict(entries),
             years: years,
             currentYear: currentYear,
-            currentMonth: currentMonth,
             currentEntries: entries,
             timelineData: timelineData
         });
     },
+    // Update entries in state by year, month, and councildistrict
     _councilGraphClickHandler (data) {
         var entries = this.props.model.filter({
             year: this.state.currentYear,
