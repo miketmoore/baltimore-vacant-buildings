@@ -176,4 +176,13 @@ describe('Model ', function () {
             });
         });
     });
+    describe('debug mode', function (done) {
+        var stub = sinon.stub(console, 'log');
+        model = new Model(true);
+        model.setRaw(validData).then(function () {
+            console.log.callCount.should.equal(3);
+            sinon.restore();
+            done();
+        });
+    });
 });

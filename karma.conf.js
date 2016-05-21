@@ -33,7 +33,7 @@ module.exports = function(config) {
 
         singleRun: true,
 
-        frameworks: ['mocha'],
+        frameworks: ['mocha', 'sinon'],
 
         files: [
             'node_modules/es6-shim/es6-shim.min.js',
