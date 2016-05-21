@@ -49,11 +49,13 @@
     "karma-mocha": "^1.0.1",
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-should": "^1.0.0",
+    "karma-sinon": "^1.0.5",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
     "phantomjs": "^2.1.7",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
-    "should": "^8.4.0"
+    "should": "^8.4.0",
+    "sinon": "^1.17.4"
   }
 }
