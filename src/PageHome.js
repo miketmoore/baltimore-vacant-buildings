@@ -2,6 +2,7 @@ var React = require('react');
 var Layout = require('./Layout');
 var MapView = require('./MapView');
 var Select = require('./Select');
+var Button = require('./Button');
 var Timeline = require('./Timeline');
 var BarGraphSmall = require('./BarGraphSmall');
 import ReactDataGrid from 'react-data-grid/addons';
@@ -171,6 +172,17 @@ module.exports = React.createClass({
             currentCouncilDistrict: data.label
         });
     },
+    _clearCouncilHandler () {
+        console.log('PageHome._clearCouncilHandler');
+        var entries = this.props.model.filter({
+            year: this.state.currentYear,
+            month: this.state.currentMonth
+        });
+        this.setState({
+            currentEntries: entries,
+            currentCouncilDistrict: ''
+        });
+    },
     componentWillReceiveProps (props) {
         this._init();
     },
@@ -224,6 +236,11 @@ module.exports = React.createClass({
                             <div className="col-md-5">
                                 <p>Total Entries: {this.state.currentEntries.length}</p>
                                 <h5>Vacancies per Council District</h5>
+                                <Button
+                                    disabled={this.state.currentCouncilDistrict == ''}
+                                    clickHandler={this._clearCouncilHandler}
+                                    label="Clear Council District Filter"
+                                />
                                 <BarGraphSmall
                                     data={this.state.entriesPerCouncilDistrict}
                                     selectedLabel={this.state.currentCouncilDistrict}

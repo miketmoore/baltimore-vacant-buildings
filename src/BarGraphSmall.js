@@ -203,10 +203,7 @@ module.exports = React.createClass({
     },
     render () {
         return (
-            <div>
-                <p>selectedLabel: {this.props.selectedLabel}</p>
-                <canvas id="canvas" resize></canvas>
-            </div>
+            <canvas id="canvas" resize></canvas>
         );
     }
 });
