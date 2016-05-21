@@ -32,7 +32,17 @@
     "webpack": "^1.13.0"
   },
   "devDependencies": {
+    "babel-loader": "^6.2.4",
+    "expect": "^1.20.1",
     "file-loader": "^0.8.5",
-    "forever-monitor": "^1.7.0"
+    "forever-monitor": "^1.7.0",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-cli": "^1.0.0",
+    "karma-mocha": "^1.0.1",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^1.7.0",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0"
   }
 }
