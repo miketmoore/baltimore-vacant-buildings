@@ -130,3 +130,25 @@ Model.prototype._mapRows = function () {
     if (this._debug) console.log('Distinct policedistrict: ', this.index.get('policedistrict').size);
     if (this._debug) console.log('Distinct councildistrict: ', this.index.get('councildistrict').size);
 };
+Model.prototype.filter = function (filters) {
+    var rows = this.rows;
+    var i = 0;
+    var row;
+    var matches;
+    var filterKeys = Object.keys(filters);
+    var filterKeysLen = filterKeys.length;
+    var filterKey;
+    var rowsLen = rows.length;
+    var filtered = [];
+    var j;
+    for ( i; i < rowsLen; i++ ) {
+        row = rows[i];
+        matches = 0;
+        for ( j = 0; j < filterKeysLen; j++ ) {
+            filterKey = filterKeys[j];
+            if (row[filterKey] && (row[filterKey] == filters[filterKey])) matches++;
+            if (matches == filterKeysLen) filtered.push(row);
+        }
+    }
+    return filtered;
+};

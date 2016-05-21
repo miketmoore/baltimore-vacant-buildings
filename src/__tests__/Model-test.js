@@ -1,7 +1,9 @@
 var React = require('react');
 //var TestUtils = require('react/lib/ReactTestUtils');
 //var expect = require('expect');
-var should = require('should');
+//var should = require('should');
+//import {expect} from 'chai';
+var expect = require('chai').expect;
 
 var Model = require('../Model');
 
@@ -180,31 +182,103 @@ describe('Model ', function() {
     });
     describe('setRaw resolves', function() {
         it('should resolve w/valid raw data', function(done) {
-            model.setRaw(validData).then(done);
+            try {
+                model.setRaw(validData).then(done);
+            } catch (e) {
+                done(e);
+            }
         });
         it('should map data', function(done) {
             model.setRaw(validData).then(function() {
-                model.rows.should.eql(expectedData);
-                done();
+                try {
+                    model.rows.should.eql(expectedData);
+                    done();
+                } catch (e) {
+                    done(e);
+                }
             });
         });
         it('should index data', function(done) {
             model.setRaw(validData).then(function() {
-                model.should.have.property('index');
-                var index = model.index;
-                index.should.be.instanceof(Map);
-                index.size.should.equal(10);
-                done();
+                try {
+                    model.should.have.property('index');
+                    var index = model.index;
+                    index.should.be.instanceof(Map);
+                    index.size.should.equal(10);
+                    done();
+                } catch (e) {
+                    done(e)
+                }
             });
         });
     });
-    describe('debug mode', function(done) {
-        var stub = sinon.stub(console, 'log');
-        model = new Model(true);
-        model.setRaw(validData).then(function() {
-            console.log.callCount.should.equal(3);
-            sinon.restore();
-            done();
+    // describe('debug mode', function(done) {
+    //     var stub = sinon.stub(console, 'log');
+    //     model = new Model(true);
+    //     model.setRaw(validData).then(function() {
+    //         console.log.callCount.should.equal(3);
+    //         sinon.restore();
+    //         done();
+    //     });
+    // });
+    describe('filtering', function (filters) {
+        it('should filter by year', function (done) {
+            model.setRaw(validData).then(function() {
+                try {
+                    var filtered = model.filter({
+                        year: '2016'
+                    });
+                    filtered.should.eql([
+                        expectedData[0],
+                        expectedData[1]
+                    ]);
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            });
+        });
+        it('should filter by year and month', function (done) {
+            model.setRaw(validData).then(function() {
+                try {
+                    var filtered = model.filter({
+                        year: '2016',
+                        month: '02'
+                    });
+                    filtered.should.eql([expectedData[1]]);
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            });
+        });
+        it('should filter by councildistrict', function (done) {
+            model.setRaw(validData).then(function() {
+                try {
+                    var filtered = model.filter({
+                        councildistrict: '9'
+                    });
+                    filtered.should.eql([expectedData[0],expectedData[2]]);
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            });
+        });
+        it('should filter by year, month, and councildistrict', function (done) {
+            model.setRaw(validData).then(function() {
+                try {
+                    var filtered = model.filter({
+                        year: '2016',
+                        month: '02',
+                        councildistrict: '7'
+                    });
+                    filtered.should.eql([expectedData[1]]);
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            });
         });
     });
 });
