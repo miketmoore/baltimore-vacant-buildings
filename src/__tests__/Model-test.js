@@ -78,6 +78,47 @@ var sampleData = [
     ]
 ];
 
+var expectedData = [
+    {
+        ':id': "67F0BF20-05D7-40D4-89AE-4D323757158D",
+        'buildingaddress':"2017 W NORTH AVE",
+        'noticedate':'2016-01-14T00:00:00',
+        'neighborhood':'EASTERWOOD',
+        'policedistrict':'WESTERN',
+        'councildistrict':'7',
+        'location':[
+            null,
+            "39.30943944",
+            "-76.65044524",
+            null,
+            false
+        ],
+        'year': '2016',
+        'month': '01',
+        'yearMonth': '2016-01',
+        'yearMonthDay': '2016-01-14'
+    },
+    {
+        ':id':"2F623C7A-85E2-42AC-A9CB-C6C241BAD890",
+        'buildingaddress':"1041 N FULTON AVE",
+        'noticedate':"2016-01-08T00:00:00",
+        'neighborhood':"SANDTOWN-WINCHESTER",
+        'policedistrict':"WESTERN",
+        'councildistrict':"9",
+        'location':[
+            null,
+            "39.30077843",
+            "-76.64556524",
+            null,
+            false
+        ],
+        'year':'2016',
+        'month':'01',
+        'yearMonth':'2016-01',
+        'yearMonthDay':'2016-01-08'
+    }
+];
+
 describe('Model ', function () {
     var model;
     beforeEach(function () {
@@ -118,14 +159,7 @@ describe('Model ', function () {
         })
         it('should resolve w/valid raw data', function (done) {
             model.setRaw(valid).then(function () {
-                done();
-            });
-        });
-        it('should have working getters', function () {
-            model.setRaw(valid).then(function () {
-                var rows = model.rows;
-                rows.should.be('array');
-                rows.length.should.equal(sampleData.length);
+                model.rows.should.eql(expectedData);
                 done();
             });
         });
