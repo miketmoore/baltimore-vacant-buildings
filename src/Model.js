@@ -35,22 +35,22 @@ Model.prototype.map = function () {
     this._mapColumns();
     this._mapRows();
 };
-Model.prototype.getDistinct = function (key) {
-    if (key == 'yyyy') {
-        return Array.from(this.index.get('yyyy').keys()).sort();
-    }
-};
 Model.prototype._mapColumns = function () {
     var raw = this._raw.meta.view.columns;
     var cols = [];
     var col;
     for (var i = 0; i < raw.length; i++) {
         col = raw[i];
-        cols.push({
-            key: col.fieldName,
-            name: col.name,
-            resizable: true
-        });
+        if (!col) {
+            cols.push(null);
+        } else {
+            cols.push({
+                key: col.fieldName,
+                name: col.name,
+                resizable: true
+            });
+        }
+
     }
     this._mapped.columns = cols;
 };
@@ -89,16 +89,18 @@ Model.prototype._indexRow = function (row) {
     var key;
     for ( i = 0; i < this.columns.length; i++ ) {
         colObj = this.columns[i];
-        key = colObj.key;
-        if (key == ':id') continue;
+        if (colObj) {
+            key = colObj.key;
+            if (key == ':id') continue;
 
-        if (!this.index.has(key)) {
-            this.index.set(key, new Map());
+            if (!this.index.has(key)) {
+                this.index.set(key, new Map());
+            }
+            if (!this.index.get(key).has(row[key])) {
+                this.index.get(key).set(row[key], new Set());
+            }
+            this.index.get(key).get(row[key]).add(id);
         }
-        if (!this.index.get(key).has(row[key])) {
-            this.index.get(key).set(row[key], new Set());
-        }
-        this.index.get(key).get(row[key]).add(id);
     }
 };
 
