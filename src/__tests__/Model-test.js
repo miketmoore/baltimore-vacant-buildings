@@ -78,6 +78,15 @@ var sampleData = [
     ]
 ];
 
+var validData = {
+    meta: {
+        view: {
+            columns: sampleDataColDefs
+        }
+    },
+    data: sampleData
+};
+
 var expectedData = [
     {
         ':id': "67F0BF20-05D7-40D4-89AE-4D323757158D",
@@ -148,17 +157,8 @@ describe('Model ', function () {
         });
     });
     describe('setRaw resolves', function () {
-        var valid;
-        beforeEach(() => valid = {
-            meta: {
-                view: {
-                    columns: sampleDataColDefs
-                }
-            },
-            data: sampleData
-        })
         it('should resolve w/valid raw data', function (done) {
-            model.setRaw(valid).then(function () {
+            model.setRaw(validData).then(function () {
                 model.rows.should.eql(expectedData);
                 done();
             });
