@@ -158,8 +158,20 @@ describe('Model ', function () {
     });
     describe('setRaw resolves', function () {
         it('should resolve w/valid raw data', function (done) {
+            model.setRaw(validData).then(done);
+        });
+        it('should map data', function (done) {
             model.setRaw(validData).then(function () {
                 model.rows.should.eql(expectedData);
+                done();
+            });
+        });
+        it('should index data', function (done) {
+            model.setRaw(validData).then(function () {
+                model.should.have.property('index');
+                var index = model.index;
+                index.should.be.instanceof(Map);
+                index.size.should.equal(10);
                 done();
             });
         });
