@@ -21,6 +21,8 @@ Object.defineProperties(Model.prototype, {
     "index": { get: function () { return this._mapped.index; } }
 });
 Model.prototype.setRaw = function (raw) {
+    if (!raw) return Promise.reject('setRaw failed - no raw data passed');
+    if (!raw.meta) return Promise.reject('setRaw failed - raw data is missing "meta" property');
     this._raw = raw;
     this.map();
 };
