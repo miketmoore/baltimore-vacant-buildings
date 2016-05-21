@@ -10,6 +10,8 @@ module.exports = React.createClass({
     },
     getDefaultProps () {
         return {
+            width: '400px',
+            height: '400px',
             entries: []
         };
     },
@@ -78,13 +80,13 @@ module.exports = React.createClass({
                                 style={{
                                     display: 'block',
                                     width: this.props.width,
-                                    height: '500px'
+                                    height: this.props.height
                                 }}
                             />
                         }
                         googleMapElement={
                             <GoogleMap
-                                defaultZoom={12}
+                                defaultZoom={10}
                                 defaultCenter={{ lat: this.state.centerCoords[0], lng: this.state.centerCoords[1] }}
                                 onClick={props.onMapClick}
                             >
