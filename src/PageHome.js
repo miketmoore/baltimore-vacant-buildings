@@ -170,12 +170,11 @@ module.exports = React.createClass({
         return final;
     },
     _councilGraphClickHandler (data) {
-        var ids = this._getNewIds(this.state.currentYear, this.state.currentMonth);
-        var entries = this._getCurrentEntriesFromIds(ids);
-        entries = this._filterEntries(entries, {
-            currentCouncilDistrict: data.label
+        var entries = this.props.model.filter({
+            year: this.state.currentYear,
+            month: this.state.currentMonth,
+            councildistrict: data.label
         });
-
         this.setState({
             currentEntries: entries,
             currentCouncilDistrict: data.label

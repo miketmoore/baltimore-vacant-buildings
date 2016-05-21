@@ -152,6 +152,6 @@ Model.prototype.filter = function (filters, rows) {
     }
     return filtered;
 };
-Model.prototpye.getById = function (id) {
+Model.prototype.getById = function (id) {
     return this.index.get(':id').get(id);
 };
