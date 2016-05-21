@@ -151,18 +151,35 @@ module.exports = React.createClass({
             timelineData: timelineData
         });
     },
+    _filterEntries (entries, overrides) {
+        console.log('_filterEntries 1 ', entries.length, arguments);
+        var i, j, entry, config, key, val, matches;
+        var final = [];
+        var configs = [
+            ['councildistrict', this.state.currentCouncilDistrict]
+        ];
+        for ( i = 0; i < entries.length; i++ ) {
+            entry = entries[i];
+            matches = 0;
+            for ( j = 0; j < configs.length; j++ ) {
+                config = configs[j];
+                key = config[0];
+                if (overrides && overrides[key]) console.log('_filterEntries overrides has key: ', overrides, key);
+                val = (overrides && overrides[key]) ? overrides[key] : config[1];
+                //val = config[1];
+                if (entry[key] == val) matches++;
+            }
+            if (matches == configs.length) final.push(entry);
+        }
+        console.log('_filterEntries ', final.length);
+        return final;
+    },
     _councilGraphClickHandler (data) {
         var ids = this._getNewIds(this.state.currentYear, this.state.currentMonth);
         var entries = this._getCurrentEntriesFromIds(ids);
-
-        var newVal = data.label;
-
-        if (newVal != '') {
-            // filter entries list by councildistrict
-            entries = entries.filter(function (entry) {
-                return entry.councildistrict == newVal;
-            });
-        }
+        entries = this._filterEntries(entries, {
+            currentCouncilDistrict: data.label
+        });
 
         this.setState({
             currentEntries: entries,
