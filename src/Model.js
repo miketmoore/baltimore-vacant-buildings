@@ -2,7 +2,8 @@ var React = require('react');
 
 module.exports = Model;
 
-function Model () {
+function Model (debug) {
+    this._debug = debug;
     this._raw = {};
     this._mapped = {
         rows: [],
@@ -123,7 +124,7 @@ Model.prototype._mapRows = function () {
     }
     this._mapped.rows = rows;
 
-    console.log('Distinct neighborhood: ', this.index.get('neighborhood').size);
-    console.log('Distinct policedistrict: ', this.index.get('policedistrict').size);
-    console.log('Distinct councildistrict: ', this.index.get('councildistrict').size);
+    if (this._debug) console.log('Distinct neighborhood: ', this.index.get('neighborhood').size);
+    if (this._debug) console.log('Distinct policedistrict: ', this.index.get('policedistrict').size);
+    if (this._debug) console.log('Distinct councildistrict: ', this.index.get('councildistrict').size);
 };

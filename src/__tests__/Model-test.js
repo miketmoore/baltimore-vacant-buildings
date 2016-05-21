@@ -32,23 +32,23 @@ describe('Model', function () {
             model.setRaw({ meta: { view: {} } }).catch(isDone);
             model.setRaw({ meta: { view: { columns: [] } } }).catch(isDone);
         });
-        // it('should resolve w/valid raw data', function (done) {
-        //     var valid = {
-        //         meta: {
-        //             view: {
-        //                 columns: [{
-        //                     fieldName: ':id'
-        //                 }]
-        //             }
-        //         },
-        //         data: [
-        //
-        //         ]
-        //     };
-        //     model.setRaw(valid).then(function () {
-        //         done();
-        //     });
-        // });
+        it('should resolve w/valid raw data', function (done) {
+            var valid = {
+                meta: {
+                    view: {
+                        columns: [{
+                            fieldName: ':id'
+                        }]
+                    }
+                },
+                data: [
+
+                ]
+            };
+            model.setRaw(valid).then(function () {
+                done();
+            });
+        });
     })
   // it('should reject - no raw data passed', function (done) {
   //   var model = new Model();
