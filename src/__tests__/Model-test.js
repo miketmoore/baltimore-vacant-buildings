@@ -1,6 +1,6 @@
 var React = require('react');
-var TestUtils = require('react/lib/ReactTestUtils'); //I like using the Test Utils, but you can just use the DOM API instead.
-var expect = require('expect');
+//var TestUtils = require('react/lib/ReactTestUtils');
+//var expect = require('expect');
 var should = require('should');
 
 var Model = require('../Model');
@@ -49,12 +49,5 @@ describe('Model', function () {
                 done();
             });
         });
-    })
-  // it('should reject - no raw data passed', function (done) {
-  //   var model = new Model();
-  //   model.setRaw().catch(function (err) {
-  //       err.should.equal('setRaw failed - no raw data passed');
-  //       done();
-  //   });
-  // });
+    });
 });
