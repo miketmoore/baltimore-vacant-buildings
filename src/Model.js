@@ -130,8 +130,8 @@ Model.prototype._mapRows = function () {
     if (this._debug) console.log('Distinct policedistrict: ', this.index.get('policedistrict').size);
     if (this._debug) console.log('Distinct councildistrict: ', this.index.get('councildistrict').size);
 };
-Model.prototype.filter = function (filters) {
-    var rows = this.rows;
+Model.prototype.filter = function (filters, rows) {
+    if (!rows) rows = this.rows;
     var i = 0;
     var row;
     var matches;
