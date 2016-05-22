@@ -86,6 +86,26 @@ module.exports = React.createClass({
             'councildistrict':row['councildistrict']
         };
     },
+    _getBarGraphData (key) {
+        var model = this.props.model;
+        if (!model.rows.length) return [];
+        // get entries filtered by current year and month (these are always set)
+        var entriesByDate = model.filter({
+            year: this.state.currentYear,
+            month: this.state.currentMonth
+        });
+        // Get full, distinct list of council districts
+        var distinct = Array.from(model.index.get('councildistrict').keys());
+        // Map distinct council districts to total entries in that district
+        var map = new Map();
+        distinct.forEach(k => map.set(k, 0));
+        entriesByDate.forEach(function (entry) {
+            map.set(entry[key], map.get(entry[key]) + 1);
+        });
+        var data = [];
+        map.forEach((count, key) => data.push({ size: count, label: key }));
+        return data;
+    },
     render () {
         return (
             <Layout>
@@ -120,6 +140,26 @@ module.exports = React.createClass({
                             <div className="col-md-2">
                                 <h4>Total</h4>
                                 <p>{this.state.currentEntries.length}</p>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-4">
+                                <h4>Per Council District</h4>
+                                <p><small>Click a bar to filter data.</small> <Button
+                                    visible={this.state.currentCouncilDistrict != ''}
+                                    clickHandler={this._clearCouncilHandler}
+                                    label="Clear Filter"
+                                /></p>
+
+                                <BarGraphSmall
+                                    data={this._getBarGraphData('councildistrict')}
+                                    selectedLabel={this.state.currentCouncilDistrict}
+                                    clickHandler={this._councilGraphClickHandler}
+                                    bgroundcolor={'#A3BFD9'}
+                                    bordercolor={'#7790D9'}
+                                    fontcolora="#F24535"
+                                    fontcolorb="#F2AF5C"
+                                />
                             </div>
                         </div>
                     </div>
