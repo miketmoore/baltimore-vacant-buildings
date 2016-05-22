@@ -29,15 +29,7 @@ module.exports = React.createClass({
             currentEntries: []
         };
     },
-    _getCurrentEntriesFromIds (entryIds) {
-        var entries = [];
-        for ( var i = 0; i < entryIds.length; i++ ) {
-            entry = this.props.model.getById(entryIds[i]);
-            entries.push(entry);
-        }
-        return entries;
-    },
-    yearSelectChangeHandler (newCurrentYear) {
+    _yearSelectChangeHandler (newCurrentYear) {
         var entries = this.props.model.filter({
             year: newCurrentYear,
             month: this.state.currentMonth
@@ -55,7 +47,7 @@ module.exports = React.createClass({
             currentEntries: entries
         });
     },
-    monthSelectChangeHandler (newCurrentMonth) {
+    _monthSelectChangeHandler (newCurrentMonth) {
         var entries = this.props.model.filter({
             year: this.state.currentYear,
             month: newCurrentMonth
@@ -72,18 +64,6 @@ module.exports = React.createClass({
             currentMonth: newCurrentMonth,
             currentEntries: entries
         });
-    },
-    /**
-     * @description Converts YYYY string to a Array(startDate, endDate)
-     * @param year
-     * @returns {Array}
-     * @private
-     */
-    _convertYear (year) {
-        var a = '01/01/' + year;
-        var start = new Date(a);
-        var end = new Date(new Date(a).setYear(new Date(a).getFullYear() + 1));
-        return [start, end];
     },
     _getFullCouncilDistrictList () {
         var model = this.props.model;
@@ -166,7 +146,7 @@ module.exports = React.createClass({
             this._init();
         }
     },
-    gridRowGetter (i) {
+    _gridRowGetter (i) {
         var row = this.state.currentEntries[i];
         return {
             "buildingaddress":row['buildingaddress'],
@@ -194,7 +174,7 @@ module.exports = React.createClass({
                                 <h4>Year</h4>
                                 <Select
                                     currentVal={this.state.currentYear}
-                                    changeHandler={this.yearSelectChangeHandler}
+                                    changeHandler={this._yearSelectChangeHandler}
                                     values={this.state.years}
                                     liveSearch={true}
                                 />
@@ -203,7 +183,7 @@ module.exports = React.createClass({
                                 <h4>Month</h4>
                                 <Select
                                     currentVal={this.state.currentMonth}
-                                    changeHandler={this.monthSelectChangeHandler}
+                                    changeHandler={this._monthSelectChangeHandler}
                                     values={this.state.months}
                                 />
                             </div>
@@ -238,7 +218,7 @@ module.exports = React.createClass({
                     <div className="col-md-12">
                         <ReactDataGrid
                             columns={this.props.gridColumns}
-                            rowGetter={this.gridRowGetter}
+                            rowGetter={this._gridRowGetter}
                             rowsCount={this.state.currentEntries.length}
                             minHeight={500} />
                     </div>
