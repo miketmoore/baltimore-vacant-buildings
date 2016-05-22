@@ -108,11 +108,32 @@ module.exports = React.createClass({
         var preparedData = this.state.preparedData;
         var thisY;
         var $canvas = $(this.state.canvas);
+
         function addMouseHandlers (path, data) {
             path.data = data;
-            path.on('mousedown', () => this.props.clickHandler(data));
-            path.on('mouseenter', () => $canvas.css('cursor', 'pointer'));
-            path.on('mouseleave', () => $canvas.css('cursor', 'auto'));
+            path.data.isSelected = this.props.selectedLabel == data.label;
+
+            path.on('mousedown', function () {
+                this.props.clickHandler(data);
+            }.bind(this));
+
+            path.on('mouseenter', function (e) {
+                var item = e.target;
+                $canvas.css('cursor', 'pointer');
+                if (!item.data.isSelected) {
+                    // not selected so show slightly darker hue
+                    item.fillColor = '#BF6B04';
+                }
+            }.bind(this));
+
+            path.on('mouseleave', function (e) {
+                var item = e.target;
+                $canvas.css('cursor', 'auto')
+                if (!item.data.isSelected) {
+                    // not selected so show default color
+                    item.fillColor = '#F29F05';
+                }
+            }.bind(this));
         }
         for ( var i = 0; i < preparedData.length; i++ ) {
 
