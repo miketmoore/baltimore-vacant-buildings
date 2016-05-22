@@ -7,10 +7,11 @@ module.exports = React.createClass({
             data: [],
             prefix: '',
             displayLabels: false,
-            defaultHoverLabelMsg: 'Hover over bars for description',
             bgroundcolor: '#000000',
+            hoverLabelColor: 'black',
+            hoverLabelDefault: 'Hover for info, click to filter',
             viewWidth: 230,
-            viewHeight: 105,
+            viewHeight: 110,
             barMargin: 4,
             barMin: 18,
             barMax: 85,
@@ -132,7 +133,7 @@ module.exports = React.createClass({
                     // not selected so show slightly darker hue
                     item.fillColor = this.props.barcolorhover;
                 }
-                hoverLabel.content = this.props.prefix + ': ' + item.data.label;
+                hoverLabel.content = item.data.label + ' (' + item.data.size + ')';
             }.bind(this));
 
             path.on('mouseleave', function (e) {
@@ -142,7 +143,7 @@ module.exports = React.createClass({
                     // not selected so show default color
                     item.fillColor = this.props.barcolor;
                 }
-                hoverLabel.content = this.props.defaultHoverLabelMsg;
+                hoverLabel.content = this.props.hoverLabelDefault;
             }.bind(this));
         }
         for ( var i = 0; i < preparedData.length; i++ ) {
@@ -204,10 +205,10 @@ module.exports = React.createClass({
     },
     _drawHoverLabel (pscope) {
         return new pscope.PointText({
-            point: [3,13],
-            content: this.props.defaultHoverLabelMsg,
-            fontSize: 12,
-            fillColor: 'white'
+            point: [3,14],
+            content: this.props.hoverLabelDefault,
+            fontSize: 14,
+            fillColor: this.props.hoverLabelColor
         });
     },
     _draw (canvas) {
@@ -223,16 +224,6 @@ module.exports = React.createClass({
             width: this.props.viewWidth,
             height: this.props.viewHeight
         };
-        if (this.props.title) {
-            var text = new this.props.paper.PointText({
-                point: [3,11],
-                content: this.props.title,
-                style: {
-                    fillColor: this.props.titlecolor
-                }
-            });
-            dims.height += 15;
-        }
         this.props.paper.project.view.viewSize = new paper.Size(dims);
         this.props.paper.project.view.update();
     },

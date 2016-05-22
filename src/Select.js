@@ -5,7 +5,7 @@ module.exports = React.createClass({
         return {
             title: "Select One",
             liveSearch: false,
-            dataStyle: 'btn-primary',
+            dataStyle: 'btn-default',
             currentValue: ''
         };
     },

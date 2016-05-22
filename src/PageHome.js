@@ -3,6 +3,7 @@ var Layout = require('./Layout');
 var MapView = require('./MapView');
 var Select = require('./Select');
 var Button = require('./Button');
+var Tags = require('./Tags');
 var BarGraphSmall = require('./BarGraphSmall');
 import ReactDataGrid from 'react-data-grid/addons';
 
@@ -179,6 +180,19 @@ module.exports = React.createClass({
         }
         return data;
     },
+    _getTagsData () {
+        var data = [];
+        var config = [
+            { key: 'month', label: 'Month', onDelete: this._clearMonthHandler },
+            { key: 'councildistrict', label: 'Council District', onDelete: this._clearCouncilHandler },
+            { key: 'policedistrict', label: 'Police District', onDelete: this._clearPoliceHandler },
+            { key: 'neighborhood', label: 'Neighborhood', onDelete: this._clearNeighborhoodHandler }
+        ];
+        config.forEach((c) => {
+            if (this.state[c.key]) data.push(c);
+        }, this);
+        return data;
+    },
     render () {
         var neighborhoods = this._getNeighborhoods();
         var entries = this._getEntries.call(this);
@@ -217,7 +231,9 @@ module.exports = React.createClass({
         };
         var barSharedProps = barColorSchemes.night;
         barSharedProps.displayLabels = false;
+        barSharedProps.hoverLabelColor = '#33627A';
         var mapData = this._getMapData(entries);
+        var tagsData = this._getTagsData();
         return (
             <Layout>
                 <div className="row">
@@ -230,6 +246,12 @@ module.exports = React.createClass({
                     </div>
                     <div className="col-md-8">
                         <div className="row">
+                            <div className="col-md-8">
+                                <h4>Filters</h4>
+                                <Tags data={tagsData} />
+                            </div>
+                        </div>
+                        <div className="row">
                             <div className="col-md-2">
                                 <h4>Year</h4>
                                 <Select
@@ -239,22 +261,15 @@ module.exports = React.createClass({
                                     liveSearch={true}
                                 />
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-2">
                                 <h4>Month</h4>
                                 <Select
                                     currentVal={this.state.month}
                                     changeHandler={this._monthSelectChangeHandler}
                                     values={this.props.months}
                                 />
-                                <Button
-                                    disabled={this.state.month == ''}
-                                    clickHandler={this._clearMonthHandler}
-                                    label="Clear"
-                                />
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md-8">
+                            <div className="col-md-4">
                                 <h4>Neighborhoods</h4>
                                 <Select
                                     title="Select One"
@@ -263,48 +278,27 @@ module.exports = React.createClass({
                                     values={neighborhoods}
                                     liveSearch={true}
                                 />
-                                <Button
-                                    disabled={this.state.neighborhood == ''}
-                                    clickHandler={this._clearNeighborhoodHandler}
-                                    label="Clear"
-                                />
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-md-4">
-                                <h4>Council Districts</h4>
-                                <p><small>Click a bar to filter data.</small> <Button
-                                    disabled={this.state.councildistrict == ''}
-                                    clickHandler={this._clearCouncilHandler}
-                                    label="Clear"
-                                    size="xs"
-                                /></p>
-
+                                <h4>By Council District</h4>
                                 <BarGraphSmall
                                     data={this._getBarGraphData('councildistrict')}
                                     selectedLabel={this.state.councildistrict}
                                     clickHandler={this._councilGraphClickHandler}
                                     paper={this.props.papers[0]}
                                     sort={this._sortBarGraphData('councildistrict')}
-                                    prefix="Council District"
                                     {...barSharedProps}
                                 />
                             </div>
                             <div className="col-md-4">
-                                <h4>Police Districts</h4>
-                                <p><small>Click a bar to filter data.</small> <Button
-                                    disabled={this.state.policedistrict == ''}
-                                    clickHandler={this._clearPoliceHandler}
-                                    label="Clear"
-                                    size="xs"
-                                /></p>
-
+                                <h4>By Police District</h4>
                                 <BarGraphSmall
                                     data={this._getBarGraphData('policedistrict')}
                                     selectedLabel={selectedLabelPoliceDistrict}
                                     clickHandler={this._policeGraphClickHandler}
                                     paper={this.props.papers[1]}
-                                    prefix="Police District"
                                     {...barSharedProps}
                                 />
                             </div>
