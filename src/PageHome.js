@@ -180,6 +180,26 @@ module.exports = React.createClass({
         // Map the label (N, NW, etc) to the display value (NORTHERN, NORTHWESTERN, etc)
         var selectedLabelPoliceDistrict = this.props.model.policeDistrictLookup.get('toDisplay').get(this.state.policedistrict);
 
+        var barColorSchemes = {
+            night: {
+                bgroundcolor: '#132F32',
+                barcolor: "#33627A",
+                barcolorhover: "#719BB0",
+                barcolorselected: "#9DBFCF",
+                bordercolor: '#7790D9',
+                fontcolora: "#FFFFFF",
+                fontcolorb: "#9CBFCF"
+            },
+            baltimoreAbandonedRowHouses: {
+                bgroundcolor: '#c5b7a9', // suva gray
+                barcolor: '#8c8886', // ash gray
+                barcolorhover: '#af4e5b', // light steel blue
+                barcolorselected: '#b2c8e3', // hippie pink brown
+                fontcolora: '#433030',
+                fontcolorb: '#433030'
+            }
+        };
+        var barSharedProps = barColorSchemes.baltimoreAbandonedRowHouses;
         return (
             <Layout>
                 <div className="row">
@@ -246,13 +266,9 @@ module.exports = React.createClass({
                                     data={this._getBarGraphData('councildistrict')}
                                     selectedLabel={this.state.councildistrict}
                                     clickHandler={this._councilGraphClickHandler}
-                                    titlecolor='white'
-                                    bgroundcolor={'#A3BFD9'}
-                                    bordercolor={'#7790D9'}
-                                    fontcolora="#F24535"
-                                    fontcolorb="#F2AF5C"
                                     paper={this.props.papers[0]}
                                     sort={this._sortBarGraphData('councildistrict')}
+                                    {...barSharedProps}
                                 />
                             </div>
                             <div className="col-md-4">
@@ -268,12 +284,8 @@ module.exports = React.createClass({
                                     data={this._getBarGraphData('policedistrict')}
                                     selectedLabel={selectedLabelPoliceDistrict}
                                     clickHandler={this._policeGraphClickHandler}
-                                    titlecolor='white'
-                                    bgroundcolor={'#A3BFD9'}
-                                    bordercolor={'#7790D9'}
-                                    fontcolora="#F24535"
-                                    fontcolorb="#F2AF5C"
                                     paper={this.props.papers[1]}
+                                    {...barSharedProps}
                                 />
                             </div>
                         </div>
