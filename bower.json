@@ -19,9 +19,6 @@
     "jquery": "^2.2.3",
     "bootstrap": "^3.3.6",
     "paper": "^0.9.25",
-    "bootstrap-switch": "^3.3.2",
-    "d3-timeline": "^0.0.5",
-    "bootstrap-select": "^1.10.0",
-    "bootstrap-tagsinput": "^0.8.0"
+    "bootstrap-select": "^1.10.0"
   }
 }
