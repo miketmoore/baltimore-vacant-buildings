@@ -234,13 +234,20 @@ module.exports = React.createClass({
     },
     componentDidUpdate () {
         console.log('BarGraphSmall.componentDidUpdate ', this.props.id, this.props.paper._id, this.props.data.length);
-        new this.props.paper.Path.Rectangle({
-            point: [40,40],
+        window.paper = this.props.paper;
+        var pscope = this.props.paper;
+        new pscope.Path.Rectangle({
+            point: [this.props.rectx, this.props.recty],
             size: [20, 20],
             fillColor: this.props.fillcolor
         });
-        this.props.paper.project.view.update();
-        //this._draw();
+        new pscope.paper.PointText({
+            point: [this.props.rectx, this.props.recty],
+            content: this.props.paper._id,
+            fillColor: 'black'
+        });
+        pscope.view.update();
+        this._draw();
     },
     componentDidMount () {
         console.log('BarGraphSmall.componentDidMount this.props: ', this.props);
