@@ -121,18 +121,18 @@ module.exports = React.createClass({
             path.on('mouseenter', function (e) {
                 var item = e.target;
                 $canvas.css('cursor', 'pointer');
-                if (!item.data.isSelected) {
+                if (!item.data.isSelected && (item.className != 'PointText')) {
                     // not selected so show slightly darker hue
-                    item.fillColor = '#BF6B04';
+                    item.fillColor = this.props.barcolorhover;
                 }
             }.bind(this));
 
             path.on('mouseleave', function (e) {
                 var item = e.target;
                 $canvas.css('cursor', 'auto')
-                if (!item.data.isSelected) {
+                if (!item.data.isSelected && (item.className != 'PointText')) {
                     // not selected so show default color
-                    item.fillColor = '#F29F05';
+                    item.fillColor = this.props.barcolor;
                 }
             }.bind(this));
         }
@@ -148,7 +148,7 @@ module.exports = React.createClass({
                 }),
                 size: new pscope.Size(barWidth, barHeight),
                 style: {
-                    fillColor: (obj.label == this.props.selectedLabel) ? 'yellow' : '#F29F05'
+                    fillColor: (obj.label == this.props.selectedLabel) ? this.props.barcolorselected : this.props.barcolor
                 }
             });
             addMouseHandlers.call(this, rect, obj);
@@ -162,8 +162,7 @@ module.exports = React.createClass({
                 justification: 'center',
                 fontSize: 12,
                 fontFamily: 'sans-serif',
-                fillColor: this.props.fontcolora,
-                blendMode: 'multiply'
+                fillColor: this.props.fontcolora
             });
             addMouseHandlers.call(this, text, obj);
             text = new pscope.PointText({
@@ -175,8 +174,7 @@ module.exports = React.createClass({
                 justification: 'center',
                 fontSize: 12,
                 fontFamily: 'sans-serif',
-                fillColor: this.props.fontcolorb,
-                blendMode: 'multiply'
+                fillColor: this.props.fontcolorb
             });
             addMouseHandlers.call(this, text, obj);
             x += barWidth + this.props.barMargin;
