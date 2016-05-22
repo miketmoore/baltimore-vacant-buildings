@@ -25,19 +25,19 @@ module.exports = React.createClass({
             maxNormal: 0
         };
     },
-    _map (data) {
-        // sort array of objects by obj.size
-        data = data.sort(function (a,b) {
+    _sortDataBySize (data) {
+        return data.sort(function (a,b) {
             a = a.size;
             b = b.size;
             if (a < b) return -1;
             else if (a > b) return 1;
             return 0;
         });
-
+    },
+    _determineMinAndMax (data) {
         // determine min and max
         var obj, size, min, max;
-        for ( var i = 0; i < data.length; i++ ) {
+        for (var i = 0; i < data.length; i++) {
             obj = data[i];
             size = obj.size;
             if (typeof min === 'undefined') min = size;
@@ -45,7 +45,9 @@ module.exports = React.createClass({
             if (size < min) min = size;
             if (size > max) max = size;
         }
-
+        return [min, max];
+    },
+    _normalize (data) {
         // Normalize range
         // Convert range A-B to scale of C-D
         // y = 1 + (x-A)*(10-1)/(B-A)
@@ -75,17 +77,21 @@ module.exports = React.createClass({
 
             }
         }
-
+        return [minNormal,maxNormal];
+    },
+    _map (data) {
+        data = this._sortDataBySize(data);
+        var range = this._determineMinAndMax(data);
+        var rangeNormalized = this._normalize(data);
         data = this.props.sort ? data.sort(this.props.sort) : data.sort(this._defaultSort);
-
         return {
             preparedData: data,
-            min: min,
-            max: max,
-            minNormal: minNormal,
-            maxNormal: maxNormal,
-            minY: this.props.viewHeight - Math.ceil(maxNormal),
-            maxY: this.props.viewHeight - Math.ceil(minNormal)
+            min: range[0],
+            max: range[1],
+            minNormal: rangeNormalized[0],
+            maxNormal: rangeNormalized[1],
+            minY: this.props.viewHeight - Math.ceil(rangeNormalized[1]),
+            maxY: this.props.viewHeight - Math.ceil(rangeNormalized[0])
         };
     },
     _defaultSort (a,b) {
