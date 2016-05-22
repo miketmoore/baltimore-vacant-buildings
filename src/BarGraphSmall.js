@@ -15,7 +15,9 @@ module.exports = React.createClass({
             barMargin: 4,
             barMin: 18,
             barMax: 85,
-            clickHandler: function () {}
+            clickHandler: function () {},
+            clickHandlerB: function () {},
+            bgroundClickHandler: function () {}
         };
     },
     getInitialState () {
@@ -122,8 +124,13 @@ module.exports = React.createClass({
             path.data = data;
             path.data.isSelected = this.props.selectedLabel == data.label;
 
-            path.on('mousedown', function () {
-                this.props.clickHandler(data);
+            path.on('mousedown', function (e) {
+                var item = e.target;
+                if (!item.data.isSelected) {
+                    this.props.clickHandler(data);
+                } else {
+                    this.props.clickHandlerB();
+                }
             }.bind(this));
 
             path.on('mouseenter', function (e) {
@@ -194,7 +201,7 @@ module.exports = React.createClass({
         }
     },
     _drawBackground (pscope) {
-        new pscope.Path.Rectangle({
+        var path = new pscope.Path.Rectangle({
             point: [0,0],
             size: [this.props.viewWidth, this.props.viewHeight],
             style: {
@@ -202,6 +209,10 @@ module.exports = React.createClass({
                 fillColor: this.props.bgroundcolor
             }
         });
+        path.on('mousedown', function () {
+            // User can click the background
+            this.props.bgroundClickHandler();
+        }.bind(this));
     },
     _drawHoverLabel (pscope) {
         return new pscope.PointText({

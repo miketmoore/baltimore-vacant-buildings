@@ -287,6 +287,8 @@ module.exports = React.createClass({
                                     data={this._getBarGraphData('councildistrict')}
                                     selectedLabel={this.state.councildistrict}
                                     clickHandler={this._councilGraphClickHandler}
+                                    clickHandlerB={this._clearCouncilHandler}
+                                    bgroundClickHandler={this._clearCouncilHandler}
                                     paper={this.props.papers[0]}
                                     sort={this._sortBarGraphData('councildistrict')}
                                     {...barSharedProps}
@@ -298,6 +300,8 @@ module.exports = React.createClass({
                                     data={this._getBarGraphData('policedistrict')}
                                     selectedLabel={selectedLabelPoliceDistrict}
                                     clickHandler={this._policeGraphClickHandler}
+                                    clickHandlerB={this._clearPoliceHandler}
+                                    bgroundClickHandler={this._clearPoliceHandler}
                                     paper={this.props.papers[1]}
                                     {...barSharedProps}
                                 />
