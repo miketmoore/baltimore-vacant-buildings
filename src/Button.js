@@ -1,4 +1,5 @@
 var React = require('react');
+var classNames = require('classnames');
 
 module.exports = React.createClass({
     getDefaultProps () {
@@ -11,11 +12,17 @@ module.exports = React.createClass({
         if (this.props.clickHandler) this.props.clickHandler();
     },
     render () {
+        var btnClass = classNames({
+            'btn': true,
+            'btn-default': true,
+            'btn-xs': (this.props.size == 'xs')
+        });
         return (
             <button
                 disabled={this.props.disabled}
                 onClick={this._clickHandler}
-                className="btn btn-default btn-xs">
+                className={btnClass}
+            >
                 {this.props.label}
             </button>
         );
