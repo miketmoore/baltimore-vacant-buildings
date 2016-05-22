@@ -26,13 +26,9 @@ module.exports = React.createClass({
     componentDidUpdate () {
         $('.selectpicker').selectpicker('refresh');
     },
-    componentWillReceiveProps (props) {
-        this.setState({
-            values: props.values
-        });
-    },
     render () {
-        var options = this.state.values.map((val) => {
+        var options = this.props.values.map((val) => {
+            if (val == this.props.currentVal) console.log('SELECT CURRENT: ', val);
             return (
                 <option value={val} key={val}>{val}</option>
             );
@@ -45,9 +41,7 @@ module.exports = React.createClass({
                data-width="fit"
                data-style={this.props.dataStyle}
                value={this.props.currentVal}
-               onChange={this.changeHandler}>
-               {options}
-           </select>
+               onChange={this.changeHandler}>{options}</select>
         )
     }
 })
