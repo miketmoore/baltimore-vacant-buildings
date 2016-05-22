@@ -17,7 +17,6 @@ module.exports = React.createClass({
         if (this.props.changeHandler) this.props.changeHandler(val);
     },
     componentDidMount () {
-        console.log('Select.componentDidMount ', this.props);
         this.setState({
             values: this.props.values
         });
@@ -26,7 +25,6 @@ module.exports = React.createClass({
         $('.selectpicker').selectpicker('refresh');
     },
     componentWillReceiveProps (props) {
-        console.log('Select.componentWillReceiveProps ', props);
         this.setState({
             values: props.values
         });
