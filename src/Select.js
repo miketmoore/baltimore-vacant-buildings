@@ -28,7 +28,6 @@ module.exports = React.createClass({
     },
     render () {
         var options = this.props.values.map((val) => {
-            if (val == this.props.currentVal) console.log('SELECT CURRENT: ', val);
             return (
                 <option value={val} key={val}>{val}</option>
             );
