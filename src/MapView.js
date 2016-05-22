@@ -86,7 +86,7 @@ module.exports = React.createClass({
                         }
                         googleMapElement={
                             <GoogleMap
-                                defaultZoom={12}
+                                defaultZoom={10}
                                 defaultCenter={{ lat: this.state.centerCoords[0], lng: this.state.centerCoords[1] }}
                                 onClick={props.onMapClick}
                             >
