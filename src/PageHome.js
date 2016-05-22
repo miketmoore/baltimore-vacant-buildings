@@ -216,6 +216,7 @@ module.exports = React.createClass({
             }
         };
         var barSharedProps = barColorSchemes.night;
+        barSharedProps.displayLabels = false;
         var mapData = this._getMapData(entries);
         return (
             <Layout>
@@ -285,6 +286,7 @@ module.exports = React.createClass({
                                     clickHandler={this._councilGraphClickHandler}
                                     paper={this.props.papers[0]}
                                     sort={this._sortBarGraphData('councildistrict')}
+                                    prefix="Council District"
                                     {...barSharedProps}
                                 />
                             </div>
@@ -302,6 +304,7 @@ module.exports = React.createClass({
                                     selectedLabel={selectedLabelPoliceDistrict}
                                     clickHandler={this._policeGraphClickHandler}
                                     paper={this.props.papers[1]}
+                                    prefix="Police District"
                                     {...barSharedProps}
                                 />
                             </div>
