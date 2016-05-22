@@ -2,51 +2,33 @@ var React = require('react');
 import {GoogleMapLoader, GoogleMap, Marker} from "react-google-maps";
 
 module.exports = React.createClass({
-    getInitialState () {
-        return {
-            centerCoords: [],
-            markers: []
-        };
-    },
     getDefaultProps () {
         return {
-            centerCoords: [39.290, -76.6122],
+            center: [39.290, -76.6122],
             width: '400px',
             height: '400px',
-            entries: []
+            data: []
         };
     },
     _buildMarkers () {
-        var markersByDate = new Map();
+        var markers = [];
         var obj, marker, lat, lng, year, month, key;
-        var values = this.props.entries;
-        for ( var i = 0; i < values.length; i++ ) {
-            obj = values[i];
-            lat = parseFloat(obj.location[1]);
-            lng = parseFloat(obj.location[2]);
-            year = obj.year;
-            month = obj.month;
-            key = year + '-' + month;
-            marker = {
+        var data = this.props.data;
+        for ( var i = 0; i < data.length; i++ ) {
+            obj = data[i];
+            markers.push({
                 position: {
-                    lat: lat,
-                    lng: lng
+                    lat: parseFloat(obj.latitude),
+                    lng: parseFloat(obj.longitude)
                 },
-                key: obj[':id'],
+                key: obj.key,
                 defaultAnimation: 2
-            };
-            if (!markersByDate.has(key)) markersByDate.set(key, new Set());
-            markersByDate.get(key).add(marker);
+            });
         }
-
-        key = this.props.year + '-' + this.props.month;
-        if (markersByDate.has(key)) {
-            return Array.from(markersByDate.get(key).values())
-        }
-        return [];
+        return markers;
     },
     render () {
-        if (!this.props.centerCoords.length) return null;
+        if (!this.props.center.length) return null;
         var props = {
             markers: this._buildMarkers(),
             onMapClick: function () {
@@ -73,7 +55,7 @@ module.exports = React.createClass({
                         googleMapElement={
                             <GoogleMap
                                 defaultZoom={10}
-                                defaultCenter={{ lat: this.props.centerCoords[0], lng: this.props.centerCoords[1] }}
+                                defaultCenter={{ lat: this.props.center[0], lng: this.props.center[1] }}
                                 onClick={props.onMapClick}
                             >
                                 {props.markers.map((marker, index) => {

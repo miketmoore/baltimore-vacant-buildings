@@ -202,6 +202,17 @@ module.exports = React.createClass({
             }
         };
         var barSharedProps = barColorSchemes.night;
+        var mapData = [];
+        var entry;
+        for ( var i = 0; i < entries.length; i++ ) {
+            entry = entries[i];
+            mapData.push({
+                key: entry[':id'],
+                address: entry.buildingaddress,
+                latitude: entry.location[1],
+                longitude: entry.location[2]
+            });
+        }
         return (
             <Layout>
                 <div className="row">
@@ -209,9 +220,7 @@ module.exports = React.createClass({
                         <MapView
                             width="350px"
                             height="350px"
-                            year={this.state.year}
-                            month={this.state.month}
-                            entries={entries} />
+                            data={mapData} />
                     </div>
                     <div className="col-md-8">
                         <div className="row">
