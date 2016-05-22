@@ -27,7 +27,7 @@ module.exports = React.createClass({
         };
     },
     _map (data) {
-
+        console.log('BarGraphSmall._map ', this.props.id, data.length);
         // sort array of objects by obj.size
         data = data.sort(function (a,b) {
             a = a.size;
@@ -208,27 +208,50 @@ module.exports = React.createClass({
     // invoked when receiving new props, NOT on initial render
     componentWillReceiveProps: function(props) {
         this._map(props.data);
-        this._init();
     },
     // Immediately before initial rendering
     // This is run before rendering when switching to the route
     componentWillMount () {
-        this._map(this.props.data);
+        //this._map(this.props.data);
+    },
+    _draw () {
+        console.log('BarGraphSmall._draw');
+        console.log('BarGraphSmall._draw actually ', this.props.id, this.props.paper._id);
+        //this.draw();
+        var text = new this.props.paper.PointText({
+            point: [10,10],
+            content: this.props.id,
+            style: {
+                fillColor: 'black'
+            }
+        });
+        this.props.paper.project.view.viewSize = new paper.Size({
+            width: this.props.viewWidth,
+            height: this.props.viewHeight
+        });
+        console.log('BarGraphSmall_draw actually 2 ', text);
+        this.props.paper.project.view.update();
     },
     componentDidUpdate () {
-        this._init();
+        console.log('BarGraphSmall.componentDidUpdate ', this.props.id, this.props.paper._id, this.props.data.length);
+        new this.props.paper.Path.Rectangle({
+            point: [40,40],
+            size: [20, 20],
+            fillColor: this.props.fillcolor
+        });
+        this.props.paper.project.view.update();
+        //this._draw();
     },
     componentDidMount () {
-        var canvas = document.getElementById('canvas');
-        this.setState({
-            canvas: canvas
-        });
-        paper.setup(canvas);
-        this._init();
+        console.log('BarGraphSmall.componentDidMount this.props: ', this.props);
+        var canvas = this.refs.canvas;
+        this.props.paper.setup(canvas);
+        //this._draw();
     },
     render () {
+        console.log('BarGraphSmall.render');
         return (
-            <canvas id="canvas" resize></canvas>
+            <canvas ref="canvas" resize></canvas>
         );
     }
 });

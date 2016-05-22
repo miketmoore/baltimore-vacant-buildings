@@ -9,6 +9,7 @@ import ReactDataGrid from 'react-data-grid/addons';
 module.exports = React.createClass({
     getDefaultProps () {
         return {
+            papers: [new paper.PaperScope(), new paper.PaperScope()],
             months: ['01','02','03','04','05','06','07','08','09','10','11','12'],
             gridColumns: [
                 {"key":"buildingaddress","name":"Address","resizable":true},
@@ -212,6 +213,7 @@ module.exports = React.createClass({
                                 /></p>
 
                                 <BarGraphSmall
+                                    id="councildistrictbargraph"
                                     data={this._getBarGraphData('councildistrict')}
                                     selectedLabel={this.state.councildistrict}
                                     clickHandler={this._councilGraphClickHandler}
@@ -219,6 +221,21 @@ module.exports = React.createClass({
                                     bordercolor={'#7790D9'}
                                     fontcolora="#F24535"
                                     fontcolorb="#F2AF5C"
+                                    paper={this.props.papers[0]}
+                                    fillcolor="red"
+                                />
+                                <br/>
+                                <BarGraphSmall
+                                    id="policedistrictbargraph"
+                                    data={this._getBarGraphData('policedistrict')}
+                                    selectedLabel={this.state.policedistrict}
+                                    clickHandler={this._policeGraphClickHandler}
+                                    bgroundcolor={'#A3BFD9'}
+                                    bordercolor={'#7790D9'}
+                                    fontcolora="#F24535"
+                                    fontcolorb="#F2AF5C"
+                                    paper={this.props.papers[1]}
+                                    fillcolor="yellow"
                                 />
                             </div>
                         </div>
