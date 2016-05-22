@@ -24,7 +24,8 @@ module.exports = React.createClass({
             years: [],
             year: '',
             month: '01',
-            councildistrict: ''
+            councildistrict: '',
+            neighborhood: ''
         };
     },
     _yearSelectChangeHandler (val) {
@@ -35,6 +36,11 @@ module.exports = React.createClass({
     _monthSelectChangeHandler (val) {
         this.setState({
             month: val
+        });
+    },
+    _neighborhoodSelectChangeHandler (val) {
+        this.setState({
+            neighborhood: val
         });
     },
     _councilGraphClickHandler (data) {
@@ -49,7 +55,8 @@ module.exports = React.createClass({
     },
     // Update state with actual data
     _init () {
-        var byYear = this.props.model.index.get('yyyy');
+        var model = this.props.model;
+        var byYear = model.index.get('yyyy');
         var years = Array.from(byYear.keys()).sort();
         var year = years[years.length-1];
 
@@ -80,13 +87,18 @@ module.exports = React.createClass({
         console.log('PageHome.componentWillUpdate', np, ns);
     },
     _getBarGraphData (key) {
+        console.log('PageHome._getbarGraphData ');
         var model = this.props.model;
         if (!model.rows.length) return [];
         // get entries filtered by current year and month (these are always set)
-        var entriesByDate = model.filter({
+        var filters = {
             year: this.state.year,
             month: this.state.month
-        });
+        };
+        if (this.state.neighborhood) {
+            filters.neighborhood = this.state.neighborhood;
+        }
+        var entriesByDate = model.filter(filters);
         // Get full, distinct list of council districts
         var distinct = Array.from(model.index.get('councildistrict').keys());
         // Map distinct council districts to total entries in that district
@@ -107,10 +119,21 @@ module.exports = React.createClass({
         if (this.state.councildistrict) {
             filters.councildistrict = this.state.councildistrict;
         }
+        if (this.state.neighborhood) {
+            filters.neighborhood = this.state.neighborhood;
+        }
         return this.props.model.filter(filters) || [];
+    },
+    _getNeighborhoods () {
+        var index = this.props.model.index;
+        if (index.has('neighborhood')) {
+            return Array.from(index.get('neighborhood').keys()).sort();
+        }
+        return [];
     },
     render () {
         console.log('PageHome.render()');
+        var neighborhoods = this._getNeighborhoods();
         var entries = this._getEntries.call(this);
         function gridRowGetter (i) {
             var row = entries[i];
@@ -155,6 +178,17 @@ module.exports = React.createClass({
                             <div className="col-md-2">
                                 <h4>Total</h4>
                                 <p>{entries.length}</p>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-8">
+                                <h4>Neighborhoods</h4>
+                                <Select
+                                    currentVal={this.state.neighborhood}
+                                    changeHandler={this._neighborhoodSelectChangeHandler}
+                                    values={neighborhoods}
+                                    liveSearch={true}
+                                />
                             </div>
                         </div>
                         <div className="row">
