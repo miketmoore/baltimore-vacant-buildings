@@ -78,14 +78,7 @@ module.exports = React.createClass({
             }
         }
 
-        // Sort by year
-        data = data.sort(function (a,b) {
-            a = parseInt(a.label);
-            b = parseInt(b.label);
-            if (a < b) return -1;
-            if (a > b ) return 1;
-            return 0;
-        });
+        data = this.props.sort ? data.sort(this.props.sort) : data.sort(this._defaultSort);
 
         return {
             preparedData: data,
@@ -96,6 +89,13 @@ module.exports = React.createClass({
             minY: this.props.viewHeight - Math.ceil(maxNormal),
             maxY: this.props.viewHeight - Math.ceil(minNormal)
         };
+    },
+    _defaultSort (a,b) {
+        a = a.label;
+        b = b.label;
+        if (a < b) return -1;
+        if (a > b ) return 1;
+        return 0;
     },
     _drawBars (pscope, drawData) {
         console.log('BarGraphSmall._drawBars() ', drawData.preparedData);
