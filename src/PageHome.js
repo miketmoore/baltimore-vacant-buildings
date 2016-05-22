@@ -24,7 +24,7 @@ module.exports = React.createClass({
         return {
             years: [],
             year: '',
-            month: '',
+            month: '01',
             councildistrict: '',
             policedistrict: '',
             neighborhood: ''
@@ -221,6 +221,7 @@ module.exports = React.createClass({
             <Layout>
                 <div className="row">
                     <div className="col-md-4">
+                        <p>Displaying {entries.length} Vacancies</p>
                         <MapView
                             width="350px"
                             height="350px"
@@ -237,7 +238,7 @@ module.exports = React.createClass({
                                     liveSearch={true}
                                 />
                             </div>
-                            <div className="col-md-2">
+                            <div className="col-md-3">
                                 <h4>Month</h4>
                                 <Select
                                     currentVal={this.state.month}
@@ -249,10 +250,6 @@ module.exports = React.createClass({
                                     clickHandler={this._clearMonthHandler}
                                     label="Clear"
                                 />
-                            </div>
-                            <div className="col-md-2">
-                                <h4>Total</h4>
-                                <p>{entries.length}</p>
                             </div>
                         </div>
                         <div className="row">
