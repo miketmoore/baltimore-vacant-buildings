@@ -182,13 +182,13 @@ module.exports = React.createClass({
 
         var barColorSchemes = {
             night: {
-                bgroundcolor: '#132F32',
+                bgroundcolor: '#4EC0CC',
                 barcolor: "#33627A",
                 barcolorhover: "#719BB0",
-                barcolorselected: "#9DBFCF",
+                barcolorselected: "#BEE7FA",
                 bordercolor: '#7790D9',
                 fontcolora: "#FFFFFF",
-                fontcolorb: "#9CBFCF"
+                fontcolorb: "#33627A"
             },
             baltimoreAbandonedRowHouses: {
                 bgroundcolor: '#c5b7a9', // suva gray
@@ -199,7 +199,7 @@ module.exports = React.createClass({
                 fontcolorb: '#433030'
             }
         };
-        var barSharedProps = barColorSchemes.baltimoreAbandonedRowHouses;
+        var barSharedProps = barColorSchemes.night;
         return (
             <Layout>
                 <div className="row">
