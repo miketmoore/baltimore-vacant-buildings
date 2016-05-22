@@ -112,7 +112,7 @@ module.exports = React.createClass({
         var rect;
         var text;
         var thisY;
-        var $canvas = $(this.state.canvas);
+        var $canvas = $(this.refs.canvas);
 
         function addMouseHandlers (path, data) {
             path.data = data;
