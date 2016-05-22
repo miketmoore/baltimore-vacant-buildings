@@ -133,7 +133,7 @@ Model.prototype._mapRow = function (raw) {
     return {
         ':id': raw[1],
         'buildingaddress': raw[11],
-        'noticedate': raw[12],
+        'noticedate': raw[12].slice(0,10), // slice off time since times are all the same
         'neighborhood': raw[13],
         'policedistrict': raw[14],
         'councildistrict': raw[15],
