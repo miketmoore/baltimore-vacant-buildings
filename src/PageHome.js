@@ -151,6 +151,18 @@ module.exports = React.createClass({
         }
         return [];
     },
+    _sortBarGraphData (key) {
+        var sorters = {
+            councildistrict: function (a,b) {
+                a = parseInt(a.label);
+                b = parseInt(b.label);
+                if (a < b) return -1;
+                if (a > b ) return 1;
+                return 0;
+            }
+        };
+        return sorters[key];
+    },
     render () {
         var neighborhoods = this._getNeighborhoods();
         var entries = this._getEntries.call(this);
@@ -241,6 +253,7 @@ module.exports = React.createClass({
                                     fontcolora="#F24535"
                                     fontcolorb="#F2AF5C"
                                     paper={this.props.papers[0]}
+                                    sort={this._sortBarGraphData('councildistrict')}
                                 />
                             </div>
                             <div className="col-md-4">
