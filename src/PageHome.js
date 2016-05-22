@@ -77,23 +77,17 @@ module.exports = React.createClass({
         });
     },
     componentWillReceiveProps (props) {
-        console.log('PageHome.componentWillReceiveProps ');
         this._init();
     },
     // called before render
     // setting state here will not trigger re-rendering
     componentWillMount () {
-        console.log('PageHome.componentWillMount');
         var map = this.props.model.index.get('yyyy');
         if (map.size) {
             this._init();
         }
     },
-    componentWillUpdate (np, ns) {
-        console.log('PageHome.componentWillUpdate', np, ns);
-    },
     _getBarGraphData (key) {
-        console.log('PageHome._getbarGraphData ');
         var model = this.props.model;
         if (!model.rows.length) return [];
         // get entries filtered by current year and month (these are always set)
@@ -138,7 +132,6 @@ module.exports = React.createClass({
         return [];
     },
     render () {
-        console.log('PageHome.render()');
         var neighborhoods = this._getNeighborhoods();
         var entries = this._getEntries.call(this);
         function gridRowGetter (i) {
