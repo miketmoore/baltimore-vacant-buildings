@@ -161,7 +161,7 @@ module.exports = React.createClass({
                             <div className="col-md-4">
                                 <h4>Per Council District</h4>
                                 <p><small>Click a bar to filter data.</small> <Button
-                                    visible={this.state.councildistrict != ''}
+                                    disabled={this.state.councildistrict == ''}
                                     clickHandler={this._clearCouncilHandler}
                                     label="Clear Filter"
                                 /></p>
