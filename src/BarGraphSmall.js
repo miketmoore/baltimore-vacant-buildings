@@ -6,10 +6,10 @@ module.exports = React.createClass({
         return {
             data: [],
             bgroundcolor: '#000000',
-            viewWidth: 300,
-            viewHeight: 100,
-            barMargin: 5,
-            barWidth: 16,
+            viewWidth: 230,
+            viewHeight: 115,
+            barMargin: 4,
+            barWidth: 12,
             barMin: 18,
             barMax: 85,
             clickHandler: function () {}
@@ -27,7 +27,7 @@ module.exports = React.createClass({
         };
     },
     _map (data) {
-        console.log('BarGraphSmall._map ', this.props.id, data.length);
+        console.log('BarGraphSmall._map');
         // sort array of objects by obj.size
         data = data.sort(function (a,b) {
             a = a.size;
@@ -161,7 +161,7 @@ module.exports = React.createClass({
                 }),
                 content: obj.label,
                 justification: 'center',
-                fontSize: 14,
+                fontSize: 12,
                 fontFamily: 'sans-serif',
                 fillColor: this.props.fontcolora,
                 blendMode: 'multiply'
@@ -174,7 +174,7 @@ module.exports = React.createClass({
                 }),
                 content: parseInt(obj.size).toLocaleString(),
                 justification: 'center',
-                fontSize: 14,
+                fontSize: 12,
                 fontFamily: 'sans-serif',
                 fillColor: this.props.fontcolorb,
                 blendMode: 'multiply'
@@ -204,13 +204,12 @@ module.exports = React.createClass({
     },
     _draw () {
         console.log('BarGraphSmall._draw');
-        console.log('BarGraphSmall._draw actually ', this.props.id, this.props.paper._id);
         //this.draw();
         var text = new this.props.paper.PointText({
-            point: [10,10],
-            content: this.props.id,
+            point: [3,11],
+            content: this.props.title,
             style: {
-                fillColor: 'black'
+                fillColor: this.props.titlecolor
             }
         });
         this.props.paper.project.view.viewSize = new paper.Size({
@@ -221,7 +220,7 @@ module.exports = React.createClass({
         this.props.paper.project.view.update();
     },
     componentDidUpdate () {
-        console.log('BarGraphSmall.componentDidUpdate ', this.props.id, this.props.paper._id, this.props.data.length);
+        console.log('BarGraphSmall.componentDidUpdate');
         window.paper = this.props.paper;
         var pscope = this.props.paper;
         // draw background

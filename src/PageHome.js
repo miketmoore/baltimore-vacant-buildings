@@ -206,10 +206,11 @@ module.exports = React.createClass({
                                 /></p>
 
                                 <BarGraphSmall
-                                    id="councildistrictbargraph"
+                                    title="Vacancies by Council Districts"
                                     data={this._getBarGraphData('councildistrict')}
                                     selectedLabel={this.state.councildistrict}
                                     clickHandler={this._councilGraphClickHandler}
+                                    titlecolor='white'
                                     bgroundcolor={'#A3BFD9'}
                                     bordercolor={'#7790D9'}
                                     fontcolora="#F24535"
@@ -227,10 +228,11 @@ module.exports = React.createClass({
                                 /></p>
 
                                 <BarGraphSmall
-                                    id="policedistrictbargraph"
+                                    title="Vacancies by Police Districts"
                                     data={this._getBarGraphData('policedistrict')}
                                     selectedLabel={this.state.policedistrict}
                                     clickHandler={this._policeGraphClickHandler}
+                                    titlecolor='white'
                                     bgroundcolor={'#A3BFD9'}
                                     bordercolor={'#7790D9'}
                                     fontcolora="#F24535"
