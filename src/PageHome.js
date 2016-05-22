@@ -37,6 +37,11 @@ module.exports = React.createClass({
             month: val
         });
     },
+    _councilGraphClickHandler (data) {
+        this.setState({
+            councildistrict: data.label
+        });
+    },
     _clearCouncilHandler () {
         this.setState({
             councildistrict: ''
@@ -93,14 +98,6 @@ module.exports = React.createClass({
         var data = [];
         map.forEach((count, key) => data.push({ size: count, label: key }));
         return data;
-    },
-    _councilGraphClickHandler (data) {
-        var newCouncilDistrict = data.label;
-        console.log('PageHome._councilGraphClickHandler ', newCouncilDistrict);
-
-        this.setState({
-            councildistrict: newCouncilDistrict
-        });
     },
     _getEntries () {
         var filters = {
