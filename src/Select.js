@@ -3,8 +3,10 @@ var React = require('react');
 module.exports = React.createClass({
     getDefaultProps () {
         return {
+            title: "Select One",
             liveSearch: false,
-            dataStyle: 'btn-primary'
+            dataStyle: 'btn-primary',
+            currentValue: ''
         };
     },
     getInitialState () {
@@ -32,12 +34,13 @@ module.exports = React.createClass({
     render () {
         var options = this.state.values.map((val) => {
             return (
-                <option value={val}  key={val}>{val}</option>
+                <option value={val} key={val}>{val}</option>
             );
         });
         return (
            <select
-               className="selectpicker show-tick"
+               title={this.props.title}
+               className="selectpicker show-tick right-margin"
                data-live-search={this.props.liveSearch}
                data-width="fit"
                data-style={this.props.dataStyle}

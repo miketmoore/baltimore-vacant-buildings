@@ -53,6 +53,11 @@ module.exports = React.createClass({
             councildistrict: ''
         });
     },
+    _clearNeighborhoodHandler () {
+        this.setState({
+            neighborhood: ''
+        })
+    },
     // Update state with actual data
     _init () {
         var model = this.props.model;
@@ -184,10 +189,15 @@ module.exports = React.createClass({
                             <div className="col-md-8">
                                 <h4>Neighborhoods</h4>
                                 <Select
+                                    title="Select One"
                                     currentVal={this.state.neighborhood}
                                     changeHandler={this._neighborhoodSelectChangeHandler}
                                     values={neighborhoods}
                                     liveSearch={true}
+                                />
+                                <Button
+                                    clickHandler={this._clearNeighborhoodHandler}
+                                    label="Clear"
                                 />
                             </div>
                         </div>
@@ -197,7 +207,8 @@ module.exports = React.createClass({
                                 <p><small>Click a bar to filter data.</small> <Button
                                     disabled={this.state.councildistrict == ''}
                                     clickHandler={this._clearCouncilHandler}
-                                    label="Clear Filter"
+                                    label="Clear"
+                                    size="xs"
                                 /></p>
 
                                 <BarGraphSmall
