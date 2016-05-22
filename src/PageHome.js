@@ -208,7 +208,7 @@ module.exports = React.createClass({
         return (
             <Layout>
                 <div className="row">
-                    <div className="col-md-7">
+                    <div className="col-md-4">
                         <MapView
                             width="350px"
                             height="350px"
@@ -216,7 +216,7 @@ module.exports = React.createClass({
                             month={this.state.currentMonth}
                             entries={this.state.currentEntries} />
                     </div>
-                    <div className="col-md-5">
+                    <div className="col-md-8">
                         <div className="row">
                             <div className="col-md-3">
                                 <h4>Year</h4>
@@ -225,23 +225,27 @@ module.exports = React.createClass({
                                     changeHandler={this.yearSelectChangeHandler}
                                     values={this.state.years} />
                             </div>
-                            <div className="col-md-2">
+                            <div className="col-md-3">
                                 <h4>Month</h4>
                                 <Select
                                     currentVal={this.state.currentMonth}
                                     changeHandler={this.monthSelectChangeHandler}
                                     values={this.state.months} />
                             </div>
+                            <div className="col-md-3">
+                                <h4>Total</h4>
+                                <p>{this.state.currentEntries.length}</p>
+                            </div>
                         </div>
                         <div className="row">
-                            <div className="col-md-5">
-                                <p>Total Entries: {this.state.currentEntries.length}</p>
-                                <h5>Vacancies per Council District</h5>
-                                <Button
-                                    disabled={this.state.currentCouncilDistrict == ''}
+                            <div className="col-md-4">
+                                <h4>Per Council District</h4>
+                                <p>Click a bar to filter data. <Button
+                                    visible={this.state.currentCouncilDistrict != ''}
                                     clickHandler={this._clearCouncilHandler}
                                     label="Clear Filter"
-                                />
+                                /></p>
+
                                 <BarGraphSmall
                                     data={this.state.entriesPerCouncilDistrict}
                                     selectedLabel={this.state.currentCouncilDistrict}
