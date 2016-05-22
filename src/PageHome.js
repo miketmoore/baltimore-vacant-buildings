@@ -238,7 +238,7 @@ module.exports = React.createClass({
                                     liveSearch={true}
                                 />
                             </div>
-                            <div className="col-md-3">
+                            <div className="col-md-4">
                                 <h4>Month</h4>
                                 <Select
                                     currentVal={this.state.month}
