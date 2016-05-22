@@ -21,28 +21,19 @@ module.exports = React.createClass({
     getInitialState() {
         return {
             years: [],
-            entriesPerCouncilDistrict: [],
             currentYear: '',
             months: ['01','02','03','04','05','06','07','08','09','10','11','12'],
             currentMonth: '01',
-            currentCouncilDistrict: '',
             currentEntries: []
         };
     },
     _yearSelectChangeHandler (newCurrentYear) {
+        // get all entries filtered by date
         var entries = this.props.model.filter({
             year: newCurrentYear,
             month: this.state.currentMonth
         });
-        var entriesPerCouncilDistrict = this._getEntriesPerCouncilDistrict(entries);
-        if (this.state.currentCouncilDistrict != '') {
-            // Limit current entries by councildistrict
-            entries = this.props.model.filter({
-                councildistrict: this.state.currentCouncilDistrict
-            }, entries);
-        }
         this.setState({
-            entriesPerCouncilDistrict: this._getEntriesPerCouncilDistrict(entries),
             currentYear: newCurrentYear,
             currentEntries: entries
         });
@@ -52,47 +43,10 @@ module.exports = React.createClass({
             year: this.state.currentYear,
             month: newCurrentMonth
         });
-        var entriesPerCouncilDistrict = this._getEntriesPerCouncilDistrict(entries);
-        if (this.state.currentCouncilDistrict != '') {
-            // Limit current entries by councildistrict
-            entries = this.props.model.filter({
-                councildistrict: this.state.currentCouncilDistrict
-            }, entries);
-        }
         this.setState({
-            entriesPerCouncilDistrict: this._getEntriesPerCouncilDistrict(entries),
             currentMonth: newCurrentMonth,
             currentEntries: entries
         });
-    },
-    _getFullCouncilDistrictList () {
-        var model = this.props.model;
-        var map = model.index.get('councildistrict');
-        // sort strings numerically
-        return Array.from(map.keys()).sort(function (a,b) {
-            a = parseInt(a);
-            b = parseInt(b);
-            if (a < b) return -1;
-            if (a > b) return 1;
-            return 0;
-        });
-    },
-    _getEntriesPerCouncilDistrict (entries) {
-        var fullCouncilDistrictList = this._getFullCouncilDistrictList();
-        var fullCouncilDistrictMap = new Map();
-        fullCouncilDistrictList.forEach(cd => fullCouncilDistrictMap.set(cd, new Set()));
-        entries.forEach((entry) => {
-            fullCouncilDistrictMap.get(entry.councildistrict).add(entry[':id']);
-        });
-        var entriesPerCouncilDistrict = [];
-
-        fullCouncilDistrictMap.forEach((v, k) => {
-            entriesPerCouncilDistrict.push({
-                label: k,
-                size: v.size
-            });
-        });
-        return entriesPerCouncilDistrict;
     },
     // Update state with actual data
     _init () {
@@ -106,33 +60,9 @@ module.exports = React.createClass({
         });
 
         this.setState({
-            entriesPerCouncilDistrict: this._getEntriesPerCouncilDistrict(entries),
             years: years,
             currentYear: currentYear,
             currentEntries: entries
-        });
-    },
-    // Update entries in state by year, month, and councildistrict
-    _councilGraphClickHandler (data) {
-        var entries = this.props.model.filter({
-            year: this.state.currentYear,
-            month: this.state.currentMonth,
-            councildistrict: data.label
-        });
-        this.setState({
-            currentEntries: entries,
-            currentCouncilDistrict: data.label
-        });
-    },
-    _clearCouncilHandler () {
-        console.log('PageHome._clearCouncilHandler');
-        var entries = this.props.model.filter({
-            year: this.state.currentYear,
-            month: this.state.currentMonth
-        });
-        this.setState({
-            currentEntries: entries,
-            currentCouncilDistrict: ''
         });
     },
     componentWillReceiveProps (props) {
@@ -190,26 +120,6 @@ module.exports = React.createClass({
                             <div className="col-md-2">
                                 <h4>Total</h4>
                                 <p>{this.state.currentEntries.length}</p>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md-4">
-                                <h4>Per Council District</h4>
-                                <p><small>Click a bar to filter data.</small> <Button
-                                    visible={this.state.currentCouncilDistrict != ''}
-                                    clickHandler={this._clearCouncilHandler}
-                                    label="Clear Filter"
-                                /></p>
-
-                                <BarGraphSmall
-                                    data={this.state.entriesPerCouncilDistrict}
-                                    selectedLabel={this.state.currentCouncilDistrict}
-                                    clickHandler={this._councilGraphClickHandler}
-                                    bgroundcolor={'#A3BFD9'}
-                                    bordercolor={'#7790D9'}
-                                    fontcolora="#F24535"
-                                    fontcolorb="#F2AF5C"
-                                />
                             </div>
                         </div>
                     </div>
