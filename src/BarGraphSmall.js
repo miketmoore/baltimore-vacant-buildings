@@ -87,7 +87,7 @@ module.exports = React.createClass({
             return 0;
         });
 
-        this.setState({
+        return {
             preparedData: data,
             min: min,
             max: max,
@@ -95,9 +95,10 @@ module.exports = React.createClass({
             maxNormal: maxNormal,
             minY: this.props.viewHeight - Math.ceil(maxNormal),
             maxY: this.props.viewHeight - Math.ceil(minNormal)
-        });
+        };
     },
-    _drawBars () {
+    _drawBars (pscope, drawData) {
+        console.log('BarGraphSmall._drawBars() ', drawData.preparedData);
         var obj;
         var barWidth = this.props.barWidth;
         var barHeight; // diff per bar
@@ -106,7 +107,7 @@ module.exports = React.createClass({
         var y = 0;
         var rect;
         var text;
-        var preparedData = this.state.preparedData;
+        var preparedData = drawData.preparedData;
         var thisY;
         var $canvas = $(this.state.canvas);
 
@@ -141,20 +142,20 @@ module.exports = React.createClass({
             obj = preparedData[i];
             barHeight = Math.ceil(obj.normalized);
             thisY = this.props.viewHeight - barHeight;
-            rect = new paper.Path.Rectangle({
-                point: new paper.Point({
+            rect = new pscope.Path.Rectangle({
+                point: new pscope.Point({
                     x: x,
                     y: thisY
                 }),
-                size: new paper.Size(barWidth, barHeight),
+                size: new pscope.Size(barWidth, barHeight),
                 style: {
                     fillColor: (obj.label == this.props.selectedLabel) ? 'yellow' : '#F29F05'
                 }
             });
             addMouseHandlers.call(this, rect, obj);
 
-            text = new paper.PointText({
-                point: new paper.Point({
+            text = new pscope.PointText({
+                point: new pscope.Point({
                     x: rect.bounds.bottomCenter.x,
                     y: rect.bounds.bottomCenter.y - 2
                 }),
@@ -166,8 +167,8 @@ module.exports = React.createClass({
                 blendMode: 'multiply'
             });
             addMouseHandlers.call(this, text, obj);
-            text = new paper.PointText({
-                point: new paper.Point({
+            text = new pscope.PointText({
+                point: new pscope.Point({
                     x: rect.bounds.topCenter.x,
                     y: rect.bounds.topCenter.y - 1
                 }),
@@ -192,22 +193,9 @@ module.exports = React.createClass({
             }
         });
     },
-    draw () {
-        this._drawBackground();
-        this._drawBars();
-        paper.project.view.viewSize = new paper.Size({
-            width: this.props.viewWidth,
-            height: this.props.viewHeight
-        });
-    },
-    _init () {
-        this.draw();
-        paper.view.draw();
-        paper.view.update();
-    },
     // invoked when receiving new props, NOT on initial render
     componentWillReceiveProps: function(props) {
-        this._map(props.data);
+        //this._map(props.data);
     },
     // Immediately before initial rendering
     // This is run before rendering when switching to the route
@@ -236,16 +224,18 @@ module.exports = React.createClass({
         console.log('BarGraphSmall.componentDidUpdate ', this.props.id, this.props.paper._id, this.props.data.length);
         window.paper = this.props.paper;
         var pscope = this.props.paper;
+        // draw background
         new pscope.Path.Rectangle({
-            point: [this.props.rectx, this.props.recty],
-            size: [20, 20],
-            fillColor: this.props.fillcolor
+            point: [0,0],
+            size: [this.props.viewWidth, this.props.viewHeight],
+            style: {
+                strokeWidth: 0,
+                fillColor: this.props.bgroundcolor
+            }
         });
-        new pscope.paper.PointText({
-            point: [this.props.rectx, this.props.recty],
-            content: this.props.paper._id,
-            fillColor: 'black'
-        });
+        var resp = this._map(this.props.data);
+        console.log('BarGraphSmall.componentDidUpdate ', resp);
+        this._drawBars(pscope, resp);
         pscope.view.update();
         this._draw();
     },
