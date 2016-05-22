@@ -108,9 +108,9 @@ module.exports = React.createClass({
             year: this.state.year,
             month: this.state.month
         };
-        if (this.state.neighborhood) {
-            filters.neighborhood = this.state.neighborhood;
-        }
+        if (this.state.neighborhood) filters.neighborhood = this.state.neighborhood;
+        if (this.state.councildistrict) filters.councildistrict = this.state.councildistrict;
+        if (this.state.policedistrict) filters.policedistrict = this.state.policedistrict;
         var entriesByDate = model.filter(filters);
         // Get full, distinct list
         var distinct = Array.from(model.index.get(key).keys());
@@ -139,15 +139,9 @@ module.exports = React.createClass({
             year: this.state.year,
             month: this.state.month
         };
-        if (this.state.councildistrict) {
-            filters.councildistrict = this.state.councildistrict;
-        }
-        if (this.state.policedistrict) {
-            filters.policedistrict = this.state.policedistrict;
-        }
-        if (this.state.neighborhood) {
-            filters.neighborhood = this.state.neighborhood;
-        }
+        if (this.state.councildistrict) filters.councildistrict = this.state.councildistrict;
+        if (this.state.policedistrict) filters.policedistrict = this.state.policedistrict;
+        if (this.state.neighborhood) filters.neighborhood = this.state.neighborhood;
         return this.props.model.filter(filters) || [];
     },
     _getNeighborhoods () {
@@ -220,6 +214,7 @@ module.exports = React.createClass({
                                     liveSearch={true}
                                 />
                                 <Button
+                                    disabled={this.state.neighborhood == ''}
                                     clickHandler={this._clearNeighborhoodHandler}
                                     label="Clear"
                                 />
