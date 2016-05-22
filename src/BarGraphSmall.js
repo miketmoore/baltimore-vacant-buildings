@@ -26,7 +26,6 @@ module.exports = React.createClass({
         };
     },
     _map (data) {
-        console.log('BarGraphSmall._map');
         // sort array of objects by obj.size
         data = data.sort(function (a,b) {
             a = a.size;
@@ -97,7 +96,6 @@ module.exports = React.createClass({
         return 0;
     },
     _drawBars (pscope, drawData) {
-        console.log('BarGraphSmall._drawBars() ', drawData.preparedData);
         var obj;
         var preparedData = drawData.preparedData;
         var barWidth = ((this.props.viewWidth - this.props.barMargin) / preparedData.length) - this.props.barMargin;
@@ -180,8 +178,8 @@ module.exports = React.createClass({
             x += barWidth + this.props.barMargin;
         }
     },
-    _drawBackground () {
-        new paper.Path.Rectangle({
+    _drawBackground (pscope) {
+        new pscope.Path.Rectangle({
             point: [0,0],
             size: [this.props.viewWidth, this.props.viewHeight],
             style: {
@@ -190,18 +188,14 @@ module.exports = React.createClass({
             }
         });
     },
-    // invoked when receiving new props, NOT on initial render
-    componentWillReceiveProps: function(props) {
-        //this._map(props.data);
-    },
-    // Immediately before initial rendering
-    // This is run before rendering when switching to the route
-    componentWillMount () {
-        //this._map(this.props.data);
-    },
-    _draw () {
-        console.log('BarGraphSmall._draw');
-        //this.draw();
+    _draw (canvas) {
+        window.paper = this.props.paper;
+        var pscope = this.props.paper;
+        if (canvas) pscope.setup(canvas);
+        this._drawBackground(pscope);
+        var resp = this._map(this.props.data);
+        this._drawBars(pscope, resp);
+        pscope.view.update();
         var dims = {
             width: this.props.viewWidth,
             height: this.props.viewHeight
@@ -217,36 +211,16 @@ module.exports = React.createClass({
             dims.height += 15;
         }
         this.props.paper.project.view.viewSize = new paper.Size(dims);
-        console.log('BarGraphSmall_draw actually 2 ', text);
         this.props.paper.project.view.update();
     },
     componentDidUpdate () {
-        console.log('BarGraphSmall.componentDidUpdate');
-        window.paper = this.props.paper;
-        var pscope = this.props.paper;
-        // draw background
-        new pscope.Path.Rectangle({
-            point: [0,0],
-            size: [this.props.viewWidth, this.props.viewHeight],
-            style: {
-                strokeWidth: 0,
-                fillColor: this.props.bgroundcolor
-            }
-        });
-        var resp = this._map(this.props.data);
-        console.log('BarGraphSmall.componentDidUpdate ', resp);
-        this._drawBars(pscope, resp);
-        pscope.view.update();
         this._draw();
     },
     componentDidMount () {
-        console.log('BarGraphSmall.componentDidMount this.props: ', this.props);
         var canvas = this.refs.canvas;
-        this.props.paper.setup(canvas);
-        //this._draw();
+        this._draw(canvas);
     },
     render () {
-        console.log('BarGraphSmall.render');
         return (
             <canvas ref="canvas" resize></canvas>
         );
