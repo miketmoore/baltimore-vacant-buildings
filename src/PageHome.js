@@ -100,7 +100,7 @@ module.exports = React.createClass({
         }
         var entriesByDate = model.filter(filters);
         // Get full, distinct list of council districts
-        var distinct = Array.from(model.index.get('councildistrict').keys());
+        var distinct = Array.from(model.index.get(key).keys());
         // Map distinct council districts to total entries in that district
         var map = new Map();
         distinct.forEach(k => map.set(k, 0));
@@ -108,7 +108,29 @@ module.exports = React.createClass({
             map.set(entry[key], map.get(entry[key]) + 1);
         });
         var data = [];
-        map.forEach((count, key) => data.push({ size: count, label: key }));
+        {/*map.forEach((count, key) => data.push({ size: count, label: key }));*/}
+        var policeLookup = new Map([
+            ['northern', 'n'],
+            ['western', 'w'],
+            ['southern', 's'],
+            ['northeastern', 'ne'],
+            ['southeastern', 'se'],
+            ['southwestern', 'sw'],
+            ['northwestern', 'nw'],
+            ['eastern', 'e'],
+            ['central', 'c']
+        ]);
+        map.forEach(function (mapVal, mapKey) {
+            var obj = {
+                size: mapVal
+            };
+            if (key == 'policedistrict') {
+                obj.label = policeLookup.get(mapKey.toLowerCase()).toUpperCase();
+            } else {
+                obj.label = mapKey
+            }
+            data.push(obj);
+        });
         return data;
     },
     _getEntries () {
