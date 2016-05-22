@@ -11,16 +11,13 @@ module.exports = React.createClass({
         if (this.props.clickHandler) this.props.clickHandler();
     },
     render () {
-        if (this.props.visible) {
-            return (
-                <button
-                    onClick={this._clickHandler}
-                    className="btn btn-default btn-xs">
-                    {this.props.label}
-                </button>
-            )
-        } else {
-            return null;
-        }
+        return (
+            <button
+                disabled={this.props.disabled}
+                onClick={this._clickHandler}
+                className="btn btn-default btn-xs">
+                {this.props.label}
+            </button>
+        );
     }
-})
+});
