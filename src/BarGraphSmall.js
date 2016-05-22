@@ -9,7 +9,6 @@ module.exports = React.createClass({
             viewWidth: 230,
             viewHeight: 100,
             barMargin: 4,
-            barWidth: 12,
             barMin: 18,
             barMax: 85,
             clickHandler: function () {}
@@ -100,14 +99,14 @@ module.exports = React.createClass({
     _drawBars (pscope, drawData) {
         console.log('BarGraphSmall._drawBars() ', drawData.preparedData);
         var obj;
-        var barWidth = this.props.barWidth;
+        var preparedData = drawData.preparedData;
+        var barWidth = ((this.props.viewWidth - this.props.barMargin) / preparedData.length) - this.props.barMargin;
         var barHeight; // diff per bar
         //var x = (this.props.viewWidth - (this.props.barWidth + this.props.barMargin)) / 2;
         var x = this.props.barMargin;
         var y = 0;
         var rect;
         var text;
-        var preparedData = drawData.preparedData;
         var thisY;
         var $canvas = $(this.state.canvas);
 
