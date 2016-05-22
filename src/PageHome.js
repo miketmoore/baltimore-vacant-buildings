@@ -215,9 +215,6 @@ module.exports = React.createClass({
                                     fontcolora="#F24535"
                                     fontcolorb="#F2AF5C"
                                     paper={this.props.papers[0]}
-                                    rectx={40}
-                                    recty={40}
-                                    fillcolor="red"
                                 />
                             </div>
                             <div className="col-md-4">
@@ -239,9 +236,6 @@ module.exports = React.createClass({
                                     fontcolora="#F24535"
                                     fontcolorb="#F2AF5C"
                                     paper={this.props.papers[1]}
-                                    rectx={70}
-                                    recty={70}
-                                    fillcolor="yellow"
                                 />
                             </div>
                         </div>
