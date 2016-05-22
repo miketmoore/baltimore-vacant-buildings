@@ -215,6 +215,8 @@ module.exports = React.createClass({
                                     fontcolora="#F24535"
                                     fontcolorb="#F2AF5C"
                                     paper={this.props.papers[0]}
+                                    rectx={40}
+                                    recty={40}
                                     fillcolor="red"
                                 />
                             </div>
@@ -226,6 +228,7 @@ module.exports = React.createClass({
                                     label="Clear"
                                     size="xs"
                                 /></p>
+
                                 <BarGraphSmall
                                     id="policedistrictbargraph"
                                     data={this._getBarGraphData('policedistrict')}
@@ -236,6 +239,8 @@ module.exports = React.createClass({
                                     fontcolora="#F24535"
                                     fontcolorb="#F2AF5C"
                                     paper={this.props.papers[1]}
+                                    rectx={70}
+                                    recty={70}
                                     fillcolor="yellow"
                                 />
                             </div>
