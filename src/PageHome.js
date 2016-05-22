@@ -37,6 +37,11 @@ module.exports = React.createClass({
             month: val
         });
     },
+    _clearCouncilHandler () {
+        this.setState({
+            councildistrict: ''
+        });
+    },
     // Update state with actual data
     _init () {
         var byYear = this.props.model.index.get('yyyy');
