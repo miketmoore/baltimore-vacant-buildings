@@ -107,6 +107,13 @@ module.exports = React.createClass({
         var text;
         var preparedData = this.state.preparedData;
         var thisY;
+        var $canvas = $(this.state.canvas);
+        function addMouseHandlers (path, data) {
+            path.data = data;
+            path.on('mousedown', () => this.props.clickHandler(data));
+            path.on('mouseenter', () => $canvas.css('cursor', 'pointer'));
+            path.on('mouseleave', () => $canvas.css('cursor', 'auto'));
+        }
         for ( var i = 0; i < preparedData.length; i++ ) {
 
             obj = preparedData[i];
@@ -122,17 +129,8 @@ module.exports = React.createClass({
                     fillColor: (obj.label == this.props.selectedLabel) ? 'yellow' : '#F29F05'
                 }
             });
-            rect.data = obj;
-            var clickHandler = this.props.clickHandler;
-            rect.on('mousedown', function () {
-                clickHandler(this.data);
-            });
-            rect.on('mouseenter', function () {
-                //this.fillColor = '#F2AF5C';
-            });
-            rect.on('mouseleave', function () {
-                //this.fillColor = '#F29F05';
-            });
+            addMouseHandlers.call(this, rect, obj);
+
             text = new paper.PointText({
                 point: new paper.Point({
                     x: rect.bounds.bottomCenter.x,
@@ -145,6 +143,7 @@ module.exports = React.createClass({
                 fillColor: this.props.fontcolora,
                 blendMode: 'multiply'
             });
+            addMouseHandlers.call(this, text, obj);
             text = new paper.PointText({
                 point: new paper.Point({
                     x: rect.bounds.topCenter.x,
@@ -157,6 +156,7 @@ module.exports = React.createClass({
                 fillColor: this.props.fontcolorb,
                 blendMode: 'multiply'
             });
+            addMouseHandlers.call(this, text, obj);
             x += barWidth + this.props.barMargin;
         }
     },
@@ -198,6 +198,9 @@ module.exports = React.createClass({
     },
     componentDidMount () {
         var canvas = document.getElementById('canvas');
+        this.setState({
+            canvas: canvas
+        });
         paper.setup(canvas);
         this._init();
     },
