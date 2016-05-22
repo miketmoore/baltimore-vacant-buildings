@@ -4,3 +4,10 @@
 .right-margin {
     margin-right: 0.5em;
 }
+.mm-label {
+    font-size: 14px;
+    font-weight: normal;
+}
+.pointer {
+    cursor: pointer;
+}
