@@ -3,32 +3,49 @@ var React = require('react');
 module.exports = React.createClass({
     getDefaultProps () {
         return {
-            values: [],
-            currentVal: ''
+            liveSearch: false,
+            dataStyle: 'btn-primary'
         };
     },
-    _getOptions () {
-        return this.props.values.map((val) => {
-            return (
-                <option value={val}  key={val}>{val}</option>
-            );
-        });
+    getInitialState () {
+        return {
+            values: []
+        }
     },
     changeHandler (event) {
         var val = event.target.value;
         if (this.props.changeHandler) this.props.changeHandler(val);
-        this.setState({ currentVal: val });
+    },
+    componentDidMount () {
+        console.log('Select.componentDidMount ', this.props);
+        this.setState({
+            values: this.props.values
+        });
+    },
+    componentDidUpdate () {
+        $('.selectpicker').selectpicker('refresh');
     },
     componentWillReceiveProps (props) {
+        console.log('Select.componentWillReceiveProps ', props);
         this.setState({
-            values: props.values,
-            currentVal: props.currentVal
+            values: props.values
         });
     },
     render () {
+        var options = this.state.values.map((val) => {
+            return (
+                <option value={val}  key={val}>{val}</option>
+            );
+        });
         return (
-           <select value={this.props.currentVal} onChange={this.changeHandler}>
-               {this._getOptions()}
+           <select
+               className="selectpicker show-tick"
+               data-live-search={this.props.liveSearch}
+               data-width="fit"
+               data-style={this.props.dataStyle}
+               value={this.props.currentVal}
+               onChange={this.changeHandler}>
+               {options}
            </select>
         )
     }
