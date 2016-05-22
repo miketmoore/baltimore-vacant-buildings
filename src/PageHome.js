@@ -165,6 +165,20 @@ module.exports = React.createClass({
         };
         return sorters[key];
     },
+    _getMapData (entries) {
+        var data = [];
+        var entry;
+        for ( var i = 0; i < entries.length; i++ ) {
+            entry = entries[i];
+            data.push({
+                key: entry[':id'],
+                address: entry.buildingaddress,
+                latitude: entry.location[1],
+                longitude: entry.location[2]
+            });
+        }
+        return data;
+    },
     render () {
         var neighborhoods = this._getNeighborhoods();
         var entries = this._getEntries.call(this);
@@ -202,17 +216,7 @@ module.exports = React.createClass({
             }
         };
         var barSharedProps = barColorSchemes.night;
-        var mapData = [];
-        var entry;
-        for ( var i = 0; i < entries.length; i++ ) {
-            entry = entries[i];
-            mapData.push({
-                key: entry[':id'],
-                address: entry.buildingaddress,
-                latitude: entry.location[1],
-                longitude: entry.location[2]
-            });
-        }
+        var mapData = this._getMapData(entries);
         return (
             <Layout>
                 <div className="row">
