@@ -97,19 +97,19 @@ module.exports = React.createClass({
             councildistrict: newCouncilDistrict
         });
     },
+    _getEntries () {
+        var filters = {
+            year: this.state.year,
+            month: this.state.month
+        };
+        if (this.state.councildistrict) {
+            filters.councildistrict = this.state.councildistrict;
+        }
+        return this.props.model.filter(filters) || [];
+    },
     render () {
         console.log('PageHome.render()');
-        function getEntries () {
-            var filters = {
-                year: this.state.year,
-                month: this.state.month
-            };
-            if (this.state.councildistrict) {
-                filters.councildistrict = this.state.councildistrict;
-            }
-            return this.props.model.filter(filters) || [];
-        }
-        var entries = getEntries.call(this);
+        var entries = this._getEntries.call(this);
         function gridRowGetter (i) {
             var row = entries[i];
             return {
