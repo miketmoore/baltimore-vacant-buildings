@@ -10,18 +10,16 @@ module.exports = React.createClass({
     },
     getDefaultProps () {
         return {
+            centerCoords: [39.290, -76.6122],
             width: '400px',
             height: '400px',
             entries: []
         };
     },
-    _init (props) {
-        if (!props) props = this.props;
-        // extract centerCoords
-        var centerCoords = [39.290, -76.6122];
+    _buildMarkers () {
         var markersByDate = new Map();
         var obj, marker, lat, lng, year, month, key;
-        var values = props.entries;
+        var values = this.props.entries;
         for ( var i = 0; i < values.length; i++ ) {
             obj = values[i];
             lat = parseFloat(obj.location[1]);
@@ -41,28 +39,16 @@ module.exports = React.createClass({
             markersByDate.get(key).add(marker);
         }
 
-        var stateObj = {
-            sampleObj: obj,
-            centerCoords: centerCoords,
-            markers: []
-        };
-        var key = props.year + '-' + props.month;
+        key = this.props.year + '-' + this.props.month;
         if (markersByDate.has(key)) {
-            stateObj.markers = Array.from(markersByDate.get(key).values())
+            return Array.from(markersByDate.get(key).values())
         }
-        this.setState(stateObj);
-    },
-    componentWillReceiveProps (props) {
-        this._init(props);
-
-    },
-    componentWillMount () {
-        if (this.props.entries.length) this._init();
+        return [];
     },
     render () {
-        if (!this.state.centerCoords.length) return null;
+        if (!this.props.centerCoords.length) return null;
         var props = {
-            markers: this.state.markers,
+            markers: this._buildMarkers(),
             onMapClick: function () {
                 //console.log('onMapClick(): ', arguments);
             },
@@ -87,7 +73,7 @@ module.exports = React.createClass({
                         googleMapElement={
                             <GoogleMap
                                 defaultZoom={10}
-                                defaultCenter={{ lat: this.state.centerCoords[0], lng: this.state.centerCoords[1] }}
+                                defaultCenter={{ lat: this.props.centerCoords[0], lng: this.props.centerCoords[1] }}
                                 onClick={props.onMapClick}
                             >
                                 {props.markers.map((marker, index) => {

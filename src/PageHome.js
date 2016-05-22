@@ -24,7 +24,7 @@ module.exports = React.createClass({
         return {
             years: [],
             year: '',
-            month: '01',
+            month: '',
             councildistrict: '',
             policedistrict: '',
             neighborhood: ''
@@ -57,6 +57,11 @@ module.exports = React.createClass({
             policedistrict: val
         });
     },
+    _clearMonthHandler () {
+        this.setState({
+            month: ''
+        });
+    },
     _clearCouncilHandler () {
         this.setState({
             councildistrict: ''
@@ -79,10 +84,9 @@ module.exports = React.createClass({
         var years = Array.from(byYear.keys()).sort();
         var year = years[years.length-1];
 
-        var entries = this.props.model.filter({
-            year: year,
-            month: this.state.month
-        });
+        var filters = { year: year };
+        if (this.state.month) filters.month = this.state.month;
+        var entries = this.props.model.filter(filters);
 
         this.setState({
             years: years,
@@ -105,9 +109,9 @@ module.exports = React.createClass({
         if (!model.rows.length) return [];
         // get entries filtered by current year and month (these are always set)
         var filters = {
-            year: this.state.year,
-            month: this.state.month
+            year: this.state.year
         };
+        if (this.state.month) filters.month = this.state.month;
         if (this.state.neighborhood) filters.neighborhood = this.state.neighborhood;
         if (this.state.councildistrict) filters.councildistrict = this.state.councildistrict;
         if (this.state.policedistrict) filters.policedistrict = this.state.policedistrict;
@@ -135,10 +139,8 @@ module.exports = React.createClass({
         return data;
     },
     _getEntries () {
-        var filters = {
-            year: this.state.year,
-            month: this.state.month
-        };
+        var filters = { year: this.state.year };
+        if (this.state.month) filters.month = this.state.month;
         if (this.state.councildistrict) filters.councildistrict = this.state.councildistrict;
         if (this.state.policedistrict) filters.policedistrict = this.state.policedistrict;
         if (this.state.neighborhood) filters.neighborhood = this.state.neighborhood;
@@ -228,6 +230,11 @@ module.exports = React.createClass({
                                     currentVal={this.state.month}
                                     changeHandler={this._monthSelectChangeHandler}
                                     values={this.props.months}
+                                />
+                                <Button
+                                    disabled={this.state.month == ''}
+                                    clickHandler={this._clearMonthHandler}
+                                    label="Clear"
                                 />
                             </div>
                             <div className="col-md-2">
