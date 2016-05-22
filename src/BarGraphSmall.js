@@ -7,7 +7,7 @@ module.exports = React.createClass({
             data: [],
             bgroundcolor: '#000000',
             viewWidth: 230,
-            viewHeight: 115,
+            viewHeight: 100,
             barMargin: 4,
             barWidth: 12,
             barMin: 18,
@@ -205,17 +205,21 @@ module.exports = React.createClass({
     _draw () {
         console.log('BarGraphSmall._draw');
         //this.draw();
-        var text = new this.props.paper.PointText({
-            point: [3,11],
-            content: this.props.title,
-            style: {
-                fillColor: this.props.titlecolor
-            }
-        });
-        this.props.paper.project.view.viewSize = new paper.Size({
+        var dims = {
             width: this.props.viewWidth,
             height: this.props.viewHeight
-        });
+        };
+        if (this.props.title) {
+            var text = new this.props.paper.PointText({
+                point: [3,11],
+                content: this.props.title,
+                style: {
+                    fillColor: this.props.titlecolor
+                }
+            });
+            dims.height += 15;
+        }
+        this.props.paper.project.view.viewSize = new paper.Size(dims);
         console.log('BarGraphSmall_draw actually 2 ', text);
         this.props.paper.project.view.update();
     },

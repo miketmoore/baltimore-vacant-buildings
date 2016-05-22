@@ -243,7 +243,6 @@ module.exports = React.createClass({
                                 /></p>
 
                                 <BarGraphSmall
-                                    title="Vacancies by Council Districts"
                                     data={this._getBarGraphData('councildistrict')}
                                     selectedLabel={this.state.councildistrict}
                                     clickHandler={this._councilGraphClickHandler}
@@ -266,7 +265,6 @@ module.exports = React.createClass({
                                 /></p>
 
                                 <BarGraphSmall
-                                    title="Vacancies by Police Districts"
                                     data={this._getBarGraphData('policedistrict')}
                                     selectedLabel={selectedLabelPoliceDistrict}
                                     clickHandler={this._policeGraphClickHandler}
