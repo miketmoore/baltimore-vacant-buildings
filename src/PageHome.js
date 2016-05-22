@@ -197,7 +197,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="row">
                             <div className="col-md-4">
-                                <h4>Per Council District</h4>
+                                <h4>Council Districts</h4>
                                 <p><small>Click a bar to filter data.</small> <Button
                                     disabled={this.state.councildistrict == ''}
                                     clickHandler={this._clearCouncilHandler}
@@ -217,7 +217,15 @@ module.exports = React.createClass({
                                     paper={this.props.papers[0]}
                                     fillcolor="red"
                                 />
-                                <br/>
+                            </div>
+                            <div className="col-md-4">
+                                <h4>Police Districts</h4>
+                                <p><small>Click a bar to filter data.</small> <Button
+                                    disabled={this.state.policedistrict == ''}
+                                    clickHandler={this._clearPoliceHandler}
+                                    label="Clear"
+                                    size="xs"
+                                /></p>
                                 <BarGraphSmall
                                     id="policedistrictbargraph"
                                     data={this._getBarGraphData('policedistrict')}
