@@ -13,13 +13,38 @@ function Model (debug) {
             ['yyyy-mm', new Map()],
             ['yyyy', new Map()]
         ]),
-        distinct: new Set()
+        distinct: new Set(),
+        policeDistrictLookup: new Map([
+            ['toDisplay', new Map([
+                ['NORTHERN', 'N'],
+                ['WESTERN', 'W'],
+                ['SOUTHERN', 'S'],
+                ['NORTHEASTERN', 'NE'],
+                ['SOUTHEASTERN', 'SE'],
+                ['SOUTHWESTERN', 'SW'],
+                ['NORTHWESTERN', 'NW'],
+                ['EASTERN', 'E'],
+                ['CENTRAL', 'C']
+            ])],
+            ['toValue', new Map([
+                ['N', 'NORTHERN'],
+                ['W', 'WESTERN'],
+                ['S', 'SOUTHERN'],
+                ['NE', 'NORTHEASTERN'],
+                ['SE', 'SOUTHEASTERN'],
+                ['SW', 'SOUTHWESTERN'],
+                ['NW', 'NORTHWESTERN'],
+                ['E', 'EASTERN'],
+                ['C', 'CENTRAL']
+            ])]
+        ])
     };
 }
 Object.defineProperties(Model.prototype, {
     "rows": { get: function () { return this._mapped.rows; } },
     "columns": { get: function () { return this._mapped.columns; } },
-    "index": { get: function () { return this._mapped.index; } }
+    "index": { get: function () { return this._mapped.index; } },
+    "policeDistrictLookup": { get: function () { return this._mapped.policeDistrictLookup; } }
 });
 Model.prototype.setRaw = function (raw) {
     if (!raw) return Promise.reject('setRaw failed - no raw data passed');

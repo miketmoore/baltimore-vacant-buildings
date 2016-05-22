@@ -26,6 +26,7 @@ module.exports = React.createClass({
             year: '',
             month: '01',
             councildistrict: '',
+            policedistrict: '',
             neighborhood: ''
         };
     },
@@ -49,9 +50,21 @@ module.exports = React.createClass({
             councildistrict: data.label
         });
     },
+    _policeGraphClickHandler (data) {
+        var label = data.label;
+        var val = this.props.model.policeDistrictLookup.get('toValue').get(label);
+        this.setState({
+            policedistrict: val
+        });
+    },
     _clearCouncilHandler () {
         this.setState({
             councildistrict: ''
+        });
+    },
+    _clearPoliceHandler () {
+        this.setState({
+            policedistrict: ''
         });
     },
     _clearNeighborhoodHandler () {
@@ -99,38 +112,26 @@ module.exports = React.createClass({
             filters.neighborhood = this.state.neighborhood;
         }
         var entriesByDate = model.filter(filters);
-        // Get full, distinct list of council districts
+        // Get full, distinct list
         var distinct = Array.from(model.index.get(key).keys());
-        // Map distinct council districts to total entries in that district
+        // Map distinct item to total entries associated to it
         var map = new Map();
         distinct.forEach(k => map.set(k, 0));
         entriesByDate.forEach(function (entry) {
             map.set(entry[key], map.get(entry[key]) + 1);
         });
         var data = [];
-        {/*map.forEach((count, key) => data.push({ size: count, label: key }));*/}
-        var policeLookup = new Map([
-            ['northern', 'n'],
-            ['western', 'w'],
-            ['southern', 's'],
-            ['northeastern', 'ne'],
-            ['southeastern', 'se'],
-            ['southwestern', 'sw'],
-            ['northwestern', 'nw'],
-            ['eastern', 'e'],
-            ['central', 'c']
-        ]);
         map.forEach(function (mapVal, mapKey) {
             var obj = {
                 size: mapVal
             };
             if (key == 'policedistrict') {
-                obj.label = policeLookup.get(mapKey.toLowerCase()).toUpperCase();
+                obj.label = this.props.model.policeDistrictLookup.get('toDisplay').get(mapKey);
             } else {
                 obj.label = mapKey
             }
             data.push(obj);
-        });
+        }, this);
         return data;
     },
     _getEntries () {
@@ -140,6 +141,9 @@ module.exports = React.createClass({
         };
         if (this.state.councildistrict) {
             filters.councildistrict = this.state.councildistrict;
+        }
+        if (this.state.policedistrict) {
+            filters.policedistrict = this.state.policedistrict;
         }
         if (this.state.neighborhood) {
             filters.neighborhood = this.state.neighborhood;
@@ -166,6 +170,10 @@ module.exports = React.createClass({
                 'councildistrict':row['councildistrict']
             };
         };
+
+        // Map the label (N, NW, etc) to the display value (NORTHERN, NORTHWESTERN, etc)
+        var selectedLabelPoliceDistrict = this.props.model.policeDistrictLookup.get('toDisplay').get(this.state.policedistrict);
+
         return (
             <Layout>
                 <div className="row">
@@ -252,7 +260,7 @@ module.exports = React.createClass({
                                 <BarGraphSmall
                                     title="Vacancies by Police Districts"
                                     data={this._getBarGraphData('policedistrict')}
-                                    selectedLabel={this.state.policedistrict}
+                                    selectedLabel={selectedLabelPoliceDistrict}
                                     clickHandler={this._policeGraphClickHandler}
                                     titlecolor='white'
                                     bgroundcolor={'#A3BFD9'}
