@@ -6,6 +6,7 @@ var Model = require('./Model');
 var PageHome = require('./PageHome');
 var PagePaperBarGraph = require('./PagePaperBarGraph');
 var PageAbout = require('./PageAbout');
+var PageCustomMap = require('./PageCustomMap');
 
 module.exports = React.createClass({
     getInitialState () {
@@ -33,6 +34,7 @@ module.exports = React.createClass({
         return (
             <Locations hash childProps={{model: this.state.model}}>
               <Location path="/" handler={PageHome} />
+                <Location path="/custom-map" handler={PageCustomMap} />
               <Location path="/about" handler={PageAbout} />
             </Locations>
         )
