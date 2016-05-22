@@ -9,6 +9,7 @@ import ReactDataGrid from 'react-data-grid/addons';
 module.exports = React.createClass({
     getDefaultProps () {
         return {
+            months: ['01','02','03','04','05','06','07','08','09','10','11','12'],
             gridColumns: [
                 {"key":"buildingaddress","name":"Address","resizable":true},
                 {"key":"noticedate","name":"Notice Date","resizable":true},
@@ -21,78 +22,60 @@ module.exports = React.createClass({
     getInitialState() {
         return {
             years: [],
-            currentYear: '',
-            months: ['01','02','03','04','05','06','07','08','09','10','11','12'],
-            currentMonth: '01',
-            currentEntries: []
+            year: '',
+            month: '01',
+            councildistrict: ''
         };
     },
-    _yearSelectChangeHandler (newCurrentYear) {
-        // get all entries filtered by date
-        var entries = this.props.model.filter({
-            year: newCurrentYear,
-            month: this.state.currentMonth
-        });
+    _yearSelectChangeHandler (val) {
         this.setState({
-            currentYear: newCurrentYear,
-            currentEntries: entries
+            year: val
         });
     },
-    _monthSelectChangeHandler (newCurrentMonth) {
-        var entries = this.props.model.filter({
-            year: this.state.currentYear,
-            month: newCurrentMonth
-        });
+    _monthSelectChangeHandler (val) {
         this.setState({
-            currentMonth: newCurrentMonth,
-            currentEntries: entries
+            month: val
         });
     },
     // Update state with actual data
     _init () {
         var byYear = this.props.model.index.get('yyyy');
         var years = Array.from(byYear.keys()).sort();
-        var currentYear = years[years.length-1];
+        var year = years[years.length-1];
 
         var entries = this.props.model.filter({
-            year: currentYear,
-            month: this.state.currentMonth
+            year: year,
+            month: this.state.month
         });
 
         this.setState({
             years: years,
-            currentYear: currentYear,
-            currentEntries: entries
+            year: year
         });
     },
     componentWillReceiveProps (props) {
+        console.log('PageHome.componentWillReceiveProps ');
         this._init();
     },
     // called before render
     // setting state here will not trigger re-rendering
     componentWillMount () {
+        console.log('PageHome.componentWillMount');
         var map = this.props.model.index.get('yyyy');
         if (map.size) {
             this._init();
         }
     },
-    _gridRowGetter (i) {
-        var row = this.state.currentEntries[i];
-        return {
-            "buildingaddress":row['buildingaddress'],
-            "noticedate":row['noticedate'],
-            "neighborhood":row["neighborhood"],
-            'policedistrict':row['policedistrict'],
-            'councildistrict':row['councildistrict']
-        };
+    componentWillUpdate (np, ns) {
+        console.log('PageHome.componentWillUpdate', np, ns);
     },
     _getBarGraphData (key) {
         var model = this.props.model;
         if (!model.rows.length) return [];
         // get entries filtered by current year and month (these are always set)
         var entriesByDate = model.filter({
-            year: this.state.currentYear,
-            month: this.state.currentMonth
+            year: this.state.year,
+            month: this.state.month
         });
         // Get full, distinct list of council districts
         var distinct = Array.from(model.index.get('councildistrict').keys());
@@ -106,7 +89,37 @@ module.exports = React.createClass({
         map.forEach((count, key) => data.push({ size: count, label: key }));
         return data;
     },
+    _councilGraphClickHandler (data) {
+        var newCouncilDistrict = data.label;
+        console.log('PageHome._councilGraphClickHandler ', newCouncilDistrict);
+
+        this.setState({
+            councildistrict: newCouncilDistrict
+        });
+    },
     render () {
+        console.log('PageHome.render()');
+        function getEntries () {
+            var filters = {
+                year: this.state.year,
+                month: this.state.month
+            };
+            if (this.state.councildistrict) {
+                filters.councildistrict = this.state.councildistrict;
+            }
+            return this.props.model.filter(filters) || [];
+        }
+        var entries = getEntries.call(this);
+        function gridRowGetter (i) {
+            var row = entries[i];
+            return {
+                "buildingaddress":row['buildingaddress'],
+                "noticedate":row['noticedate'],
+                "neighborhood":row["neighborhood"],
+                'policedistrict':row['policedistrict'],
+                'councildistrict':row['councildistrict']
+            };
+        };
         return (
             <Layout>
                 <div className="row">
@@ -114,16 +127,16 @@ module.exports = React.createClass({
                         <MapView
                             width="350px"
                             height="350px"
-                            year={this.state.currentYear}
-                            month={this.state.currentMonth}
-                            entries={this.state.currentEntries} />
+                            year={this.state.year}
+                            month={this.state.month}
+                            entries={entries} />
                     </div>
                     <div className="col-md-8">
                         <div className="row">
                             <div className="col-md-2">
                                 <h4>Year</h4>
                                 <Select
-                                    currentVal={this.state.currentYear}
+                                    currentVal={this.state.year}
                                     changeHandler={this._yearSelectChangeHandler}
                                     values={this.state.years}
                                     liveSearch={true}
@@ -132,28 +145,28 @@ module.exports = React.createClass({
                             <div className="col-md-2">
                                 <h4>Month</h4>
                                 <Select
-                                    currentVal={this.state.currentMonth}
+                                    currentVal={this.state.month}
                                     changeHandler={this._monthSelectChangeHandler}
-                                    values={this.state.months}
+                                    values={this.props.months}
                                 />
                             </div>
                             <div className="col-md-2">
                                 <h4>Total</h4>
-                                <p>{this.state.currentEntries.length}</p>
+                                <p>{entries.length}</p>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-md-4">
                                 <h4>Per Council District</h4>
                                 <p><small>Click a bar to filter data.</small> <Button
-                                    visible={this.state.currentCouncilDistrict != ''}
+                                    visible={this.state.councildistrict != ''}
                                     clickHandler={this._clearCouncilHandler}
                                     label="Clear Filter"
                                 /></p>
 
                                 <BarGraphSmall
                                     data={this._getBarGraphData('councildistrict')}
-                                    selectedLabel={this.state.currentCouncilDistrict}
+                                    selectedLabel={this.state.councildistrict}
                                     clickHandler={this._councilGraphClickHandler}
                                     bgroundcolor={'#A3BFD9'}
                                     bordercolor={'#7790D9'}
@@ -168,8 +181,8 @@ module.exports = React.createClass({
                     <div className="col-md-12">
                         <ReactDataGrid
                             columns={this.props.gridColumns}
-                            rowGetter={this._gridRowGetter}
-                            rowsCount={this.state.currentEntries.length}
+                            rowGetter={gridRowGetter}
+                            rowsCount={entries.length}
                             minHeight={500} />
                     </div>
                 </div>
