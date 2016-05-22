@@ -3,7 +3,6 @@ var Layout = require('./Layout');
 var MapView = require('./MapView');
 var Select = require('./Select');
 var Button = require('./Button');
-var Timeline = require('./Timeline');
 var BarGraphSmall = require('./BarGraphSmall');
 import ReactDataGrid from 'react-data-grid/addons';
 
@@ -27,8 +26,7 @@ module.exports = React.createClass({
             months: ['01','02','03','04','05','06','07','08','09','10','11','12'],
             currentMonth: '01',
             currentCouncilDistrict: '',
-            currentEntries: [],
-            timelineData: []
+            currentEntries: []
         };
     },
     _getCurrentEntriesFromIds (entryIds) {
@@ -87,29 +85,6 @@ module.exports = React.createClass({
         var end = new Date(new Date(a).setYear(new Date(a).getFullYear() + 1));
         return [start, end];
     },
-    _buildYearTimelineData (years) {
-        var year;
-        var timelineData = [];
-        var range;
-        var convertedObj;
-        var startingTime;
-        var endingTime;
-        for ( var i = 0; i < years.length; i++ ) {
-            year = years[i];
-            range = this._convertYear(year);
-            convertedObj = {
-                "label": year,
-                "times": [
-                    {
-                        "starting_time": range[0].getTime(),
-                        "ending_time": range[1].getTime()
-                    }
-                ]
-            };
-            timelineData.push(convertedObj);
-        }
-        return timelineData;
-    },
     _getFullCouncilDistrictList () {
         var model = this.props.model;
         var map = model.index.get('councildistrict');
@@ -150,14 +125,11 @@ module.exports = React.createClass({
             month: this.state.currentMonth
         });
 
-        var timelineData = this._buildYearTimelineData(years);
-
         this.setState({
             entriesPerCouncilDistrict: this._getEntriesPerCouncilDistrict(entries),
             years: years,
             currentYear: currentYear,
-            currentEntries: entries,
-            timelineData: timelineData
+            currentEntries: entries
         });
     },
     // Update entries in state by year, month, and councildistrict
@@ -262,14 +234,6 @@ module.exports = React.createClass({
                         </div>
                     </div>
                 </div>
-                {/*
-                    <div className="row">
-                        <div className="col-md-12">
-                            <h4>Years Available <small>Click to change dataset</small></h4>
-                            <Timeline cb={this.yearSelectChangeHandler} data={this.state.timelineData} />
-                        </div>
-                    </div>
-                */}
                 <div className="row">
                     <div className="col-md-12">
                         <ReactDataGrid
