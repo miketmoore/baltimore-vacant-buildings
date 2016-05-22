@@ -73,7 +73,7 @@ module.exports = React.createClass({
             entriesPerCouncilDistrict: this._getEntriesPerCouncilDistrict(entries),
             currentMonth: newCurrentMonth,
             currentEntries: entries
-        })
+        });
     },
     /**
      * @description Converts YYYY string to a Array(startDate, endDate)
@@ -218,7 +218,7 @@ module.exports = React.createClass({
                     </div>
                     <div className="col-md-8">
                         <div className="row">
-                            <div className="col-md-3">
+                            <div className="col-md-2">
                                 <h4>Year</h4>
                                 <Select
                                     currentVal={this.state.currentYear}
@@ -227,7 +227,7 @@ module.exports = React.createClass({
                                     liveSearch={true}
                                 />
                             </div>
-                            <div className="col-md-3">
+                            <div className="col-md-2">
                                 <h4>Month</h4>
                                 <Select
                                     currentVal={this.state.currentMonth}
@@ -235,7 +235,7 @@ module.exports = React.createClass({
                                     values={this.state.months}
                                 />
                             </div>
-                            <div className="col-md-3">
+                            <div className="col-md-2">
                                 <h4>Total</h4>
                                 <p>{this.state.currentEntries.length}</p>
                             </div>
@@ -243,7 +243,7 @@ module.exports = React.createClass({
                         <div className="row">
                             <div className="col-md-4">
                                 <h4>Per Council District</h4>
-                                <p>Click a bar to filter data. <Button
+                                <p><small>Click a bar to filter data.</small> <Button
                                     visible={this.state.currentCouncilDistrict != ''}
                                     clickHandler={this._clearCouncilHandler}
                                     label="Clear Filter"
