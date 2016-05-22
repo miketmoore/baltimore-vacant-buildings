@@ -11,7 +11,8 @@ module.exports = React.createClass({
             barMargin: 5,
             barWidth: 16,
             barMin: 18,
-            barMax: 85
+            barMax: 85,
+            clickHandler: function () {}
         };
     },
     getInitialState () {
