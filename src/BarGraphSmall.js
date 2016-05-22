@@ -5,9 +5,12 @@ module.exports = React.createClass({
     getDefaultProps () {
         return {
             data: [],
+            prefix: '',
+            displayLabels: false,
+            defaultHoverLabelMsg: 'Hover over bars for description',
             bgroundcolor: '#000000',
             viewWidth: 230,
-            viewHeight: 100,
+            viewHeight: 105,
             barMargin: 4,
             barMin: 18,
             barMax: 85,
@@ -101,7 +104,7 @@ module.exports = React.createClass({
         if (a > b ) return 1;
         return 0;
     },
-    _drawBars (pscope, drawData) {
+    _drawBars (pscope, drawData, hoverLabel) {
         var obj;
         var preparedData = drawData.preparedData;
         var barWidth = ((this.props.viewWidth - this.props.barMargin) / preparedData.length) - this.props.barMargin;
@@ -129,6 +132,7 @@ module.exports = React.createClass({
                     // not selected so show slightly darker hue
                     item.fillColor = this.props.barcolorhover;
                 }
+                hoverLabel.content = this.props.prefix + ': ' + item.data.label;
             }.bind(this));
 
             path.on('mouseleave', function (e) {
@@ -138,6 +142,7 @@ module.exports = React.createClass({
                     // not selected so show default color
                     item.fillColor = this.props.barcolor;
                 }
+                hoverLabel.content = this.props.defaultHoverLabelMsg;
             }.bind(this));
         }
         for ( var i = 0; i < preparedData.length; i++ ) {
@@ -157,30 +162,33 @@ module.exports = React.createClass({
             });
             addMouseHandlers.call(this, rect, obj);
 
-            text = new pscope.PointText({
-                point: new pscope.Point({
-                    x: rect.bounds.bottomCenter.x,
-                    y: rect.bounds.bottomCenter.y - 2
-                }),
-                content: obj.label,
-                justification: 'center',
-                fontSize: 12,
-                fontFamily: 'sans-serif',
-                fillColor: this.props.fontcolora
-            });
-            addMouseHandlers.call(this, text, obj);
-            text = new pscope.PointText({
-                point: new pscope.Point({
-                    x: rect.bounds.topCenter.x,
-                    y: rect.bounds.topCenter.y - 1
-                }),
-                content: parseInt(obj.size).toLocaleString(),
-                justification: 'center',
-                fontSize: 12,
-                fontFamily: 'sans-serif',
-                fillColor: this.props.fontcolorb
-            });
-            addMouseHandlers.call(this, text, obj);
+            if (this.props.displayLabels) {
+                text = new pscope.PointText({
+                    point: new pscope.Point({
+                        x: rect.bounds.bottomCenter.x,
+                        y: rect.bounds.bottomCenter.y - 2
+                    }),
+                    content: obj.label,
+                    justification: 'center',
+                    fontSize: 12,
+                    fontFamily: 'sans-serif',
+                    fillColor: this.props.fontcolora
+                });
+                addMouseHandlers.call(this, text, obj);
+                text = new pscope.PointText({
+                    point: new pscope.Point({
+                        x: rect.bounds.topCenter.x,
+                        y: rect.bounds.topCenter.y - 1
+                    }),
+                    content: parseInt(obj.size).toLocaleString(),
+                    justification: 'center',
+                    fontSize: 12,
+                    fontFamily: 'sans-serif',
+                    fillColor: this.props.fontcolorb
+                });
+                addMouseHandlers.call(this, text, obj);
+            }
+
             x += barWidth + this.props.barMargin;
         }
     },
@@ -194,13 +202,22 @@ module.exports = React.createClass({
             }
         });
     },
+    _drawHoverLabel (pscope) {
+        return new pscope.PointText({
+            point: [3,13],
+            content: this.props.defaultHoverLabelMsg,
+            fontSize: 12,
+            fillColor: 'white'
+        });
+    },
     _draw (canvas) {
         window.paper = this.props.paper;
         var pscope = this.props.paper;
         if (canvas) pscope.setup(canvas);
         this._drawBackground(pscope);
+        var hoverLabel = this._drawHoverLabel(pscope);
         var resp = this._map(this.props.data);
-        this._drawBars(pscope, resp);
+        this._drawBars(pscope, resp, hoverLabel);
         pscope.view.update();
         var dims = {
             width: this.props.viewWidth,
