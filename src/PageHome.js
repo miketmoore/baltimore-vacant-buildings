@@ -223,14 +223,17 @@ module.exports = React.createClass({
                                 <Select
                                     currentVal={this.state.currentYear}
                                     changeHandler={this.yearSelectChangeHandler}
-                                    values={this.state.years} />
+                                    values={this.state.years}
+                                    liveSearch={true}
+                                />
                             </div>
                             <div className="col-md-3">
                                 <h4>Month</h4>
                                 <Select
                                     currentVal={this.state.currentMonth}
                                     changeHandler={this.monthSelectChangeHandler}
-                                    values={this.state.months} />
+                                    values={this.state.months}
+                                />
                             </div>
                             <div className="col-md-3">
                                 <h4>Total</h4>
