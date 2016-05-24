@@ -28,6 +28,7 @@
     "react-dom": "^15.0.2",
     "react-google-maps": "^4.10.1",
     "react-router-component": "^0.32.2",
+    "react-widgets": "^3.3.1",
     "serve-favicon": "~2.3.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.0"
@@ -54,12 +55,15 @@
     "karma-sinon": "^1.0.5",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
     "mocha": "^2.4.5",
     "phantomjs": "^2.1.7",
     "phantomjs-prebuilt": "^2.1.7",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "should": "^8.4.0",
-    "sinon": "^1.17.4"
+    "sinon": "^1.17.4",
+    "url-loader": "^0.5.7"
   }
 }
