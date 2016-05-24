@@ -3,6 +3,7 @@ var React = require('react');
 module.exports = React.createClass({
     getDefaultProps () {
         return {
+            values: [],
             title: "Select One",
             liveSearch: false,
             dataStyle: 'btn-default',
