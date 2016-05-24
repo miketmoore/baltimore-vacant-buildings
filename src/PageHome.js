@@ -26,9 +26,7 @@ module.exports = React.createClass({
             allYears: [],
             year: '',
             month: '01',
-            councildistrict: '',
-            policedistrict: '',
-            neighborhood: ''
+            selectedCouncilDistricts: new Set()
         };
     },
     _yearSelectChangeHandler (val) {
@@ -41,21 +39,13 @@ module.exports = React.createClass({
             month: val
         });
     },
-    _neighborhoodSelectChangeHandler (val) {
-        this.setState({
-            neighborhood: val
-        });
-    },
     _councilGraphClickHandler (data) {
-        this.setState({
-            councildistrict: data.label
-        });
-    },
-    _policeGraphClickHandler (data) {
         var label = data.label;
-        var val = this.props.model.policeDistrictLookup.get('toValue').get(label);
+        var a = this.state.selectedCouncilDistricts;
+        if (!a.has(label)) a.add(label);
+        else a.delete(label);
         this.setState({
-            policedistrict: val
+            selectedCouncilDistricts: a
         });
     },
     _clearMonthHandler () {
@@ -64,19 +54,11 @@ module.exports = React.createClass({
         });
     },
     _clearCouncilHandler () {
+        var a = this.state.selectedCouncilDistricts;
+        a.clear();
         this.setState({
-            councildistrict: ''
+            selectedCouncilDistricts: a
         });
-    },
-    _clearPoliceHandler () {
-        this.setState({
-            policedistrict: ''
-        });
-    },
-    _clearNeighborhoodHandler () {
-        this.setState({
-            neighborhood: ''
-        })
     },
     // Update state with actual data
     _init () {
@@ -108,14 +90,12 @@ module.exports = React.createClass({
     _getBarGraphData (key) {
         var model = this.props.model;
         if (!model.rows.length) return [];
-        // get entries filtered by current year and month (these are always set)
+
+        // Build filters
         var filters = {
             year: this.state.year
         };
         if (this.state.month) filters.month = this.state.month;
-        if (this.state.neighborhood) filters.neighborhood = this.state.neighborhood;
-        if (this.state.councildistrict) filters.councildistrict = this.state.councildistrict;
-        if (this.state.policedistrict) filters.policedistrict = this.state.policedistrict;
         var entriesByDate = model.filter(filters);
         // Get full, distinct list
         var distinct = Array.from(model.index.get(key).keys());
@@ -128,13 +108,9 @@ module.exports = React.createClass({
         var data = [];
         map.forEach(function (mapVal, mapKey) {
             var obj = {
-                size: mapVal
+                size: mapVal,
+                label: mapKey
             };
-            if (key == 'policedistrict') {
-                obj.label = this.props.model.policeDistrictLookup.get('toDisplay').get(mapKey);
-            } else {
-                obj.label = mapKey
-            }
             data.push(obj);
         }, this);
         return data;
@@ -142,17 +118,8 @@ module.exports = React.createClass({
     _getEntries () {
         var filters = { year: this.state.year };
         if (this.state.month) filters.month = this.state.month;
-        if (this.state.councildistrict) filters.councildistrict = this.state.councildistrict;
-        if (this.state.policedistrict) filters.policedistrict = this.state.policedistrict;
-        if (this.state.neighborhood) filters.neighborhood = this.state.neighborhood;
+        if (this.state.selectedCouncilDistricts.size) filters.councildistrict = Array.from(this.state.selectedCouncilDistricts.values());
         return this.props.model.filter(filters) || [];
-    },
-    _getNeighborhoods () {
-        var index = this.props.model.index;
-        if (index.has('neighborhood')) {
-            return Array.from(index.get('neighborhood').keys()).sort();
-        }
-        return [];
     },
     _sortBarGraphData (key) {
         var sorters = {
@@ -184,9 +151,7 @@ module.exports = React.createClass({
         var data = [];
         var config = [
             { key: 'month', label: 'Month', onDelete: this._clearMonthHandler },
-            { key: 'councildistrict', label: 'Council District', onDelete: this._clearCouncilHandler },
-            { key: 'policedistrict', label: 'Police District', onDelete: this._clearPoliceHandler },
-            { key: 'neighborhood', label: 'Neighborhood', onDelete: this._clearNeighborhoodHandler }
+            { key: 'councildistrict', label: 'Council District', onDelete: this._clearCouncilHandler }
         ];
         config.forEach((c) => {
             if (this.state[c.key]) data.push(c);
@@ -194,7 +159,6 @@ module.exports = React.createClass({
         return data;
     },
     render () {
-        var neighborhoods = this._getNeighborhoods();
         var entries = this._getEntries.call(this);
         function gridRowGetter (i) {
             var row = entries[i];
@@ -206,9 +170,6 @@ module.exports = React.createClass({
                 'councildistrict':row['councildistrict']
             };
         };
-
-        // Map the label (N, NW, etc) to the display value (NORTHERN, NORTHWESTERN, etc)
-        var selectedLabelPoliceDistrict = this.props.model.policeDistrictLookup.get('toDisplay').get(this.state.policedistrict);
 
         var barColorSchemes = {
             night: {
@@ -269,40 +230,19 @@ module.exports = React.createClass({
                                     values={this.props.months}
                                 />
                             </div>
-                            <div className="col-md-4">
-                                <h4>Neighborhoods</h4>
-                                <Select
-                                    title="Select One"
-                                    currentVal={this.state.neighborhood}
-                                    changeHandler={this._neighborhoodSelectChangeHandler}
-                                    values={neighborhoods}
-                                    liveSearch={true}
-                                />
-                            </div>
                         </div>
                         <div className="row">
                             <div className="col-md-4">
                                 <h4>By Council District</h4>
+                                <p>Total selected: {this.state.selectedCouncilDistricts.size}</p>
                                 <BarGraphSmall
                                     data={this._getBarGraphData('councildistrict')}
-                                    selectedLabel={this.state.councildistrict}
+                                    selectedLabels={Array.from(this.state.selectedCouncilDistricts.values())}
                                     clickHandler={this._councilGraphClickHandler}
                                     clickHandlerB={this._clearCouncilHandler}
                                     bgroundClickHandler={this._clearCouncilHandler}
                                     paper={this.props.papers[0]}
                                     sort={this._sortBarGraphData('councildistrict')}
-                                    {...barSharedProps}
-                                />
-                            </div>
-                            <div className="col-md-4">
-                                <h4>By Police District</h4>
-                                <BarGraphSmall
-                                    data={this._getBarGraphData('policedistrict')}
-                                    selectedLabel={selectedLabelPoliceDistrict}
-                                    clickHandler={this._policeGraphClickHandler}
-                                    clickHandlerB={this._clearPoliceHandler}
-                                    bgroundClickHandler={this._clearPoliceHandler}
-                                    paper={this.props.papers[1]}
                                     {...barSharedProps}
                                 />
                             </div>
