@@ -105,7 +105,7 @@ var validData = {
 var expectedData = [{
         ':id': "29040AAA-3EE2-4068-8FB6-BB2A913921F7",
         'buildingaddress':"1707 W BALTIMORE ST",
-        'noticedate':"2016-01-29T00:00:00",
+        'noticedate':"2016-01-29", // time trimmed off
         'neighborhood':"FRANKLIN SQUARE",
         'policedistrict':"WESTERN",
         'councildistrict':"9",
@@ -117,7 +117,7 @@ var expectedData = [{
 }, {
         ':id':"20DF27E8-7666-457E-A573-B62090C05E6B",
         'buildingaddress':"2110 HERBERT ST",
-        'noticedate':"2016-02-03T00:00:00",
+        'noticedate':"2016-02-03",
         'neighborhood':"MONDAWMIN",
         'policedistrict':"WESTERN",
         'councildistrict':"7",
@@ -129,7 +129,7 @@ var expectedData = [{
 }, {
         ':id':"9FEFF7FE-D255-4683-9714-0783AC07F70E",
         'buildingaddress':"2037 HOLLINS ST",
-        'noticedate':"1993-05-20T00:00:00",
+        'noticedate':"1993-05-20",
         'neighborhood':"BOYD-BOOTH",
         'policedistrict':"SOUTHWESTERN",
         'councildistrict':"9",
@@ -212,15 +212,15 @@ describe('Model ', function() {
             });
         });
     });
-    // describe('debug mode', function(done) {
-    //     var stub = sinon.stub(console, 'log');
-    //     model = new Model(true);
-    //     model.setRaw(validData).then(function() {
-    //         console.log.callCount.should.equal(3);
-    //         sinon.restore();
-    //         done();
-    //     });
-    // });
+    describe('debug mode', function(done) {
+        var stub = sinon.stub(console, 'log');
+        model = new Model(true);
+        model.setRaw(validData).then(function() {
+            console.log.callCount.should.equal(3);
+            sinon.restore();
+            done();
+        });
+    });
     describe('filtering', function (filters) {
         it('should filter by year', function (done) {
             model.setRaw(validData).then(function() {
