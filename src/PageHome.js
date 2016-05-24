@@ -26,7 +26,8 @@ module.exports = React.createClass({
             allYears: [],
             year: '',
             month: '01',
-            selectedCouncilDistricts: new Set()
+            selectedCouncilDistricts: new Set(),
+            selectedPoliceDistricts: new Set()
         };
     },
     _yearSelectChangeHandler (val) {
@@ -39,31 +40,38 @@ module.exports = React.createClass({
             month: val
         });
     },
-    _councilGraphClickHandler (data) {
+    _graphClickHandler (key, data) {
         var label = data.label;
-        var a = this.state.selectedCouncilDistricts;
+        var a = this.state[key];
         if (!a.has(label)) a.add(label);
         else a.delete(label);
-        this.setState({
-            selectedCouncilDistricts: a
-        });
+        var stateObj = {};
+        stateObj[key] = a;
+        this.setState(stateObj);
+    },
+    _policeGraphClickHandler (data) {
+        this._graphClickHandler('selectedPoliceDistricts', data);
+    },
+    _councilGraphClickHandler (data) {
+        this._graphClickHandler('selectedCouncilDistricts', data);
     },
     _clearMonthHandler () {
         this.setState({
             month: ''
         });
     },
+    _clear (key, data) {
+        var a = this.state[key];
+        data ? a.delete(data.label) : a.clear();
+        var stateObj = {};
+        stateObj[key] = a;
+        this.setState(stateObj);
+    },
+    _clearPoliceHandler (data) {
+        this._clear('selectedPoliceDistricts', data);
+    },
     _clearCouncilHandler (data) {
-        var a = this.state.selectedCouncilDistricts;
-        if (data) {
-            var label = data.label;
-            a.delete(label);
-        } else {
-            a.clear();
-        }
-        this.setState({
-            selectedCouncilDistricts: a
-        });
+        this._clear('selectedCouncilDistricts', data);
     },
     // Update state with actual data
     _init () {
@@ -84,14 +92,29 @@ module.exports = React.createClass({
     componentWillReceiveProps (props) {
         this._init();
     },
-    // called before render
-    // setting state here will not trigger re-rendering
     componentWillMount () {
-        var map = this.props.model.index.get('yyyy');
-        if (map.size) {
-            this._init();
-        }
+        if (this.props.model.index.get('yyyy').size) this._init();
     },
+    // _getEntriesPer (key, entries) {
+    //     var entry;
+    //     var map = new Map();
+    //     var val;
+    //     var distinct = Array.from(this.props.model.index.get(key).keys());
+    //     distinct.forEach(k => map.set(k, 0));
+    //     for ( var i = 0; i < entries.length; i++ ) {
+    //         entry = entries[i];
+    //         val = entry[key];
+    //         map.set(val, map.get(val) + 1);
+    //     }
+    //     var final = [];
+    //     map.forEach((val,key) => {
+    //         final.push({
+    //             size: val.size,
+    //             label: key
+    //         });
+    //     });
+    //     return final;
+    // },
     _getBarGraphData (key) {
         var model = this.props.model;
         if (!model.rows.length) return [];
@@ -102,14 +125,15 @@ module.exports = React.createClass({
         };
         if (this.state.month) filters.month = this.state.month;
         var entriesByDate = model.filter(filters);
+
         // Get full, distinct list
         var distinct = Array.from(model.index.get(key).keys());
+
         // Map distinct item to total entries associated to it
         var map = new Map();
         distinct.forEach(k => map.set(k, 0));
-        entriesByDate.forEach(function (entry) {
-            map.set(entry[key], map.get(entry[key]) + 1);
-        });
+        entriesByDate.forEach((entry) => map.set(entry[key], map.get(entry[key]) + 1));
+
         var data = [];
         map.forEach(function (mapVal, mapKey) {
             var obj = {
@@ -124,6 +148,7 @@ module.exports = React.createClass({
         var filters = { year: this.state.year };
         if (this.state.month) filters.month = this.state.month;
         if (this.state.selectedCouncilDistricts.size) filters.councildistrict = Array.from(this.state.selectedCouncilDistricts.values());
+        if (this.state.selectedPoliceDistricts.size) filters.policedistrict = Array.from(this.state.selectedPoliceDistricts.values());
         return this.props.model.filter(filters) || [];
     },
     _sortBarGraphData (key) {
@@ -156,10 +181,17 @@ module.exports = React.createClass({
         var data = [];
         var config = [
             { key: 'month', label: 'Month', onDelete: this._clearMonthHandler },
-            { key: 'councildistrict', label: 'Council District', onDelete: this._clearCouncilHandler }
+            { key: 'selectedCouncilDistricts', label: 'Council District', onDelete: function () {
+                // to avoid passing event, which triggers a false positive
+                this._clearCouncilHandler();
+            }.bind(this), isSet: true },
+            { key: 'selectedPoliceDistricts', label: 'Police District', onDelete: function () {
+                // to avoid passing event, which triggers a false positive
+                this._clearPoliceHandler();
+            }.bind(this), isSet: true }
         ];
         config.forEach((c) => {
-            if (this.state[c.key]) data.push(c);
+            if ((c.isSet && this.state[c.key].size) || (!c.isSet && this.state[c.key])) data.push(c);
         }, this);
         return data;
     },
@@ -200,6 +232,7 @@ module.exports = React.createClass({
         barSharedProps.hoverLabelColor = '#33627A';
         var mapData = this._getMapData(entries);
         var tagsData = this._getTagsData();
+
         return (
             <Layout>
                 <div className="row">
@@ -239,7 +272,6 @@ module.exports = React.createClass({
                         <div className="row">
                             <div className="col-md-4">
                                 <h4>By Council District</h4>
-                                <p>Total selected: {this.state.selectedCouncilDistricts.size}</p>
                                 <BarGraphSmall
                                     data={this._getBarGraphData('councildistrict')}
                                     selectedLabels={this.state.selectedCouncilDistricts}
@@ -248,6 +280,19 @@ module.exports = React.createClass({
                                     bgroundClickHandler={this._clearCouncilHandler}
                                     paper={this.props.papers[0]}
                                     sort={this._sortBarGraphData('councildistrict')}
+                                    {...barSharedProps}
+                                />
+                            </div>
+                            <div className="col-md-4">
+                                <h4>By Police District</h4>
+                                <BarGraphSmall
+                                    data={this._getBarGraphData('policedistrict')}
+                                    selectedLabels={this.state.selectedPoliceDistricts}
+                                    clickHandler={this._policeGraphClickHandler}
+                                    clickHandlerB={this._clearPoliceHandler}
+                                    bgroundClickHandler={this._clearPoliceHandler}
+                                    paper={this.props.papers[1]}
+                                    sort={this._sortBarGraphData('policedistrict')}
                                     {...barSharedProps}
                                 />
                             </div>
