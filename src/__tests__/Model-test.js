@@ -328,7 +328,7 @@ describe('Model ', function() {
                         'month': '05',
                         'councildistrict': '1'
                     }
-                ]
+                ];
                 try {
                     model.filter({ year: ['2014','1993'] }, entries).should.eql([entries[0],entries[2]]);
                     model.filter({ year: ['1999'] }, entries).should.eql([entries[1]]);
