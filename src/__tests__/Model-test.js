@@ -330,8 +330,20 @@ describe('Model ', function() {
                     }
                 ]
                 try {
-                    var results = model.filter({ year: ['2014','1993'] }, entries);
-                    results.should.eql([entries[0],entries[2]]);
+                    model.filter({ year: ['2014','1993'] }, entries).should.eql([entries[0],entries[2]]);
+                    model.filter({ year: ['1999'] }, entries).should.eql([entries[1]]);
+                    model.filter({
+                        year: ['2014','1993'],
+                        month: '01'
+                    },entries).should.eql([]);
+                    model.filter({
+                        year: ['2014','1993'],
+                        month: '05'
+                    },entries).should.eql([entries[0],entries[2]]);
+                    model.filter({
+                        month: ['05','01'],
+                        councildistrict: '1'
+                    },entries).should.eql([entries[0],entries[2]]);
                     done();
                 } catch (e) {
                     done(e);
