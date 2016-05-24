@@ -23,7 +23,7 @@ module.exports = React.createClass({
     },
     getInitialState() {
         return {
-            years: [],
+            allYears: [],
             year: '',
             month: '01',
             councildistrict: '',
@@ -82,15 +82,15 @@ module.exports = React.createClass({
     _init () {
         var model = this.props.model;
         var byYear = model.index.get('yyyy');
-        var years = Array.from(byYear.keys()).sort();
-        var year = years[years.length-1];
+        var allYears = Array.from(byYear.keys()).sort();
+        var year = allYears[allYears.length-1];
 
         var filters = { year: year };
         if (this.state.month) filters.month = this.state.month;
         var entries = this.props.model.filter(filters);
 
         this.setState({
-            years: years,
+            allYears: allYears,
             year: year
         });
     },
@@ -257,7 +257,7 @@ module.exports = React.createClass({
                                 <Select
                                     currentVal={this.state.year}
                                     changeHandler={this._yearSelectChangeHandler}
-                                    values={this.state.years}
+                                    values={this.state.allYears}
                                     liveSearch={true}
                                 />
                             </div>
