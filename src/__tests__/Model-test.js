@@ -144,7 +144,7 @@ describe('Model ', function() {
     var model;
     beforeEach(function() {
         model = new Model();
-    })
+    });
     it('should be instantiated', function() {
         model.should.be.instanceof(Model);
     });
@@ -304,6 +304,34 @@ describe('Model ', function() {
                     model.filter({ year: '1999' }, entries).should.eql([entries[1]]);
                     model.filter({ year: '1993' }, entries).should.eql([entries[2]]);
                     model.filter({ councildistrict: '1' }, entries).should.eql([entries[0],entries[2]]);
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            });
+        });
+        it('should filter multiple values for one filter', function (done) {
+            model.setRaw(validData).then(function() {
+                var entries = [
+                    {
+                        'year': '2014',
+                        'month': '05',
+                        'councildistrict': '1'
+                    },
+                    {
+                        'year': '1999',
+                        'month': '01',
+                        'councildistrict': '2'
+                    },
+                    {
+                        'year': '1993',
+                        'month': '05',
+                        'councildistrict': '1'
+                    }
+                ]
+                try {
+                    var results = model.filter({ year: ['2014','1993'] }, entries);
+                    results.should.eql([entries[0],entries[2]]);
                     done();
                 } catch (e) {
                     done(e);

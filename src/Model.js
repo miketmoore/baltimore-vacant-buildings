@@ -163,15 +163,31 @@ Model.prototype.filter = function (filters, rows) {
     var filterKeys = Object.keys(filters);
     var filterKeysLen = filterKeys.length;
     var filterKey;
+    var filterValues;
+    var filterValue;
     var rowsLen = rows.length;
+    var rowVal;
     var filtered = [];
-    var j;
+    var j, k;
     for ( i; i < rowsLen; i++ ) {
         row = rows[i];
         matches = 0;
         for ( j = 0; j < filterKeysLen; j++ ) {
             filterKey = filterKeys[j];
-            if (row[filterKey] && (row[filterKey] == filters[filterKey])) matches++;
+            rowVal = row[filterKey];
+            filterValues = filters[filterKey];
+            if (Array.isArray(filterValues)) {
+                for ( k = 0; k < filterValues.length; k++ ) {
+                    filterValue = filterValues[k];
+                    if (rowVal == filterValue) {
+                        matches++;
+                        break;
+                    }
+                }
+            } else {
+                if (rowVal == filterValues) matches++;
+            }
+
             if (matches == filterKeysLen) filtered.push(row);
         }
     }
