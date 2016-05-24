@@ -3,9 +3,7 @@ var React = require('react');
 module.exports = React.createClass({
     getDefaultProps () {
         return {
-            clickHandler: function () {
-                console.log('TagDeleteButton.clickHandler');
-            }
+            clickHandler: function () {}
         };
     },
     render () {
