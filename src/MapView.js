@@ -22,7 +22,7 @@ module.exports = React.createClass({
                     lng: parseFloat(obj.longitude)
                 },
                 key: obj.key,
-                defaultAnimation: 2
+                defaultAnimation: 0
             });
         }
         return markers;
