@@ -6,6 +6,8 @@ var Button = require('./Button');
 var Tags = require('./Tags');
 var BarGraphSmall = require('./BarGraphSmall');
 import ReactDataGrid from 'react-data-grid/addons';
+import 'react-widgets/lib/less/react-widgets.less';
+var DropdownList = require('react-widgets').DropdownList;
 
 module.exports = React.createClass({
     getDefaultProps () {
@@ -27,7 +29,8 @@ module.exports = React.createClass({
             year: '',
             month: '01',
             selectedCouncilDistricts: new Set(),
-            selectedPoliceDistricts: new Set()
+            selectedPoliceDistricts: new Set(),
+            neighborhoods: []
         };
     },
     _yearSelectChangeHandler (val) {
@@ -86,7 +89,8 @@ module.exports = React.createClass({
 
         this.setState({
             allYears: allYears,
-            year: year
+            year: year,
+            neighborhoods: Array.from(model.index.get('neighborhood').keys()).sort()
         });
     },
     componentWillReceiveProps (props) {
@@ -267,6 +271,11 @@ module.exports = React.createClass({
                                     changeHandler={this._monthSelectChangeHandler}
                                     values={this.props.months}
                                 />
+                            </div>
+                            <div className="col-md-2">
+                                <h4>Neighborhoods</h4>
+                                <DropdownList
+                                    defaultValue={"orange"} data={["orange","blue"]} />
                             </div>
                         </div>
                         <div className="row">
