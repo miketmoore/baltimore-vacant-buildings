@@ -168,7 +168,7 @@ Model.prototype.filter = function (filters, rows) {
     var rowsLen = rows.length;
     var rowVal;
     var filtered = [];
-    var j, k;
+    var j;
     for ( i; i < rowsLen; i++ ) {
         row = rows[i];
         matches = 0;
@@ -177,13 +177,8 @@ Model.prototype.filter = function (filters, rows) {
             rowVal = row[filterKey];
             filterValues = filters[filterKey];
             if (Array.isArray(filterValues)) {
-                for ( k = 0; k < filterValues.length; k++ ) {
-                    filterValue = filterValues[k];
-                    if (rowVal == filterValue) {
-                        matches++;
-                        break;
-                    }
-                }
+                filterValues = new Set(filterValues);
+                if (filterValues.has(rowVal)) matches++;
             } else {
                 if (rowVal == filterValues) matches++;
             }
