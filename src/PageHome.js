@@ -53,9 +53,14 @@ module.exports = React.createClass({
             month: ''
         });
     },
-    _clearCouncilHandler () {
+    _clearCouncilHandler (data) {
         var a = this.state.selectedCouncilDistricts;
-        a.clear();
+        if (data) {
+            var label = data.label;
+            a.delete(label);
+        } else {
+            a.clear();
+        }
         this.setState({
             selectedCouncilDistricts: a
         });
@@ -237,7 +242,7 @@ module.exports = React.createClass({
                                 <p>Total selected: {this.state.selectedCouncilDistricts.size}</p>
                                 <BarGraphSmall
                                     data={this._getBarGraphData('councildistrict')}
-                                    selectedLabels={Array.from(this.state.selectedCouncilDistricts.values())}
+                                    selectedLabels={this.state.selectedCouncilDistricts}
                                     clickHandler={this._councilGraphClickHandler}
                                     clickHandlerB={this._clearCouncilHandler}
                                     bgroundClickHandler={this._clearCouncilHandler}

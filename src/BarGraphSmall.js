@@ -5,6 +5,7 @@ module.exports = React.createClass({
     getDefaultProps () {
         return {
             data: [],
+            selectedLabels: new Set(),
             prefix: '',
             displayLabels: false,
             bgroundcolor: '#000000',
@@ -122,14 +123,14 @@ module.exports = React.createClass({
 
         function addMouseHandlers (path, data) {
             path.data = data;
-            path.data.isSelected = this.props.selectedLabel == data.label;
+            path.data.isSelected = this.props.selectedLabels.has(data.label);
 
             path.on('mousedown', function (e) {
                 var item = e.target;
                 if (!item.data.isSelected) {
                     this.props.clickHandler(data);
                 } else {
-                    this.props.clickHandlerB();
+                    this.props.clickHandlerB(data);
                 }
             }.bind(this));
 
@@ -165,7 +166,7 @@ module.exports = React.createClass({
                 }),
                 size: new pscope.Size(barWidth, barHeight),
                 style: {
-                    fillColor: (obj.label == this.props.selectedLabel) ? this.props.barcolorselected : this.props.barcolor
+                    fillColor: (this.props.selectedLabels.has(obj.label)) ? this.props.barcolorselected : this.props.barcolor
                 }
             });
             addMouseHandlers.call(this, rect, obj);
