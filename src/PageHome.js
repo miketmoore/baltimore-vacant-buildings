@@ -31,7 +31,7 @@ module.exports = React.createClass({
             selectedCouncilDistricts: new Set(),
             selectedPoliceDistricts: new Set(),
             neighborhoods: [],
-            selectedNeighborhood: ''
+            selectedNeighborhoods: new Set()
         };
     },
     _yearSelectChangeHandler (val) {
@@ -44,25 +44,29 @@ module.exports = React.createClass({
             month: val
         });
     },
-    _neighborhoodChangeHandler (val) {
-        this.setState({
-            selectedNeighborhood: val
-        });
-    },
-    _graphClickHandler (key, data) {
-        var label = data.label;
+    _graphClickHandler (key, val) {
         var a = this.state[key];
-        if (!a.has(label)) a.add(label);
-        else a.delete(label);
+        if (!a.has(val)) a.add(val);
+        else a.delete(val);
         var stateObj = {};
         stateObj[key] = a;
         this.setState(stateObj);
     },
+    _neighborhoodChangeHandler (val) {
+        var a = this.state.selectedNeighborhoods;
+        if (!val.length) {
+            this._clearNeighborhoodHandler();
+        } else {
+            this.setState({
+                selectedNeighborhoods: new Set(val)
+            });
+        }
+    },
     _policeGraphClickHandler (data) {
-        this._graphClickHandler('selectedPoliceDistricts', data);
+        this._graphClickHandler('selectedPoliceDistricts', data.label);
     },
     _councilGraphClickHandler (data) {
-        this._graphClickHandler('selectedCouncilDistricts', data);
+        this._graphClickHandler('selectedCouncilDistricts', data.label);
     },
     _clearMonthHandler () {
         this.setState({
@@ -71,7 +75,7 @@ module.exports = React.createClass({
     },
     _clearNeighborhoodHandler () {
         this.setState({
-            selectedNeighborhood: ''
+            selectedNeighborhoods: new Set()
         });
     },
     _clear (key, data) {
@@ -110,26 +114,6 @@ module.exports = React.createClass({
     componentWillMount () {
         if (this.props.model.index.get('yyyy').size) this._init();
     },
-    // _getEntriesPer (key, entries) {
-    //     var entry;
-    //     var map = new Map();
-    //     var val;
-    //     var distinct = Array.from(this.props.model.index.get(key).keys());
-    //     distinct.forEach(k => map.set(k, 0));
-    //     for ( var i = 0; i < entries.length; i++ ) {
-    //         entry = entries[i];
-    //         val = entry[key];
-    //         map.set(val, map.get(val) + 1);
-    //     }
-    //     var final = [];
-    //     map.forEach((val,key) => {
-    //         final.push({
-    //             size: val.size,
-    //             label: key
-    //         });
-    //     });
-    //     return final;
-    // },
     _getBarGraphData (key) {
         var model = this.props.model;
         if (!model.rows.length) return [];
@@ -164,7 +148,7 @@ module.exports = React.createClass({
         if (this.state.month) filters.month = this.state.month;
         if (this.state.selectedCouncilDistricts.size) filters.councildistrict = Array.from(this.state.selectedCouncilDistricts.values());
         if (this.state.selectedPoliceDistricts.size) filters.policedistrict = Array.from(this.state.selectedPoliceDistricts.values());
-        if (this.state.selectedNeighborhood) filters.neighborhood = this.state.selectedNeighborhood;
+        if (this.state.selectedNeighborhoods.size) filters.neighborhood = Array.from(this.state.selectedNeighborhoods.values());
         return this.props.model.filter(filters) || [];
     },
     _sortBarGraphData (key) {
@@ -205,7 +189,10 @@ module.exports = React.createClass({
                 // to avoid passing event, which triggers a false positive
                 this._clearPoliceHandler();
             }.bind(this), isSet: true },
-            { key: 'selectedNeighborhood', label: 'Neighborhood', onDelete: this._clearNeighborhoodHandler }
+            { key: 'selectedNeighborhoods', label: 'Neighborhood', onDelete: function () {
+                // to avoid passing event, which triggers a false positive
+                this._clearNeighborhoodHandler();
+            }.bind(this), isSet: true },
         ];
         config.forEach((c) => {
             if ((c.isSet && this.state[c.key].size) || (!c.isSet && this.state[c.key])) data.push(c);
@@ -287,11 +274,10 @@ module.exports = React.createClass({
                             </div>
                             <div className="col-md-4">
                                 <h4>Neighborhoods</h4>
-                                <DropdownList
-                                    placeholder="Select one"
+                                <Multiselect
                                     data={this.state.neighborhoods}
-                                    value={this.state.selectedNeighborhood}
                                     onChange={this._neighborhoodChangeHandler}
+                                    defaultValue={Array.from(this.state.selectedNeighborhoods)}
                                     />
                             </div>
                         </div>
