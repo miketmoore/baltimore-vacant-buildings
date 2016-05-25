@@ -69,6 +69,11 @@ module.exports = React.createClass({
             month: ''
         });
     },
+    _clearNeighborhoodHandler () {
+        this.setState({
+            selectedNeighborhood: ''
+        });
+    },
     _clear (key, data) {
         var a = this.state[key];
         data ? a.delete(data.label) : a.clear();
@@ -159,6 +164,7 @@ module.exports = React.createClass({
         if (this.state.month) filters.month = this.state.month;
         if (this.state.selectedCouncilDistricts.size) filters.councildistrict = Array.from(this.state.selectedCouncilDistricts.values());
         if (this.state.selectedPoliceDistricts.size) filters.policedistrict = Array.from(this.state.selectedPoliceDistricts.values());
+        if (this.state.selectedNeighborhood) filters.neighborhood = this.state.selectedNeighborhood;
         return this.props.model.filter(filters) || [];
     },
     _sortBarGraphData (key) {
@@ -198,7 +204,8 @@ module.exports = React.createClass({
             { key: 'selectedPoliceDistricts', label: 'Police District', onDelete: function () {
                 // to avoid passing event, which triggers a false positive
                 this._clearPoliceHandler();
-            }.bind(this), isSet: true }
+            }.bind(this), isSet: true },
+            { key: 'selectedNeighborhood', label: 'Neighborhood', onDelete: this._clearNeighborhoodHandler }
         ];
         config.forEach((c) => {
             if ((c.isSet && this.state[c.key].size) || (!c.isSet && this.state[c.key])) data.push(c);
@@ -281,6 +288,7 @@ module.exports = React.createClass({
                             <div className="col-md-4">
                                 <h4>Neighborhoods</h4>
                                 <DropdownList
+                                    placeholder="Select one"
                                     data={this.state.neighborhoods}
                                     value={this.state.selectedNeighborhood}
                                     onChange={this._neighborhoodChangeHandler}
