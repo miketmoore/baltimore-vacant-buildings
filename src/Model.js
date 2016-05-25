@@ -157,6 +157,7 @@ Model.prototype._mapRows = function () {
 };
 Model.prototype.filter = function (filters, rows) {
     if (!rows) rows = this.rows;
+    if (!Object.keys(filters).length) return rows;
     var i = 0;
     var row;
     var matches;
