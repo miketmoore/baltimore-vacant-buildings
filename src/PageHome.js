@@ -26,7 +26,7 @@ module.exports = React.createClass({
     getInitialState() {
         return {
             allYears: [],
-            year: '',
+            selectedYears: new Set(),
             selectedMonths: new Set(['01']),
             selectedCouncilDistricts: new Set(),
             selectedPoliceDistricts: new Set(),
@@ -35,9 +35,14 @@ module.exports = React.createClass({
         };
     },
     _yearSelectChangeHandler (val) {
-        this.setState({
-            year: val
-        });
+        var a = this.state.selectedYears;
+        if (!val.length) {
+            this._clearYearHandler();
+        } else {
+            this.setState({
+                selectedYears: new Set(val)
+            });
+        }
     },
     _monthSelectChangeHandler (val) {
         var a = this.state.selectedMonths;
@@ -83,6 +88,11 @@ module.exports = React.createClass({
             selectedNeighborhoods: new Set()
         });
     },
+    _clearYearHandler () {
+        this.setState({
+            selectedYears: new Set()
+        });
+    },
     _clear (key, data) {
         var a = this.state[key];
         data ? a.delete(data.label) : a.clear();
@@ -101,15 +111,15 @@ module.exports = React.createClass({
         var model = this.props.model;
         var byYear = model.index.get('yyyy');
         var allYears = Array.from(byYear.keys()).sort();
-        var year = allYears[allYears.length-1];
+        var selectedYears = new Set([allYears[allYears.length-1]]);
 
-        var filters = { year: year };
+        var filters = { year: selectedYears.values().next().value };
         if (this.state.selectedMonths.size) filters.month = Array.from(this.state.selectedMonths.values());
         var entries = this.props.model.filter(filters);
 
         this.setState({
             allYears: allYears,
-            year: year,
+            selectedYears: selectedYears,
             neighborhoods: Array.from(model.index.get('neighborhood').keys()).sort()
         });
     },
@@ -125,7 +135,7 @@ module.exports = React.createClass({
 
         // Build filters
         var filters = {
-            year: this.state.year
+            year: Array.from(this.state.selectedYears.values())
         };
         if (this.state.selectedMonths.size) filters.month = Array.from(this.state.selectedMonths.values());
         var entriesByDate = model.filter(filters);
@@ -149,7 +159,7 @@ module.exports = React.createClass({
         return data;
     },
     _getEntries () {
-        var filters = { year: this.state.year };
+        var filters = { year: Array.from(this.state.selectedYears.values()) };
         if (this.state.selectedMonths.size) filters.month = Array.from(this.state.selectedMonths.values());
         if (this.state.selectedCouncilDistricts.size) filters.councildistrict = Array.from(this.state.selectedCouncilDistricts.values());
         if (this.state.selectedPoliceDistricts.size) filters.policedistrict = Array.from(this.state.selectedPoliceDistricts.values());
@@ -200,7 +210,7 @@ module.exports = React.createClass({
             { key: 'selectedNeighborhoods', label: 'Neighborhood', onDelete: function () {
                 // to avoid passing event, which triggers a false positive
                 this._clearNeighborhoodHandler();
-            }.bind(this), isSet: true },
+            }.bind(this), isSet: true }
         ];
         config.forEach((c) => {
             if ((c.isSet && this.state[c.key].size) || (!c.isSet && this.state[c.key])) data.push(c);
@@ -265,11 +275,11 @@ module.exports = React.createClass({
                         <div className="row">
                             <div className="col-md-4">
                                 <h4>Year</h4>
-                                <DropdownList
-                                    value={this.state.year}
-                                    onChange={this._yearSelectChangeHandler}
+                                <Multiselect
+                                    placeholder="Search..."
                                     data={this.state.allYears}
-                                    liveSearch={true}
+                                    onChange={this._yearSelectChangeHandler}
+                                    value={Array.from(this.state.selectedYears.values())}
                                 />
                             </div>
                             <div className="col-md-4">
