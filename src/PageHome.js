@@ -113,7 +113,8 @@ module.exports = React.createClass({
         var allYears = Array.from(byYear.keys()).sort();
         var selectedYears = new Set([allYears[allYears.length-1]]);
 
-        var filters = { year: selectedYears.values().next().value };
+        var filters = {};
+        if (this.state.selectedYears.size) filters.year = Array.from(this.state.selectedYears.values());
         if (this.state.selectedMonths.size) filters.month = Array.from(this.state.selectedMonths.values());
         var entries = this.props.model.filter(filters);
 
@@ -134,9 +135,8 @@ module.exports = React.createClass({
         if (!model.rows.length) return [];
 
         // Build filters
-        var filters = {
-            year: Array.from(this.state.selectedYears.values())
-        };
+        var filters = {};
+        if (this.state.selectedYears.size) filters.year = Array.from(this.state.selectedYears.values());
         if (this.state.selectedMonths.size) filters.month = Array.from(this.state.selectedMonths.values());
         var entriesByDate = model.filter(filters);
 
@@ -159,7 +159,8 @@ module.exports = React.createClass({
         return data;
     },
     _getEntries () {
-        var filters = { year: Array.from(this.state.selectedYears.values()) };
+        var filters = {};
+        if (this.state.selectedYears.size) filters.year = Array.from(this.state.selectedYears.values());
         if (this.state.selectedMonths.size) filters.month = Array.from(this.state.selectedMonths.values());
         if (this.state.selectedCouncilDistricts.size) filters.councildistrict = Array.from(this.state.selectedCouncilDistricts.values());
         if (this.state.selectedPoliceDistricts.size) filters.policedistrict = Array.from(this.state.selectedPoliceDistricts.values());
@@ -195,19 +196,23 @@ module.exports = React.createClass({
     _getTagsData () {
         var data = [];
         var config = [
-            { key: 'selectedMonths', label: 'Month', onDelete: function () {
+            { key: 'selectedYears', label: 'Years', onDelete: function () {
+                // to avoid passing event, which triggers a false positive
+                this._clearYearHandler();
+            }.bind(this), isSet: true },
+            { key: 'selectedMonths', label: 'Months', onDelete: function () {
                 // to avoid passing event, which triggers a false positive
                 this._clearMonthHandler();
             }.bind(this), isSet: true },
-            { key: 'selectedCouncilDistricts', label: 'Council District', onDelete: function () {
+            { key: 'selectedCouncilDistricts', label: 'Council Districts', onDelete: function () {
                 // to avoid passing event, which triggers a false positive
                 this._clearCouncilHandler();
             }.bind(this), isSet: true },
-            { key: 'selectedPoliceDistricts', label: 'Police District', onDelete: function () {
+            { key: 'selectedPoliceDistricts', label: 'Police Districts', onDelete: function () {
                 // to avoid passing event, which triggers a false positive
                 this._clearPoliceHandler();
             }.bind(this), isSet: true },
-            { key: 'selectedNeighborhoods', label: 'Neighborhood', onDelete: function () {
+            { key: 'selectedNeighborhoods', label: 'Neighborhoods', onDelete: function () {
                 // to avoid passing event, which triggers a false positive
                 this._clearNeighborhoodHandler();
             }.bind(this), isSet: true }
@@ -274,7 +279,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="row">
                             <div className="col-md-4">
-                                <h4>Year</h4>
+                                <h4>Years</h4>
                                 <Multiselect
                                     placeholder="Search..."
                                     data={this.state.allYears}
@@ -283,7 +288,7 @@ module.exports = React.createClass({
                                 />
                             </div>
                             <div className="col-md-4">
-                                <h4>Month</h4>
+                                <h4>Months</h4>
                                 <Multiselect
                                     placeholder="Search..."
                                     data={this.props.months}
@@ -305,7 +310,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="row">
                             <div className="col-md-4">
-                                <h4>By Council District</h4>
+                                <h4>Council Districts</h4>
                                 <BarGraphSmall
                                     data={this._getBarGraphData('councildistrict')}
                                     selectedLabels={this.state.selectedCouncilDistricts}
@@ -318,7 +323,7 @@ module.exports = React.createClass({
                                 />
                             </div>
                             <div className="col-md-4">
-                                <h4>By Police District</h4>
+                                <h4>Police Districts</h4>
                                 <BarGraphSmall
                                     data={this._getBarGraphData('policedistrict')}
                                     selectedLabels={this.state.selectedPoliceDistricts}

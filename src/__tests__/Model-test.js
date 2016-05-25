@@ -304,6 +304,7 @@ describe('Model ', function() {
                     model.filter({ year: '1999' }, entries).should.eql([entries[1]]);
                     model.filter({ year: '1993' }, entries).should.eql([entries[2]]);
                     model.filter({ councildistrict: '1' }, entries).should.eql([entries[0],entries[2]]);
+                    model.filter({}, entries).should.eql(entries);
                     done();
                 } catch (e) {
                     done(e);
