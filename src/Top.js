@@ -4,7 +4,6 @@ var Locations = Router.Locations;
 var Location = Router.Location;
 var Model = require('./Model');
 var PageHome = require('./PageHome');
-var PagePaperBarGraph = require('./PagePaperBarGraph');
 var PageAbout = require('./PageAbout');
 
 module.exports = React.createClass({
