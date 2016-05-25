@@ -275,6 +275,7 @@ module.exports = React.createClass({
                             <div className="col-md-4">
                                 <h4>Neighborhoods</h4>
                                 <Multiselect
+                                    placeholder="Search..."
                                     data={this.state.neighborhoods}
                                     onChange={this._neighborhoodChangeHandler}
                                     defaultValue={Array.from(this.state.selectedNeighborhoods)}
