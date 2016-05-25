@@ -148,7 +148,7 @@ module.exports = React.createClass({
         if (this.state.month) filters.month = this.state.month;
         if (this.state.selectedCouncilDistricts.size) filters.councildistrict = Array.from(this.state.selectedCouncilDistricts.values());
         if (this.state.selectedPoliceDistricts.size) filters.policedistrict = Array.from(this.state.selectedPoliceDistricts.values());
-        if (this.state.selectedNeighborhoods.size) filters.neighborhood = Array.from(this.state.selectedNeighborhoods.values());
+        if (this.state.selectedNeighborhoods.size) filters.neighborhood = Array.from(this.state.selectedNeighborhoods);
         return this.props.model.filter(filters) || [];
     },
     _sortBarGraphData (key) {
@@ -278,7 +278,7 @@ module.exports = React.createClass({
                                     placeholder="Search..."
                                     data={this.state.neighborhoods}
                                     onChange={this._neighborhoodChangeHandler}
-                                    defaultValue={Array.from(this.state.selectedNeighborhoods)}
+                                    value={Array.from(this.state.selectedNeighborhoods.values())}
                                     />
                             </div>
                         </div>
