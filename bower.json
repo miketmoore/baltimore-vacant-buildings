@@ -18,7 +18,6 @@
   "dependencies": {
     "jquery": "^2.2.3",
     "bootstrap": "^3.3.6",
-    "paper": "^0.9.25",
-    "bootstrap-select": "^1.10.0"
+    "paper": "^0.9.25"
   }
 }

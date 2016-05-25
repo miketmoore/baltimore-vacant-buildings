@@ -1,13 +1,13 @@
 var React = require('react');
 var Layout = require('./Layout');
 var MapView = require('./MapView');
-var Select = require('./Select');
 var Button = require('./Button');
 var Tags = require('./Tags');
 var BarGraphSmall = require('./BarGraphSmall');
 import ReactDataGrid from 'react-data-grid/addons';
 import 'react-widgets/lib/less/react-widgets.less';
 var DropdownList = require('react-widgets').DropdownList;
+var Multiselect = require('react-widgets').Multiselect;
 
 module.exports = React.createClass({
     getDefaultProps () {
@@ -30,7 +30,8 @@ module.exports = React.createClass({
             month: '01',
             selectedCouncilDistricts: new Set(),
             selectedPoliceDistricts: new Set(),
-            neighborhoods: []
+            neighborhoods: [],
+            selectedNeighborhood: ''
         };
     },
     _yearSelectChangeHandler (val) {
@@ -41,6 +42,11 @@ module.exports = React.createClass({
     _monthSelectChangeHandler (val) {
         this.setState({
             month: val
+        });
+    },
+    _neighborhoodChangeHandler (val) {
+        this.setState({
+            selectedNeighborhood: val
         });
     },
     _graphClickHandler (key, data) {
@@ -257,25 +263,28 @@ module.exports = React.createClass({
                         <div className="row">
                             <div className="col-md-2">
                                 <h4>Year</h4>
-                                <Select
-                                    currentVal={this.state.year}
-                                    changeHandler={this._yearSelectChangeHandler}
-                                    values={this.state.allYears}
+                                <DropdownList
+                                    value={this.state.year}
+                                    onChange={this._yearSelectChangeHandler}
+                                    data={this.state.allYears}
                                     liveSearch={true}
                                 />
                             </div>
                             <div className="col-md-2">
                                 <h4>Month</h4>
-                                <Select
-                                    currentVal={this.state.month}
-                                    changeHandler={this._monthSelectChangeHandler}
-                                    values={this.props.months}
+                                <DropdownList
+                                    value={this.state.month}
+                                    onChange={this._monthSelectChangeHandler}
+                                    data={this.props.months}
                                 />
                             </div>
-                            <div className="col-md-2">
+                            <div className="col-md-4">
                                 <h4>Neighborhoods</h4>
                                 <DropdownList
-                                    defaultValue={"orange"} data={["orange","blue"]} />
+                                    data={this.state.neighborhoods}
+                                    value={this.state.selectedNeighborhood}
+                                    onChange={this._neighborhoodChangeHandler}
+                                    />
                             </div>
                         </div>
                         <div className="row">
