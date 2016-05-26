@@ -43,34 +43,14 @@ module.exports = React.createClass({
             selectedNeighborhoods: new Set()
         };
     },
-    _yearSelectChangeHandler (val) {
-        var a = this.state.selectedYears;
+    _dateSelectChangeHandler (key, clearer, val) {
+        var a = this.state[key];
         if (!val.length) {
-            this._clearYearHandler();
+            clearer();
         } else {
-            this.setState({
-                selectedYears: new Set(val)
-            });
-        }
-    },
-    _monthSelectChangeHandler (val) {
-        var a = this.state.selectedMonths;
-        if (!val.length) {
-            this._clearMonthHandler();
-        } else {
-            this.setState({
-                selectedMonths: new Set(val)
-            });
-        }
-    },
-    _daySelectChangeHandler (val) {
-        var a = this.state.selectedDays;
-        if (!val.length) {
-            this._clearDayHandler();
-        } else {
-            this.setState({
-                selectedDays: new Set(val)
-            });
+            var stateObj = {};
+            stateObj[key] = new Set(val);
+            this.setState(stateObj);
         }
     },
     _graphClickHandler (key, val) {
@@ -283,7 +263,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.state.allYears}
-                                            onChange={this._yearSelectChangeHandler}
+                                            onChange={(val) => this._dateSelectChangeHandler('selectedYears', this._clearYearHandler, val)}
                                             value={Array.from(this.state.selectedYears.values())}
                                         />
                                     </div>
@@ -292,7 +272,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('months')}
-                                            onChange={this._monthSelectChangeHandler}
+                                            onChange={(val) => this._dateSelectChangeHandler('selectedMonths', this._clearMonthHandler, val)}
                                             value={Array.from(this.state.selectedMonths.values())}
                                         />
                                     </div>
@@ -301,7 +281,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('days')}
-                                            onChange={this._daySelectChangeHandler}
+                                            onChange={(val) => this._dateSelectChangeHandler('selectedDays', this._clearDayHandler, val)}
                                             value={Array.from(this.state.selectedDays.values())}
                                         />
                                     </div>
