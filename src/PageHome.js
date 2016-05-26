@@ -161,20 +161,18 @@ module.exports = React.createClass({
         var model = this.props.model;
         if (!model.rows.length) return [];
 
-        // Build filters
-        var filters = {};
-        if (this.state.selectedYears.size) filters.year = Array.from(this.state.selectedYears.values());
-        if (this.state.selectedMonths.size) filters.month = Array.from(this.state.selectedMonths.values());
-        if (this.state.selectedDays.size) filters.day = Array.from(this.state.selectedDays.values());
-        var entriesByDate = model.filter(filters);
-
         // Get full, distinct list
         var distinct = Array.from(model.index.get(key).keys());
 
         // Map distinct item to total entries associated to it
         var map = new Map();
         distinct.forEach(k => map.set(k, 0));
-        entriesByDate.forEach((entry) => map.set(entry[key], map.get(entry[key]) + 1));
+        var entries = model.rows;
+        var entry;
+        for ( var i = 0, len = entries.length; i < len; i++ ) {
+            entry = entries[i];
+            map.set(entry[key], map.get(entry[key]) + 1);
+        }
 
         var data = [];
         map.forEach(function (mapVal, mapKey) {
