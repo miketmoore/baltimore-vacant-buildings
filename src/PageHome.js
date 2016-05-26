@@ -264,7 +264,7 @@ module.exports = React.createClass({
             <Layout>
                 <div className="row">
                     <div className="col-md-4">
-                        <p>Displaying {entries.length} Vacancies</p>
+                        <p>Displaying {entries.length.toLocaleString()}/{this.props.model.rows.length.toLocaleString()} Vacancies</p>
                         <MapView
                             width="100%"
                             height="350px"
