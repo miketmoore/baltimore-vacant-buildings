@@ -41,7 +41,7 @@ module.exports = React.createClass({
         return (
 
             <div className="row" style={{height: "100%"}}>
-                <div className="col-md-6">
+                <div className="col-md-12">
                     <GoogleMapLoader
                         containerElement={
                             <div

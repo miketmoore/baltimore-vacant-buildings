@@ -266,7 +266,7 @@ module.exports = React.createClass({
                     <div className="col-md-4">
                         <p>Displaying {entries.length} Vacancies</p>
                         <MapView
-                            width="350px"
+                            width="100%"
                             height="350px"
                             data={mapData} />
                     </div>
