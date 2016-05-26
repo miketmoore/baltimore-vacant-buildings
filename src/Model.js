@@ -151,7 +151,6 @@ Model.prototype._mapRows = function () {
         rows.push(row);
     }
     this._mapped.rows = rows;
-    console.log('_mapRows this._mapped.rows ', this._mapped.rows, this.index);
 
     if (this._debug) console.log('Distinct neighborhood: ', this.index.get('neighborhood').size);
     if (this._debug) console.log('Distinct policedistrict: ', this.index.get('policedistrict').size);

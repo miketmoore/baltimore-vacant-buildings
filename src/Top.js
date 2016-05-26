@@ -14,19 +14,22 @@ module.exports = React.createClass({
             columns: []
         }
     },
-    componentWillMount () {
-        console.log('Top.componentWillMount()');
-    },
     componentDidMount () {
-        this.serverRequest = $.get(this.props.source, function (result) {
-            this.state.model.setRaw(result);
-            this.setState({
-                columns: this.state.model.columns
-            });
-        }.bind(this));
-    },
-    componentWillUnmount () {
-        this.serverRequest.abort();
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', encodeURI(this.props.source));
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                this.state.model.setRaw(data);
+                this.setState({
+                    columns: this.state.model.columns
+                });
+            }
+            else {
+                throw new Error('Server request for data failed. Status: ' + xhr.status);
+            }
+        }.bind(this);
+        xhr.send();
     },
     render () {
         return (
