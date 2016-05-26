@@ -12,3 +12,6 @@
     cursor: pointer;
 }
 
+body {
+    padding-top: 70px;
+}

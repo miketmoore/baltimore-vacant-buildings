@@ -260,85 +260,93 @@ module.exports = React.createClass({
             <Layout>
                 <div className="row">
                     <div className="col-md-4">
-                        <p>Displaying {entries.length.toLocaleString()}/{this.props.model.rows.length.toLocaleString()} Vacancies</p>
-                        <MapView
-                            width="100%"
-                            height="350px"
-                            data={mapData} />
+                        <div className="panel panel-default">
+                            <div className="panel-heading">Displaying {entries.length.toLocaleString()}/{this.props.model.rows.length.toLocaleString()} Vacancies</div>
+                            <div className="panel-body">
+                                <MapView
+                                    width="100%"
+                                    height="350px"
+                                    data={mapData} />
+                            </div>
+                        </div>
                     </div>
                     <div className="col-md-8">
-                        <div className="row">
-                            <div className="col-md-8">
-                                <h4>Filters</h4>
-                                <Tags data={tagsData} />
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md-2">
-                                <h4>Years</h4>
-                                <Multiselect
-                                    placeholder="Search..."
-                                    data={this.state.allYears}
-                                    onChange={this._yearSelectChangeHandler}
-                                    value={Array.from(this.state.selectedYears.values())}
-                                />
-                            </div>
-                            <div className="col-md-2">
-                                <h4>Months</h4>
-                                <Multiselect
-                                    placeholder="Search..."
-                                    data={this.props.model.index.get('months')}
-                                    onChange={this._monthSelectChangeHandler}
-                                    value={Array.from(this.state.selectedMonths.values())}
-                                />
-                            </div>
-                            <div className="col-md-2">
-                                <h4>Days</h4>
-                                <Multiselect
-                                    placeholder="Search..."
-                                    data={this.props.model.index.get('days')}
-                                    onChange={this._daySelectChangeHandler}
-                                    value={Array.from(this.state.selectedDays.values())}
-                                />
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md-8">
-                                <h4>Neighborhoods</h4>
-                                <Multiselect
-                                    placeholder="Search..."
-                                    data={this.state.neighborhoods}
-                                    onChange={this._neighborhoodChangeHandler}
-                                    value={Array.from(this.state.selectedNeighborhoods.values())}
-                                />
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md-4">
-                                <h4>Council Districts</h4>
-                                <BarGraphSmall
-                                    data={this._getBarGraphData('councildistrict')}
-                                    selectedLabels={this.state.selectedCouncilDistricts}
-                                    clickHandler={this._councilGraphClickHandler}
-                                    clickHandlerB={this._clearCouncilHandler}
-                                    bgroundClickHandler={this._clearCouncilHandler}
-                                    paper={this.props.papers[0]}
-                                    sort={this._sortBarGraphData('councildistrict')}
-                                    {...barSharedProps}
-                                />
-                            </div>
-                            <div className="col-md-4">
-                                <h4>Police Districts</h4>
-                                <BarGraphSmall
-                                    data={this._getBarGraphData('policedistrict')}
-                                    selectedLabels={this.state.selectedPoliceDistricts}
-                                    clickHandler={this._policeGraphClickHandler}
-                                    clickHandlerB={this._clearPoliceHandler}
-                                    bgroundClickHandler={this._clearPoliceHandler}
-                                    paper={this.props.papers[1]}
-                                    sort={this._sortBarGraphData('policedistrict')}
-                                    {...barSharedProps}
-                                />
+                        <div className="panel panel-default">
+                            <div className="panel-heading">Filters</div>
+                            <div className="panel-body">
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <Tags data={tagsData} />
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-4">
+                                        <h5>Years</h5>
+                                        <Multiselect
+                                            placeholder="Search..."
+                                            data={this.state.allYears}
+                                            onChange={this._yearSelectChangeHandler}
+                                            value={Array.from(this.state.selectedYears.values())}
+                                        />
+                                    </div>
+                                    <div className="col-md-4">
+                                        <h5>Months</h5>
+                                        <Multiselect
+                                            placeholder="Search..."
+                                            data={this.props.model.index.get('months')}
+                                            onChange={this._monthSelectChangeHandler}
+                                            value={Array.from(this.state.selectedMonths.values())}
+                                        />
+                                    </div>
+                                    <div className="col-md-4">
+                                        <h5>Days</h5>
+                                        <Multiselect
+                                            placeholder="Search..."
+                                            data={this.props.model.index.get('days')}
+                                            onChange={this._daySelectChangeHandler}
+                                            value={Array.from(this.state.selectedDays.values())}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <h5>Neighborhoods</h5>
+                                        <Multiselect
+                                            placeholder="Search..."
+                                            data={this.state.neighborhoods}
+                                            onChange={this._neighborhoodChangeHandler}
+                                            value={Array.from(this.state.selectedNeighborhoods.values())}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <h5>Council Districts</h5>
+                                        <BarGraphSmall
+                                            data={this._getBarGraphData('councildistrict')}
+                                            selectedLabels={this.state.selectedCouncilDistricts}
+                                            clickHandler={this._councilGraphClickHandler}
+                                            clickHandlerB={this._clearCouncilHandler}
+                                            bgroundClickHandler={this._clearCouncilHandler}
+                                            paper={this.props.papers[0]}
+                                            sort={this._sortBarGraphData('councildistrict')}
+                                            {...barSharedProps}
+                                        />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <h5>Police Districts</h5>
+                                        <BarGraphSmall
+                                            data={this._getBarGraphData('policedistrict')}
+                                            selectedLabels={this.state.selectedPoliceDistricts}
+                                            clickHandler={this._policeGraphClickHandler}
+                                            clickHandlerB={this._clearPoliceHandler}
+                                            bgroundClickHandler={this._clearPoliceHandler}
+                                            paper={this.props.papers[1]}
+                                            sort={this._sortBarGraphData('policedistrict')}
+                                            {...barSharedProps}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
