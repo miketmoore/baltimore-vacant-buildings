@@ -119,7 +119,6 @@ module.exports = React.createClass({
         var rect;
         var text;
         var thisY;
-        var $canvas = $(this.refs.canvas);
 
         function addMouseHandlers (path, data) {
             path.data = data;
@@ -136,7 +135,6 @@ module.exports = React.createClass({
 
             path.on('mouseenter', function (e) {
                 var item = e.target;
-                $canvas.css('cursor', 'pointer');
                 if (!item.data.isSelected && (item.className != 'PointText')) {
                     // not selected so show slightly darker hue
                     item.fillColor = this.props.barcolorhover;
@@ -146,7 +144,6 @@ module.exports = React.createClass({
 
             path.on('mouseleave', function (e) {
                 var item = e.target;
-                $canvas.css('cursor', 'auto')
                 if (!item.data.isSelected && (item.className != 'PointText')) {
                     // not selected so show default color
                     item.fillColor = this.props.barcolor;
