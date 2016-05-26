@@ -109,7 +109,7 @@ module.exports = React.createClass({
     // Update state with actual data
     _init () {
         var model = this.props.model;
-        var byYear = model.index.get('yyyy');
+        var byYear = model.index.get('year');
         var allYears = Array.from(byYear.keys()).sort();
         var selectedYears = new Set([allYears[allYears.length-1]]);
 
@@ -128,7 +128,7 @@ module.exports = React.createClass({
         this._init();
     },
     componentWillMount () {
-        if (this.props.model.index.get('yyyy').size) this._init();
+        if (this.props.model.index.get('year').size) this._init();
     },
     _getBarGraphData (key) {
         var model = this.props.model;

@@ -28,20 +28,20 @@ module.exports = React.createClass ({
         return this.state.page == 0;
     },
     isForwardDisabled () {
-        var total = this.props.model.index.get('yyyy').size;
+        var total = this.props.model.index.get('year').size;
         var limit = this.state.limit;
         var page = this.state.page;
         var offset = (limit * page) + limit;
         return total == offset;
     },
     _determineTotalPages () {
-        var total = this.props.model.index.get('yyyy').size;
+        var total = this.props.model.index.get('year').size;
         var limit = this.state.limit;
         return Math.ceil(total/limit);
     },
     _init () {
         var data = [];
-        var map = this.props.model.index.get('yyyy');
+        var map = this.props.model.index.get('year');
         var size;
         var year;
         var idSet;

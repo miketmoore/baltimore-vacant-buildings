@@ -9,9 +9,9 @@ function Model (debug) {
         rows: [],
         columns: [],
         index: new Map([
-            ['yyyy-mm-dd', new Map()],
-            ['yyyy-mm', new Map()],
-            ['yyyy', new Map()]
+            ['year-month-day', new Map()],
+            ['year-month', new Map()],
+            ['year', new Map()]
         ]),
         distinct: new Set(),
         policeDistrictLookup: new Map([
@@ -104,9 +104,9 @@ Model.prototype._indexRow = function (row) {
         return this.index.get(key).get(val);
     }
 
-    _index.call(this, 'yyyy', y, Set).add(id);
-    _index.call(this, 'yyyy-mm', ym, Set).add(id);
-    _index.call(this, 'yyyy-mm-dd', ymd, Set).add(id);
+    _index.call(this, 'year', y, Set).add(id);
+    _index.call(this, 'year-month', ym, Set).add(id);
+    _index.call(this, 'year-month-day', ymd, Set).add(id);
 
     // Index row ID by all columns
     var colObj;
