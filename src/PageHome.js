@@ -19,7 +19,16 @@ module.exports = React.createClass({
                 {"key":"neighborhood","name":"Neighborhood","resizable":true},
                 {"key":"policedistrict","name":"Police District","resizable":true},
                 {"key":"councildistrict","name":"Council District","resizable":true}
-            ]
+            ],
+            barGraphColors: {
+                bgroundcolor: '#4EC0CC',
+                barcolor: "#33627A",
+                barcolorhover: "#719BB0",
+                barcolorselected: "#BEE7FA",
+                bordercolor: '#7790D9',
+                fontcolora: "#FFFFFF",
+                fontcolorb: "#33627A"
+            }
         };
     },
     getInitialState() {
@@ -241,26 +250,7 @@ module.exports = React.createClass({
             };
         };
 
-        var barColorSchemes = {
-            night: {
-                bgroundcolor: '#4EC0CC',
-                barcolor: "#33627A",
-                barcolorhover: "#719BB0",
-                barcolorselected: "#BEE7FA",
-                bordercolor: '#7790D9',
-                fontcolora: "#FFFFFF",
-                fontcolorb: "#33627A"
-            },
-            baltimoreAbandonedRowHouses: {
-                bgroundcolor: '#c5b7a9', // suva gray
-                barcolor: '#8c8886', // ash gray
-                barcolorhover: '#af4e5b', // light steel blue
-                barcolorselected: '#b2c8e3', // hippie pink brown
-                fontcolora: '#433030',
-                fontcolorb: '#433030'
-            }
-        };
-        var barSharedProps = barColorSchemes.night;
+        var barSharedProps = this.props.barGraphColors;
         barSharedProps.displayLabels = false;
         barSharedProps.hoverLabelColor = '#33627A';
         var mapData = this._getMapData(entries);
