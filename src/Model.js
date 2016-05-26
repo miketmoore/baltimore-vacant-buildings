@@ -9,9 +9,10 @@ function Model (debug) {
         rows: [],
         columns: [],
         index: new Map([
-            ['year-month-day', new Map()],
-            ['year-month', new Map()],
-            ['year', new Map()]
+            [':id', new Map()],
+            ['year', new Map()],
+            ['month', new Map()],
+            ['day', new Map()]
         ]),
         distinct: new Set(),
         policeDistrictLookup: new Map([
@@ -79,51 +80,37 @@ Model.prototype._mapColumns = function () {
     }
     this._mapped.columns = cols;
 };
-Model.prototype._indexRow = function (row) {
-    var id = row[':id'];
-
-    // Index row object by ID
-    if (!this.index.has(':id')) this.index.set(':id', new Map());
-    this.index.get(':id').set(id, row);
-
-    // Index row ID by year
-    var y = row['noticedate'].slice(0,4);
-    var m = row['noticedate'].slice(5,7);
-    var ym = row['noticedate'].slice(0,7);
-    var ymd = row['noticedate'].slice(0,10);
-
-    row.year = y;
-    row.month = m;
-    row.yearMonth = ym;
-    row.yearMonthDay = ymd;
-
-    function _index (key, val, clas) {
-        if (!this.index.get(key).has(val)) {
-            this.index.get(key).set(val, new clas());
-        }
-        return this.index.get(key).get(val);
+Model.prototype._indexRowDatePieces = function (row) {
+    var configs = [
+        { start: 0, end: 4, key: 'year' },
+        { start: 5, end: 7, key: 'month' },
+        { start: 8, end: 10, key: 'day' }
+    ];
+    var config, val;
+    var vals = [];
+    var index;
+    for ( var i = 0; i < configs.length; i++ ) {
+        config = configs[i];
+        val = row.noticedate.slice(config.start,config.end);
+        vals.push(val);
+        index = this.index.get(config.key);
+        if (!index.has(val)) index.set(val, new Set());
+        if (!index.get(val).has(row[':id'])) index.get(val).add(row[':id']);
+        row[config.key] = val;
     }
-
-    _index.call(this, 'year', y, Set).add(id);
-    _index.call(this, 'year-month', ym, Set).add(id);
-    _index.call(this, 'year-month-day', ymd, Set).add(id);
-
-    // Index row ID by all columns
+};
+Model.prototype._indexRowByCols = function (row) {
     var colObj;
     var i;
     var key;
+    var id = row[':id'];
     for ( i = 0; i < this.columns.length; i++ ) {
         colObj = this.columns[i];
         if (colObj) {
             key = colObj.key;
             if (key == ':id') continue;
-
-            if (!this.index.has(key)) {
-                this.index.set(key, new Map());
-            }
-            if (!this.index.get(key).has(row[key])) {
-                this.index.get(key).set(row[key], new Set());
-            }
+            if (!this.index.has(key)) this.index.set(key, new Map());
+            if (!this.index.get(key).has(row[key])) this.index.get(key).set(row[key], new Set());
             this.index.get(key).get(row[key]).add(id);
         }
     }
@@ -146,10 +133,13 @@ Model.prototype._mapRows = function () {
     var row;
     for (var i = 0, len = raw.length; i < len; i++) {
         row = this._mapRow(raw[i]);
-        this._indexRow(row);
+        this.index.get(':id').set(row[':id'], row);
+        this._indexRowByCols(row);
+        this._indexRowDatePieces(row);
         rows.push(row);
     }
     this._mapped.rows = rows;
+    console.log('_mapRows this._mapped.rows ', this._mapped.rows, this.index);
 
     if (this._debug) console.log('Distinct neighborhood: ', this.index.get('neighborhood').size);
     if (this._debug) console.log('Distinct policedistrict: ', this.index.get('policedistrict').size);
