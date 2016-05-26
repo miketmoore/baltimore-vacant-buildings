@@ -13,7 +13,6 @@ module.exports = React.createClass({
     getDefaultProps () {
         return {
             papers: [new paper.PaperScope(), new paper.PaperScope()],
-            months: ['01','02','03','04','05','06','07','08','09','10','11','12'],
             gridColumns: [
                 {"key":"buildingaddress","name":"Address","resizable":true},
                 {"key":"noticedate","name":"Notice Date","resizable":true},
@@ -27,7 +26,8 @@ module.exports = React.createClass({
         return {
             allYears: [],
             selectedYears: new Set(),
-            selectedMonths: new Set(['01']),
+            selectedMonths: new Set(),
+            selectedDays: new Set(),
             selectedCouncilDistricts: new Set(),
             selectedPoliceDistricts: new Set(),
             neighborhoods: [],
@@ -51,6 +51,16 @@ module.exports = React.createClass({
         } else {
             this.setState({
                 selectedMonths: new Set(val)
+            });
+        }
+    },
+    _daySelectChangeHandler (val) {
+        var a = this.state.selectedDays;
+        if (!val.length) {
+            this._clearDayHandler();
+        } else {
+            this.setState({
+                selectedDays: new Set(val)
             });
         }
     },
@@ -93,6 +103,11 @@ module.exports = React.createClass({
             selectedYears: new Set()
         });
     },
+    _clearDayHandler () {
+        this.setState({
+            selectedDays: new Set()
+        });
+    },
     _clear (key, data) {
         var a = this.state[key];
         data ? a.delete(data.label) : a.clear();
@@ -112,15 +127,18 @@ module.exports = React.createClass({
         var byYear = model.index.get('year');
         var allYears = Array.from(byYear.keys()).sort();
         var selectedYears = new Set([allYears[allYears.length-1]]);
+        var selectedMonths = new Set([Array.from(model.index.get('months'))[0]]);
 
         var filters = {};
         if (this.state.selectedYears.size) filters.year = Array.from(this.state.selectedYears.values());
         if (this.state.selectedMonths.size) filters.month = Array.from(this.state.selectedMonths.values());
+        if (this.state.selectedDays.size) filters.day = Array.from(this.state.selectedDays.values());
         var entries = this.props.model.filter(filters);
 
         this.setState({
             allYears: allYears,
             selectedYears: selectedYears,
+            selectedMonths: selectedMonths,
             neighborhoods: Array.from(model.index.get('neighborhood').keys()).sort()
         });
     },
@@ -138,6 +156,7 @@ module.exports = React.createClass({
         var filters = {};
         if (this.state.selectedYears.size) filters.year = Array.from(this.state.selectedYears.values());
         if (this.state.selectedMonths.size) filters.month = Array.from(this.state.selectedMonths.values());
+        if (this.state.selectedDays.size) filters.day = Array.from(this.state.selectedDays.values());
         var entriesByDate = model.filter(filters);
 
         // Get full, distinct list
@@ -162,6 +181,7 @@ module.exports = React.createClass({
         var filters = {};
         if (this.state.selectedYears.size) filters.year = Array.from(this.state.selectedYears.values());
         if (this.state.selectedMonths.size) filters.month = Array.from(this.state.selectedMonths.values());
+        if (this.state.selectedDays.size) filters.day = Array.from(this.state.selectedDays.values());
         if (this.state.selectedCouncilDistricts.size) filters.councildistrict = Array.from(this.state.selectedCouncilDistricts.values());
         if (this.state.selectedPoliceDistricts.size) filters.policedistrict = Array.from(this.state.selectedPoliceDistricts.values());
         if (this.state.selectedNeighborhoods.size) filters.neighborhood = Array.from(this.state.selectedNeighborhoods);
@@ -196,26 +216,12 @@ module.exports = React.createClass({
     _getTagsData () {
         var data = [];
         var config = [
-            { key: 'selectedYears', label: 'Years', onDelete: function () {
-                // to avoid passing event, which triggers a false positive
-                this._clearYearHandler();
-            }.bind(this), isSet: true },
-            { key: 'selectedMonths', label: 'Months', onDelete: function () {
-                // to avoid passing event, which triggers a false positive
-                this._clearMonthHandler();
-            }.bind(this), isSet: true },
-            { key: 'selectedCouncilDistricts', label: 'Council Districts', onDelete: function () {
-                // to avoid passing event, which triggers a false positive
-                this._clearCouncilHandler();
-            }.bind(this), isSet: true },
-            { key: 'selectedPoliceDistricts', label: 'Police Districts', onDelete: function () {
-                // to avoid passing event, which triggers a false positive
-                this._clearPoliceHandler();
-            }.bind(this), isSet: true },
-            { key: 'selectedNeighborhoods', label: 'Neighborhoods', onDelete: function () {
-                // to avoid passing event, which triggers a false positive
-                this._clearNeighborhoodHandler();
-            }.bind(this), isSet: true }
+            { key: 'selectedYears', label: 'Years', onDelete: this._clearYearHandler, isSet: true },
+            { key: 'selectedMonths', label: 'Months', onDelete: this._clearMonthHandler, isSet: true },
+            { key: 'selectedDays', label: 'Days', onDelete: this._clearDayHandler, isSet: true },
+            { key: 'selectedCouncilDistricts', label: 'Council Districts', onDelete: this._clearCouncilHandler, isSet: true },
+            { key: 'selectedPoliceDistricts', label: 'Police Districts', onDelete: this._clearPoliceHandler, isSet: true },
+            { key: 'selectedNeighborhoods', label: 'Neighborhoods', onDelete: this._clearNeighborhoodHandler, isSet: true }
         ];
         config.forEach((c) => {
             if ((c.isSet && this.state[c.key].size) || (!c.isSet && this.state[c.key])) data.push(c);
@@ -278,7 +284,7 @@ module.exports = React.createClass({
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col-md-4">
+                            <div className="col-md-2">
                                 <h4>Years</h4>
                                 <Multiselect
                                     placeholder="Search..."
@@ -287,13 +293,22 @@ module.exports = React.createClass({
                                     value={Array.from(this.state.selectedYears.values())}
                                 />
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-2">
                                 <h4>Months</h4>
                                 <Multiselect
                                     placeholder="Search..."
-                                    data={this.props.months}
+                                    data={this.props.model.index.get('months')}
                                     onChange={this._monthSelectChangeHandler}
                                     value={Array.from(this.state.selectedMonths.values())}
+                                />
+                            </div>
+                            <div className="col-md-2">
+                                <h4>Days</h4>
+                                <Multiselect
+                                    placeholder="Search..."
+                                    data={this.props.model.index.get('days')}
+                                    onChange={this._daySelectChangeHandler}
+                                    value={Array.from(this.state.selectedDays.values())}
                                 />
                             </div>
                         </div>

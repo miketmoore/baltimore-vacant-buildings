@@ -14,7 +14,6 @@ function Model (debug) {
             ['month', new Map()],
             ['day', new Map()]
         ]),
-        distinct: new Set(),
         policeDistrictLookup: new Map([
             ['toDisplay', new Map([
                 ['NORTHERN', 'N'],
@@ -40,7 +39,20 @@ function Model (debug) {
             ])]
         ])
     };
-}
+
+    this._indexRange(1,31,'days');
+    this._indexRange(1,12,'months');
+};
+Model.prototype._indexRange = function (a, b, key) {
+    var range = [];
+    var str;
+    for ( var i = a; i <= b; i++ ) {
+        if (i <= 9) str = '0' + i;
+        else str = i;
+        range.push(str);
+    }
+    this._mapped.index.set(key, range);
+};
 Object.defineProperties(Model.prototype, {
     "rows": { get: function () { return this._mapped.rows; } },
     "columns": { get: function () { return this._mapped.columns; } },
