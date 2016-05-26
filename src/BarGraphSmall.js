@@ -135,6 +135,7 @@ module.exports = React.createClass({
 
             path.on('mouseenter', function (e) {
                 var item = e.target;
+                document.body.style.cursor = 'pointer';
                 if (!item.data.isSelected && (item.className != 'PointText')) {
                     // not selected so show slightly darker hue
                     item.fillColor = this.props.barcolorhover;
@@ -144,6 +145,7 @@ module.exports = React.createClass({
 
             path.on('mouseleave', function (e) {
                 var item = e.target;
+                document.body.style.cursor = 'auto';
                 if (!item.data.isSelected && (item.className != 'PointText')) {
                     // not selected so show default color
                     item.fillColor = this.props.barcolor;
