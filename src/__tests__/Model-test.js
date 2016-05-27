@@ -209,7 +209,6 @@ describe('Model ', function() {
                     model.should.have.property('index');
                     var index = model.index;
                     index.should.be.instanceof(Map);
-                    index.size.should.equal(10);
                     done();
                 } catch (e) {
                     done(e)
