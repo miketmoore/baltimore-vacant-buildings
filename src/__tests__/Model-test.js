@@ -17,9 +17,11 @@ var sampleDataColDefs = [
     null,
     null,
     null,
-    null,
-    null,
-    null, {
+    null,{
+        fieldName: 'block'
+    },{
+        fieldName: 'lot'
+    }, {
         fieldName: 'buildingaddress'
     }, {
         fieldName: 'noticedate'
@@ -112,8 +114,9 @@ var expectedData = [{
         'location':[null, "39.28809997", "-76.64432508", null, false],
         'year':'2016',
         'month':'01',
-        'yearMonth':'2016-01',
-        'yearMonthDay':'2016-01-29'
+        'day':'29',
+        'block': '0209',
+        'lot': '003'
 }, {
         ':id':"20DF27E8-7666-457E-A573-B62090C05E6B",
         'buildingaddress':"2110 HERBERT ST",
@@ -124,8 +127,9 @@ var expectedData = [{
         'location':[null, "39.31033313", "-76.65199363", null, false],
         'year':'2016',
         'month':'02',
-        'yearMonth':'2016-02',
-        'yearMonthDay':'2016-02-03'
+        'day':'03',
+        'block': '3205',
+        'lot': '046'
 }, {
         ':id':"9FEFF7FE-D255-4683-9714-0783AC07F70E",
         'buildingaddress':"2037 HOLLINS ST",
@@ -136,8 +140,9 @@ var expectedData = [{
         'location':[null, "39.2868309", "-76.64959404", null, false],
         'year':'1993',
         'month':'05',
-        'yearMonth':'1993-05',
-        'yearMonthDay':'1993-05-20'
+        'day':'20',
+        'block': '0223',
+        'lot': '019'
 }];
 
 describe('Model ', function() {
