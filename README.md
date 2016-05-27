@@ -8,7 +8,7 @@ The data is from [Open Baltimore](https://data.baltimorecity.gov/) and is loaded
 
 https://data.baltimorecity.gov/Housing-Development/Vacant-Buildings/qqcv-ihn5
 
-![Screenshot](/images/baltimore-vacant-buildings-screenshot.PNG?raw=true "Screenshot")
+![Screenshot](/images/baltimore-vacant-buildings.PNG?raw=true "Screenshot")
 
 ## Dependencies
 
