@@ -11,6 +11,16 @@ var Multiselect = require('react-widgets').Multiselect;
 module.exports = React.createClass({
     getDefaultProps () {
         return {
+            filterConfigs: [
+                {'key':'year','stateKey':'selectedYears'},
+                {'key':'month','stateKey':'selectedMonths'},
+                {'key':'day','stateKey':'selectedDays'},
+                {'key':'councildistrict','stateKey':'selectedCouncilDistricts'},
+                {'key':'policedistrict','stateKey':'selectedPoliceDistricts'},
+                {'key':'block','stateKey':'selectedBlocks'},
+                {'key':'lot','stateKey':'selectedLots'},
+                {'key':'neighborhood','stateKey':'selectedNeighborhoods'}
+            ],
             papers: [
                 new paper.PaperScope(),
                 new paper.PaperScope(),
@@ -174,14 +184,18 @@ module.exports = React.createClass({
     },
     _getEntries () {
         var filters = {};
-        if (this.state.selectedYears.size) filters.year = Array.from(this.state.selectedYears.values());
-        if (this.state.selectedMonths.size) filters.month = Array.from(this.state.selectedMonths.values());
-        if (this.state.selectedDays.size) filters.day = Array.from(this.state.selectedDays.values());
-        if (this.state.selectedCouncilDistricts.size) filters.councildistrict = Array.from(this.state.selectedCouncilDistricts.values());
-        if (this.state.selectedPoliceDistricts.size) filters.policedistrict = Array.from(this.state.selectedPoliceDistricts.values());
-        if (this.state.selectedNeighborhoods.size) filters.neighborhood = Array.from(this.state.selectedNeighborhoods);
-        if (this.state.selectedBlocks.size) filters.block = Array.from(this.state.selectedBlocks);
-        if (this.state.selectedLots.size) filters.lot = Array.from(this.state.selectedLots);
+        var filterConfigs = this.props.filterConfigs;
+        var config;
+        var key;
+        var stateKey;
+        for ( var i = 0, len = filterConfigs.length; i < len; i++ ) {
+            config = filterConfigs[i];
+            key = config.key;
+            stateKey = config.stateKey;
+            if (this.state[stateKey].size) {
+                filters[key] = Array.from(this.state[stateKey].values());
+            }
+        }
         return this.props.model.filter(filters) || [];
     },
     _sortBarGraphData (key) {
