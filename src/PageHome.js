@@ -12,14 +12,14 @@ module.exports = React.createClass({
     getDefaultProps () {
         return {
             filterConfigs: [
-                {'key':'year','stateKey':'selectedYears'},
-                {'key':'month','stateKey':'selectedMonths'},
-                {'key':'day','stateKey':'selectedDays'},
-                {'key':'councildistrict','stateKey':'selectedCouncilDistricts'},
-                {'key':'policedistrict','stateKey':'selectedPoliceDistricts'},
-                {'key':'block','stateKey':'selectedBlocks'},
-                {'key':'lot','stateKey':'selectedLots'},
-                {'key':'neighborhood','stateKey':'selectedNeighborhoods'}
+                {'key':'year','stateKey':'years'},
+                {'key':'month','stateKey':'months'},
+                {'key':'day','stateKey':'days'},
+                {'key':'councildistrict','stateKey':'councilDistricts'},
+                {'key':'policedistrict','stateKey':'policeDistricts'},
+                {'key':'block','stateKey':'blocks'},
+                {'key':'lot','stateKey':'lots'},
+                {'key':'neighborhood','stateKey':'neighborhoods'}
             ],
             papers: [
                 new paper.PaperScope(),
@@ -50,14 +50,14 @@ module.exports = React.createClass({
     },
     getInitialState() {
         return {
-            selectedYears: new Set(),
-            selectedMonths: new Set(),
-            selectedDays: new Set(),
-            selectedCouncilDistricts: new Set(),
-            selectedPoliceDistricts: new Set(),
-            selectedBlocks: new Set(),
-            selectedLots: new Set(),
-            selectedNeighborhoods: new Set()
+            years: new Set(),
+            months: new Set(),
+            days: new Set(),
+            councilDistricts: new Set(),
+            policeDistricts: new Set(),
+            blocks: new Set(),
+            lots: new Set(),
+            neighborhoods: new Set()
         };
     },
     _dateSelectChangeHandler (key, clearer, val) {
@@ -79,7 +79,7 @@ module.exports = React.createClass({
         this.setState(stateObj);
     },
     _neighborhoodChangeHandler (val) {
-        var key = 'selectedNeighborhoods';
+        var key = 'neighborhoods';
         var a = this.state[key];
         if (!val.length) {
             this._clear(key);
@@ -90,7 +90,7 @@ module.exports = React.createClass({
         }
     },
     _blockChangeHandler (val) {
-        var key = 'selectedBlocks';
+        var key = 'blocks';
         var a = this.state[key];
         if (!val.length) {
             this._clear(key);
@@ -101,7 +101,7 @@ module.exports = React.createClass({
         }
     },
     _lotChangeHandler (val) {
-        var key = 'selectedLots';
+        var key = 'lots';
         var a = this.state[key];
         if (!val.length) {
             this._clear(key);
@@ -124,18 +124,18 @@ module.exports = React.createClass({
         var byYear = model.index.get('year');
 
         var allYears = model.index.get('sortedYears');
-        var selectedYears = new Set([allYears[allYears.length-1]]);
-        var selectedMonths = new Set([Array.from(model.index.get('months'))[0]]);
+        var years = new Set([allYears[allYears.length-1]]);
+        var months = new Set([Array.from(model.index.get('months'))[0]]);
 
         var filters = {};
-        if (this.state.selectedYears.size) filters.year = Array.from(this.state.selectedYears.values());
-        if (this.state.selectedMonths.size) filters.month = Array.from(this.state.selectedMonths.values());
-        if (this.state.selectedDays.size) filters.day = Array.from(this.state.selectedDays.values());
+        if (this.state.years.size) filters.year = Array.from(this.state.years.values());
+        if (this.state.months.size) filters.month = Array.from(this.state.months.values());
+        if (this.state.days.size) filters.day = Array.from(this.state.days.values());
         var entries = this.props.model.filter(filters);
 
         this.setState({
-            selectedYears: selectedYears,
-            selectedMonths: selectedMonths
+            years: years,
+            months: months
         });
     },
     componentWillReceiveProps (props) {
@@ -213,14 +213,14 @@ module.exports = React.createClass({
     _getTagsData () {
         var data = [];
         var config = [
-            { key: 'selectedYears', label: 'Years', onDelete: () => this._clear('selectedYears') },
-            { key: 'selectedMonths', label: 'Months', onDelete: () => this._clear('selectedMonths') },
-            { key: 'selectedDays', label: 'Days', onDelete: () => this._clear('selectedDays') },
-            { key: 'selectedCouncilDistricts', label: 'Council Districts', onDelete: () => this._clear('selectedCouncilDistricts') },
-            { key: 'selectedPoliceDistricts', label: 'Police Districts', onDelete: () => this._clear('selectedPoliceDistricts') },
-            { key: 'selectedNeighborhoods', label: 'Neighborhoods', onDelete: () => this._clear('selectedNeighborhoods') },
-            { key: 'selectedBlocks', label: 'Blocks', onDelete: () => this._clear('selectedBlocks') },
-            { key: 'selectedLots', label: 'Lots', onDelete: () => this._clear('selectedLots') }
+            { key: 'years', label: 'Years', onDelete: () => this._clear('years') },
+            { key: 'months', label: 'Months', onDelete: () => this._clear('months') },
+            { key: 'days', label: 'Days', onDelete: () => this._clear('days') },
+            { key: 'councilDistricts', label: 'Council Districts', onDelete: () => this._clear('councilDistricts') },
+            { key: 'policeDistricts', label: 'Police Districts', onDelete: () => this._clear('policeDistricts') },
+            { key: 'neighborhoods', label: 'Neighborhoods', onDelete: () => this._clear('neighborhoods') },
+            { key: 'blocks', label: 'Blocks', onDelete: () => this._clear('blocks') },
+            { key: 'lots', label: 'Lots', onDelete: () => this._clear('lots') }
         ];
         config.forEach((c) => {
             if (this.state[c.key].size) data.push(c);
@@ -281,8 +281,8 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('sortedYears')}
-                                            onChange={(val) => this._dateSelectChangeHandler('selectedYears', () => this._clear('selectedYears'), val)}
-                                            value={Array.from(this.state.selectedYears.values())}
+                                            onChange={(val) => this._dateSelectChangeHandler('years', () => this._clear('years'), val)}
+                                            value={Array.from(this.state.years.values())}
                                         />
                                     </div>
                                     <div className="col-md-4">
@@ -290,8 +290,8 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('months')}
-                                            onChange={(val) => this._dateSelectChangeHandler('selectedMonths', () => this._clear('selectedMonths'), val)}
-                                            value={Array.from(this.state.selectedMonths.values())}
+                                            onChange={(val) => this._dateSelectChangeHandler('months', () => this._clear('months'), val)}
+                                            value={Array.from(this.state.months.values())}
                                         />
                                     </div>
                                     <div className="col-md-4">
@@ -299,8 +299,8 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('days')}
-                                            onChange={(val) => { this._dateSelectChangeHandler('selectedDays', () => this._clear('selectedDays'), val) }}
-                                            value={Array.from(this.state.selectedDays.values())}
+                                            onChange={(val) => { this._dateSelectChangeHandler('days', () => this._clear('days'), val) }}
+                                            value={Array.from(this.state.days.values())}
                                         />
                                     </div>
                                 </div>
@@ -311,7 +311,7 @@ module.exports = React.createClass({
                                             placeholder="Search..."
                                             data={this.props.model.index.get('sortedNeighborhoods')}
                                             onChange={this._neighborhoodChangeHandler}
-                                            value={Array.from(this.state.selectedNeighborhoods.values())}
+                                            value={Array.from(this.state.neighborhoods.values())}
                                         />
                                     </div>
                                 </div>
@@ -322,7 +322,7 @@ module.exports = React.createClass({
                                             placeholder="Search..."
                                             data={this.props.model.index.get('sortedBlocks')}
                                             onChange={this._blockChangeHandler}
-                                            value={Array.from(this.state.selectedBlocks.values())}
+                                            value={Array.from(this.state.blocks.values())}
                                         />
                                     </div>
                                     <div className="col-md-3">
@@ -331,7 +331,7 @@ module.exports = React.createClass({
                                             placeholder="Search..."
                                             data={this.props.model.index.get('sortedLots')}
                                             onChange={this._lotChangeHandler}
-                                            value={Array.from(this.state.selectedLots.values())}
+                                            value={Array.from(this.state.lots.values())}
                                         />
                                     </div>
                                 </div>
@@ -341,10 +341,10 @@ module.exports = React.createClass({
                                             <h5>Council Districts</h5>
                                             <BarGraphSmall
                                                 data={this._getBarGraphData('councildistrict')}
-                                                selectedLabels={this.state.selectedCouncilDistricts}
-                                                clickHandler={(data) => { this._graphClickHandler('selectedCouncilDistricts', data.label) }}
-                                                clickHandlerB={(data) => { this._clear('selectedCouncilDistricts', data) }}
-                                                bgroundClickHandler={(data) => { this._clear('selectedCouncilDistricts', data) }}
+                                                selectedLabels={this.state.councilDistricts}
+                                                clickHandler={(data) => { this._graphClickHandler('councilDistricts', data.label) }}
+                                                clickHandlerB={(data) => { this._clear('councilDistricts', data) }}
+                                                bgroundClickHandler={(data) => { this._clear('councilDistricts', data) }}
                                                 paper={this.props.papers[0]}
                                                 sort={this._sortBarGraphData('councildistrict')}
                                                 {...barSharedProps}
@@ -352,10 +352,10 @@ module.exports = React.createClass({
                                             <h5>Police Districts</h5>
                                             <BarGraphSmall
                                                 data={this._getBarGraphData('policedistrict')}
-                                                selectedLabels={this.state.selectedPoliceDistricts}
-                                                clickHandler={(data) => { this._graphClickHandler('selectedPoliceDistricts', data.label) }}
-                                                clickHandlerB={(data) => { this._clear('selectedPoliceDistricts', data) }}
-                                                bgroundClickHandler={(data) => { this._clear('selectedPoliceDistricts', data) }}
+                                                selectedLabels={this.state.policeDistricts}
+                                                clickHandler={(data) => { this._graphClickHandler('policeDistricts', data.label) }}
+                                                clickHandlerB={(data) => { this._clear('policeDistricts', data) }}
+                                                bgroundClickHandler={(data) => { this._clear('policeDistricts', data) }}
                                                 paper={this.props.papers[1]}
                                                 sort={this._sortBarGraphData('policedistrict')}
                                                 {...barSharedProps}
@@ -365,10 +365,10 @@ module.exports = React.createClass({
                                             <h5>Years</h5>
                                             <BarGraphSmall
                                                 data={this._getBarGraphData('year')}
-                                                selectedLabels={this.state.selectedYears}
-                                                clickHandler={(data) => { this._graphClickHandler('selectedYears', data.label) }}
-                                                clickHandlerB={(data) => { this._clear('selectedYears', data) }}
-                                                bgroundClickHandler={(data) => { this._clear('selectedYears', data) }}
+                                                selectedLabels={this.state.years}
+                                                clickHandler={(data) => { this._graphClickHandler('years', data.label) }}
+                                                clickHandlerB={(data) => { this._clear('years', data) }}
+                                                bgroundClickHandler={(data) => { this._clear('years', data) }}
                                                 paper={this.props.papers[2]}
                                                 sort={this._sortBarGraphData('year')}
                                                 {...barSharedProps}
@@ -376,10 +376,10 @@ module.exports = React.createClass({
                                             <h5>Months</h5>
                                             <BarGraphSmall
                                                 data={this._getBarGraphData('month')}
-                                                selectedLabels={this.state.selectedMonths}
-                                                clickHandler={(data) => { this._graphClickHandler('selectedMonths', data.label) }}
-                                                clickHandlerB={(data) => { this._clear('selectedMonths', data) }}
-                                                bgroundClickHandler={(data) => { this._clear('selectedMonths', data) }}
+                                                selectedLabels={this.state.months}
+                                                clickHandler={(data) => { this._graphClickHandler('months', data.label) }}
+                                                clickHandlerB={(data) => { this._clear('months', data) }}
+                                                bgroundClickHandler={(data) => { this._clear('months', data) }}
                                                 paper={this.props.papers[3]}
                                                 sort={this._sortBarGraphData('month')}
                                                 {...barSharedProps}
