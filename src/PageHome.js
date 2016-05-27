@@ -60,10 +60,10 @@ module.exports = React.createClass({
             neighborhoods: new Set()
         };
     },
-    _dateSelectChangeHandler (key, clearer, val) {
+    _dateSelectChangeHandler (key, val) {
         var a = this.state[key];
         if (!val.length) {
-            clearer();
+            this._clear(key);
         } else {
             var stateObj = {};
             stateObj[key] = new Set(val);
@@ -281,7 +281,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('sortedYears')}
-                                            onChange={(val) => this._dateSelectChangeHandler('years', () => this._clear('years'), val)}
+                                            onChange={(val) => this._dateSelectChangeHandler('years', val)}
                                             value={Array.from(this.state.years.values())}
                                         />
                                     </div>
@@ -290,7 +290,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('months')}
-                                            onChange={(val) => this._dateSelectChangeHandler('months', () => this._clear('months'), val)}
+                                            onChange={(val) => this._dateSelectChangeHandler('months', val)}
                                             value={Array.from(this.state.months.values())}
                                         />
                                     </div>
@@ -299,7 +299,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('days')}
-                                            onChange={(val) => { this._dateSelectChangeHandler('days', () => this._clear('days'), val) }}
+                                            onChange={(val) => { this._dateSelectChangeHandler('days', val) }}
                                             value={Array.from(this.state.days.values())}
                                         />
                                     </div>
