@@ -28,6 +28,8 @@ https://data.baltimorecity.gov/Housing-Development/Vacant-Buildings/qqcv-ihn5
 
 2. Install and build. This will install packages via `npm` and `bower` and it will also build the app.
 
+    Note: this will take a few minutes. It will also install PhantomJS, so that takes a bit of time
+
     ```
     npm install
     ```
@@ -41,6 +43,8 @@ https://data.baltimorecity.gov/Housing-Development/Vacant-Buildings/qqcv-ihn5
 4. Open in browser at http://localhost:3000
 
 ## Automated Tests
+
+Note: this uses PhantomJS
 
 ```
 npm test
