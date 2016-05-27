@@ -78,17 +78,6 @@ module.exports = React.createClass({
         stateObj[key] = a;
         this.setState(stateObj);
     },
-    _neighborhoodChangeHandler (val) {
-        var key = 'neighborhoods';
-        var a = this.state[key];
-        if (!val.length) {
-            this._clear(key);
-        } else {
-            var a = {};
-            a[key] = new Set(val);
-            this.setState(a);
-        }
-    },
     _blockChangeHandler (val) {
         var key = 'blocks';
         var a = this.state[key];
@@ -310,7 +299,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('sortedNeighborhoods')}
-                                            onChange={this._neighborhoodChangeHandler}
+                                            onChange={(val) => this._changeHandler('neighborhoods', val)}
                                             value={Array.from(this.state.neighborhoods.values())}
                                         />
                                     </div>
