@@ -50,6 +50,14 @@ Note: this uses PhantomJS
 npm test
 ```
 
+## Developers
+
+```
+npm run forever
+// This will run webpack with the --watch arg, so each change will trigger a rebuild
+npm run watch
+```
+
 ## About
 
 - React, UI, Single Page App
