@@ -90,9 +90,13 @@ module.exports = React.createClass({
         console.log('_clear ', key);
         var a = this.state[key];
         data ? a.delete(data.label) : a.clear();
-        var stateObj = { isBusy: true };
+        var stateObj = { isBusy: true, doUpdate: true };
         stateObj[key] = a;
         this.setState(stateObj);
+    },
+    shouldComponentUpdate (nextProps, nextState) {
+        console.log('shouldComponentUpdate ', arguments);
+        return true;
     },
     // Update state with actual data
     _init () {
