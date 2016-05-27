@@ -220,12 +220,8 @@ module.exports = React.createClass({
             { key: 'selectedYears', label: 'Years', onDelete: () => this._clear('selectedYears') },
             { key: 'selectedMonths', label: 'Months', onDelete: () => this._clear('selectedMonths') },
             { key: 'selectedDays', label: 'Days', onDelete: () => this._clear('selectedDays') },
-            { key: 'selectedCouncilDistricts', label: 'Council Districts', onDelete: () => {
-                this._clear('selectedCouncilDistricts');
-            } },
-            { key: 'selectedPoliceDistricts', label: 'Police Districts', onDelete: () => {
-                this._clear('selectedPoliceDistricts');
-            } },
+            { key: 'selectedCouncilDistricts', label: 'Council Districts', onDelete: () => this._clear('selectedCouncilDistricts') },
+            { key: 'selectedPoliceDistricts', label: 'Police Districts', onDelete: () => this._clear('selectedPoliceDistricts') },
             { key: 'selectedNeighborhoods', label: 'Neighborhoods', onDelete: this._clearNeighborhoodHandler },
             { key: 'selectedBlocks', label: 'Blocks', onDelete: this._clearBlockHandler },
             { key: 'selectedLots', label: 'Lots', onDelete: this._clearLotHandler }
