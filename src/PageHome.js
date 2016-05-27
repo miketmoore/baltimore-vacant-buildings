@@ -37,14 +37,19 @@ module.exports = React.createClass({
                 {"key":"block","name":"Block","resizable":true},
                 {"key":"lot","name":"Lot","resizable":true}
             ],
-            barGraphColors: {
+            barGraphProps: {
                 bgroundcolor: '#4EC0CC',
                 barcolor: "#33627A",
                 barcolorhover: "#719BB0",
                 barcolorselected: "#BEE7FA",
                 bordercolor: '#7790D9',
                 fontcolora: "#FFFFFF",
-                fontcolorb: "#33627A"
+                fontcolorb: "#33627A",
+                displayLabels: false,
+                hoverLabelColor: '#33627A',
+                viewHeight: 70,
+                barMax: 50,
+                barMargin: 3
             }
         };
     },
@@ -209,13 +214,6 @@ module.exports = React.createClass({
             };
         };
 
-        var barSharedProps = this.props.barGraphColors;
-        barSharedProps.displayLabels = false;
-        barSharedProps.hoverLabelColor = '#33627A';
-        barSharedProps.viewHeight = 70;
-        barSharedProps.barMax = 50;
-        barSharedProps.barMargin = 3;
-
         var mapData = this._getMapData(entries);
         var tagsData = this._getTagsData();
 
@@ -314,7 +312,7 @@ module.exports = React.createClass({
                                                 bgroundClickHandler={(data) => { this._clear('councilDistricts', data) }}
                                                 paper={this.props.papers[0]}
                                                 sort={this._sortBarGraphData('councildistrict')}
-                                                {...barSharedProps}
+                                                {...this.props.barGraphProps}
                                             />
                                             <h5>Police Districts</h5>
                                             <BarGraphSmall
@@ -325,7 +323,7 @@ module.exports = React.createClass({
                                                 bgroundClickHandler={(data) => { this._clear('policeDistricts', data) }}
                                                 paper={this.props.papers[1]}
                                                 sort={this._sortBarGraphData('policedistrict')}
-                                                {...barSharedProps}
+                                                {...this.props.barGraphProps}
                                             />
                                         </div>
                                         <div className="col-md-6">
@@ -338,7 +336,7 @@ module.exports = React.createClass({
                                                 bgroundClickHandler={(data) => { this._clear('years', data) }}
                                                 paper={this.props.papers[2]}
                                                 sort={this._sortBarGraphData('year')}
-                                                {...barSharedProps}
+                                                {...this.props.barGraphProps}
                                             />
                                             <h5>Months</h5>
                                             <BarGraphSmall
@@ -349,7 +347,7 @@ module.exports = React.createClass({
                                                 bgroundClickHandler={(data) => { this._clear('months', data) }}
                                                 paper={this.props.papers[3]}
                                                 sort={this._sortBarGraphData('month')}
-                                                {...barSharedProps}
+                                                {...this.props.barGraphProps}
                                             />
                                         </div>
                                     </div>
