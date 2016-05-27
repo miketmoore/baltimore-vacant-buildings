@@ -89,13 +89,14 @@ module.exports = React.createClass({
         }
     },
     _blockChangeHandler (val) {
-        var a = this.state.selectedBlocks;
+        var key = 'selectedBlocks';
+        var a = this.state[key];
         if (!val.length) {
-            this._clearBlockHandler();
+            this._clear(key);
         } else {
-            this.setState({
-                selectedBlocks: new Set(val)
-            });
+            var a = {};
+            a[key] = new Set(val);
+            this.setState(a);
         }
     },
     _lotChangeHandler (val) {
@@ -107,11 +108,6 @@ module.exports = React.createClass({
                 selectedLots: new Set(val)
             });
         }
-    },
-    _clearBlockHandler () {
-        this.setState({
-            selectedBlocks: new Set()
-        });
     },
     _clearLotHandler () {
         this.setState({
@@ -231,7 +227,7 @@ module.exports = React.createClass({
             { key: 'selectedCouncilDistricts', label: 'Council Districts', onDelete: () => this._clear('selectedCouncilDistricts') },
             { key: 'selectedPoliceDistricts', label: 'Police Districts', onDelete: () => this._clear('selectedPoliceDistricts') },
             { key: 'selectedNeighborhoods', label: 'Neighborhoods', onDelete: this._clearNeighborhoodHandler },
-            { key: 'selectedBlocks', label: 'Blocks', onDelete: this._clearBlockHandler },
+            { key: 'selectedBlocks', label: 'Blocks', onDelete: () => this._clear('selectedBlocks') },
             { key: 'selectedLots', label: 'Lots', onDelete: this._clearLotHandler }
         ];
         config.forEach((c) => {
