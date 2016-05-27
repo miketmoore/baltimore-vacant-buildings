@@ -14,7 +14,7 @@ module.exports = React.createClass({
             viewWidth: 250,
             viewHeight: 110,
             barMargin: 6,
-            barMin: 18,
+            barMin: 10,
             barMax: 85,
             clickHandler: function () {},
             clickHandlerB: function () {},

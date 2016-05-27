@@ -12,31 +12,10 @@ function Model (debug) {
             [':id', new Map()],
             ['year', new Map()],
             ['month', new Map()],
-            ['day', new Map()]
-        ]),
-        policeDistrictLookup: new Map([
-            ['toDisplay', new Map([
-                ['NORTHERN', 'N'],
-                ['WESTERN', 'W'],
-                ['SOUTHERN', 'S'],
-                ['NORTHEASTERN', 'NE'],
-                ['SOUTHEASTERN', 'SE'],
-                ['SOUTHWESTERN', 'SW'],
-                ['NORTHWESTERN', 'NW'],
-                ['EASTERN', 'E'],
-                ['CENTRAL', 'C']
-            ])],
-            ['toValue', new Map([
-                ['N', 'NORTHERN'],
-                ['W', 'WESTERN'],
-                ['S', 'SOUTHERN'],
-                ['NE', 'NORTHEASTERN'],
-                ['SE', 'SOUTHEASTERN'],
-                ['SW', 'SOUTHWESTERN'],
-                ['NW', 'NORTHWESTERN'],
-                ['E', 'EASTERN'],
-                ['C', 'CENTRAL']
-            ])]
+            ['day', new Map()],
+            ['sortedBlocks', []],
+            ['sortedLots', []],
+            ['sortedYears', []]
         ])
     };
 
@@ -48,7 +27,7 @@ Model.prototype._indexRange = function (a, b, key) {
     var str;
     for ( var i = a; i <= b; i++ ) {
         if (i <= 9) str = '0' + i;
-        else str = i;
+        else str = i.toString();
         range.push(str);
     }
     this._mapped.index.set(key, range);
@@ -56,8 +35,7 @@ Model.prototype._indexRange = function (a, b, key) {
 Object.defineProperties(Model.prototype, {
     "rows": { get: function () { return this._mapped.rows; } },
     "columns": { get: function () { return this._mapped.columns; } },
-    "index": { get: function () { return this._mapped.index; } },
-    "policeDistrictLookup": { get: function () { return this._mapped.policeDistrictLookup; } }
+    "index": { get: function () { return this._mapped.index; } }
 });
 Model.prototype.setRaw = function (raw) {
     if (!raw) return Promise.reject('setRaw failed - no raw data passed');
@@ -67,6 +45,9 @@ Model.prototype.setRaw = function (raw) {
     if (!raw.data) return Promise.reject('setRaw failed - raw data is missing "data" property');
     this._raw = raw;
     this.map();
+    this.index.set('sortedBlocks', Array.from(this.index.get('block').keys()).sort());
+    this.index.set('sortedLots', Array.from(this.index.get('lot').keys()).sort());
+    this.index.set('sortedYears', Array.from(this.index.get('year').keys()).sort());
     return Promise.resolve();
 };
 Model.prototype.map = function () {
@@ -90,6 +71,7 @@ Model.prototype._mapColumns = function () {
         }
 
     }
+    console.log('_mapColumns final ', cols);
     this._mapped.columns = cols;
 };
 Model.prototype._indexRowDatePieces = function (row) {
@@ -131,6 +113,8 @@ Model.prototype._indexRowByCols = function (row) {
 Model.prototype._mapRow = function (raw) {
     return {
         ':id': raw[1],
+        'block': raw[9],
+        'lot': raw[10],
         'buildingaddress': raw[11],
         'noticedate': raw[12].slice(0,10), // slice off time since times are all the same
         'neighborhood': raw[13],

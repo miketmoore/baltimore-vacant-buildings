@@ -12,13 +12,21 @@ var Multiselect = require('react-widgets').Multiselect;
 module.exports = React.createClass({
     getDefaultProps () {
         return {
-            papers: [new paper.PaperScope(), new paper.PaperScope()],
+            papers: [
+                new paper.PaperScope(),
+                new paper.PaperScope(),
+                new paper.PaperScope(),
+                new paper.PaperScope(),
+                new paper.PaperScope()
+            ],
             gridColumns: [
                 {"key":"buildingaddress","name":"Address","resizable":true},
                 {"key":"noticedate","name":"Notice Date","resizable":true},
                 {"key":"neighborhood","name":"Neighborhood","resizable":true},
                 {"key":"policedistrict","name":"Police District","resizable":true},
-                {"key":"councildistrict","name":"Council District","resizable":true}
+                {"key":"councildistrict","name":"Council District","resizable":true},
+                {"key":"block","name":"Block","resizable":true},
+                {"key":"lot","name":"Lot","resizable":true}
             ],
             barGraphColors: {
                 bgroundcolor: '#4EC0CC',
@@ -33,12 +41,13 @@ module.exports = React.createClass({
     },
     getInitialState() {
         return {
-            allYears: [],
             selectedYears: new Set(),
             selectedMonths: new Set(),
             selectedDays: new Set(),
             selectedCouncilDistricts: new Set(),
             selectedPoliceDistricts: new Set(),
+            selectedBlocks: new Set(),
+            selectedLots: new Set(),
             neighborhoods: [],
             selectedNeighborhoods: new Set()
         };
@@ -71,15 +80,39 @@ module.exports = React.createClass({
             });
         }
     },
-    _policeGraphClickHandler (data) {
-        this._graphClickHandler('selectedPoliceDistricts', data.label);
+    _blockChangeHandler (val) {
+        var a = this.state.selectedBlocks;
+        if (!val.length) {
+            this._clearBlockHandler();
+        } else {
+            this.setState({
+                selectedBlocks: new Set(val)
+            });
+        }
     },
-    _councilGraphClickHandler (data) {
-        this._graphClickHandler('selectedCouncilDistricts', data.label);
+    _lotChangeHandler (val) {
+        var a = this.state.selectedLots;
+        if (!val.length) {
+            this._clearLotHandler();
+        } else {
+            this.setState({
+                selectedLots: new Set(val)
+            });
+        }
     },
     _clearMonthHandler () {
         this.setState({
             selectedMonths: new Set()
+        });
+    },
+    _clearBlockHandler () {
+        this.setState({
+            selectedBlocks: new Set()
+        });
+    },
+    _clearLotHandler () {
+        this.setState({
+            selectedLots: new Set()
         });
     },
     _clearNeighborhoodHandler () {
@@ -104,17 +137,12 @@ module.exports = React.createClass({
         stateObj[key] = a;
         this.setState(stateObj);
     },
-    _clearPoliceHandler (data) {
-        this._clear('selectedPoliceDistricts', data);
-    },
-    _clearCouncilHandler (data) {
-        this._clear('selectedCouncilDistricts', data);
-    },
     // Update state with actual data
     _init () {
         var model = this.props.model;
         var byYear = model.index.get('year');
-        var allYears = Array.from(byYear.keys()).sort();
+        
+        var allYears = model.index.get('sortedYears');
         var selectedYears = new Set([allYears[allYears.length-1]]);
         var selectedMonths = new Set([Array.from(model.index.get('months'))[0]]);
 
@@ -125,7 +153,6 @@ module.exports = React.createClass({
         var entries = this.props.model.filter(filters);
 
         this.setState({
-            allYears: allYears,
             selectedYears: selectedYears,
             selectedMonths: selectedMonths,
             neighborhoods: Array.from(model.index.get('neighborhood').keys()).sort()
@@ -172,6 +199,8 @@ module.exports = React.createClass({
         if (this.state.selectedCouncilDistricts.size) filters.councildistrict = Array.from(this.state.selectedCouncilDistricts.values());
         if (this.state.selectedPoliceDistricts.size) filters.policedistrict = Array.from(this.state.selectedPoliceDistricts.values());
         if (this.state.selectedNeighborhoods.size) filters.neighborhood = Array.from(this.state.selectedNeighborhoods);
+        if (this.state.selectedBlocks.size) filters.block = Array.from(this.state.selectedBlocks);
+        if (this.state.selectedLots.size) filters.lot = Array.from(this.state.selectedLots);
         return this.props.model.filter(filters) || [];
     },
     _sortBarGraphData (key) {
@@ -203,15 +232,21 @@ module.exports = React.createClass({
     _getTagsData () {
         var data = [];
         var config = [
-            { key: 'selectedYears', label: 'Years', onDelete: this._clearYearHandler, isSet: true },
-            { key: 'selectedMonths', label: 'Months', onDelete: this._clearMonthHandler, isSet: true },
-            { key: 'selectedDays', label: 'Days', onDelete: this._clearDayHandler, isSet: true },
-            { key: 'selectedCouncilDistricts', label: 'Council Districts', onDelete: this._clearCouncilHandler, isSet: true },
-            { key: 'selectedPoliceDistricts', label: 'Police Districts', onDelete: this._clearPoliceHandler, isSet: true },
-            { key: 'selectedNeighborhoods', label: 'Neighborhoods', onDelete: this._clearNeighborhoodHandler, isSet: true }
+            { key: 'selectedYears', label: 'Years', onDelete: this._clearYearHandler },
+            { key: 'selectedMonths', label: 'Months', onDelete: this._clearMonthHandler },
+            { key: 'selectedDays', label: 'Days', onDelete: this._clearDayHandler },
+            { key: 'selectedCouncilDistricts', label: 'Council Districts', onDelete: () => {
+                this._clear('selectedCouncilDistricts');
+            } },
+            { key: 'selectedPoliceDistricts', label: 'Police Districts', onDelete: () => {
+                this._clear('selectedPoliceDistricts');
+            } },
+            { key: 'selectedNeighborhoods', label: 'Neighborhoods', onDelete: this._clearNeighborhoodHandler },
+            { key: 'selectedBlocks', label: 'Blocks', onDelete: this._clearBlockHandler },
+            { key: 'selectedLots', label: 'Lots', onDelete: this._clearLotHandler }
         ];
         config.forEach((c) => {
-            if ((c.isSet && this.state[c.key].size) || (!c.isSet && this.state[c.key])) data.push(c);
+            if (this.state[c.key].size) data.push(c);
         }, this);
         return data;
     },
@@ -224,13 +259,19 @@ module.exports = React.createClass({
                 "noticedate":row['noticedate'],
                 "neighborhood":row["neighborhood"],
                 'policedistrict':row['policedistrict'],
-                'councildistrict':row['councildistrict']
+                'councildistrict':row['councildistrict'],
+                'block':row['block'],
+                'lot':row['lot']
             };
         };
 
         var barSharedProps = this.props.barGraphColors;
         barSharedProps.displayLabels = false;
         barSharedProps.hoverLabelColor = '#33627A';
+        barSharedProps.viewHeight = 70;
+        barSharedProps.barMax = 50;
+        barSharedProps.barMargin = 3;
+
         var mapData = this._getMapData(entries);
         var tagsData = this._getTagsData();
 
@@ -262,7 +303,7 @@ module.exports = React.createClass({
                                         <h5>Years</h5>
                                         <Multiselect
                                             placeholder="Search..."
-                                            data={this.state.allYears}
+                                            data={this.props.model.index.get('sortedYears')}
                                             onChange={(val) => this._dateSelectChangeHandler('selectedYears', this._clearYearHandler, val)}
                                             value={Array.from(this.state.selectedYears.values())}
                                         />
@@ -281,7 +322,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('days')}
-                                            onChange={(val) => this._dateSelectChangeHandler('selectedDays', this._clearDayHandler, val)}
+                                            onChange={(val) => { this._dateSelectChangeHandler('selectedDays', this._clearDayHandler, val) }}
                                             value={Array.from(this.state.selectedDays.values())}
                                         />
                                     </div>
@@ -298,31 +339,75 @@ module.exports = React.createClass({
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-md-6">
-                                        <h5>Council Districts</h5>
-                                        <BarGraphSmall
-                                            data={this._getBarGraphData('councildistrict')}
-                                            selectedLabels={this.state.selectedCouncilDistricts}
-                                            clickHandler={this._councilGraphClickHandler}
-                                            clickHandlerB={this._clearCouncilHandler}
-                                            bgroundClickHandler={this._clearCouncilHandler}
-                                            paper={this.props.papers[0]}
-                                            sort={this._sortBarGraphData('councildistrict')}
-                                            {...barSharedProps}
+                                    <div className="col-md-3">
+                                        <h5>Blocks</h5>
+                                        <Multiselect
+                                            placeholder="Search..."
+                                            data={this.props.model.index.get('sortedBlocks')}
+                                            onChange={this._blockChangeHandler}
+                                            value={Array.from(this.state.selectedBlocks.values())}
                                         />
                                     </div>
-                                    <div className="col-md-6">
-                                        <h5>Police Districts</h5>
-                                        <BarGraphSmall
-                                            data={this._getBarGraphData('policedistrict')}
-                                            selectedLabels={this.state.selectedPoliceDistricts}
-                                            clickHandler={this._policeGraphClickHandler}
-                                            clickHandlerB={this._clearPoliceHandler}
-                                            bgroundClickHandler={this._clearPoliceHandler}
-                                            paper={this.props.papers[1]}
-                                            sort={this._sortBarGraphData('policedistrict')}
-                                            {...barSharedProps}
+                                    <div className="col-md-3">
+                                        <h5>Lots</h5>
+                                        <Multiselect
+                                            placeholder="Search..."
+                                            data={this.props.model.index.get('sortedLots')}
+                                            onChange={this._lotChangeHandler}
+                                            value={Array.from(this.state.selectedLots.values())}
                                         />
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <div className="col-md-6">
+                                            <h5>Council Districts</h5>
+                                            <BarGraphSmall
+                                                data={this._getBarGraphData('councildistrict')}
+                                                selectedLabels={this.state.selectedCouncilDistricts}
+                                                clickHandler={(data) => { this._graphClickHandler('selectedCouncilDistricts', data.label) }}
+                                                clickHandlerB={(data) => { this._clear('selectedCouncilDistricts', data) }}
+                                                bgroundClickHandler={(data) => { this._clear('selectedCouncilDistricts', data) }}
+                                                paper={this.props.papers[0]}
+                                                sort={this._sortBarGraphData('councildistrict')}
+                                                {...barSharedProps}
+                                            />
+                                            <h5>Police Districts</h5>
+                                            <BarGraphSmall
+                                                data={this._getBarGraphData('policedistrict')}
+                                                selectedLabels={this.state.selectedPoliceDistricts}
+                                                clickHandler={(data) => { this._graphClickHandler('selectedPoliceDistricts', data.label) }}
+                                                clickHandlerB={(data) => { this._clear('selectedPoliceDistricts', data) }}
+                                                bgroundClickHandler={(data) => { this._clear('selectedPoliceDistricts', data) }}
+                                                paper={this.props.papers[1]}
+                                                sort={this._sortBarGraphData('policedistrict')}
+                                                {...barSharedProps}
+                                            />
+                                        </div>
+                                        <div className="col-md-6">
+                                            <h5>Years</h5>
+                                            <BarGraphSmall
+                                                data={this._getBarGraphData('year')}
+                                                selectedLabels={this.state.selectedYears}
+                                                clickHandler={(data) => { this._graphClickHandler('selectedYears', data.label) }}
+                                                clickHandlerB={(data) => { this._clear('selectedYears', data) }}
+                                                bgroundClickHandler={(data) => { this._clear('selectedYears', data) }}
+                                                paper={this.props.papers[2]}
+                                                sort={this._sortBarGraphData('year')}
+                                                {...barSharedProps}
+                                            />
+                                            <h5>Months</h5>
+                                            <BarGraphSmall
+                                                data={this._getBarGraphData('month')}
+                                                selectedLabels={this.state.selectedMonths}
+                                                clickHandler={(data) => { this._graphClickHandler('selectedMonths', data.label) }}
+                                                clickHandlerB={(data) => { this._clear('selectedMonths', data) }}
+                                                bgroundClickHandler={(data) => { this._clear('selectedMonths', data) }}
+                                                paper={this.props.papers[3]}
+                                                sort={this._sortBarGraphData('month')}
+                                                {...barSharedProps}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
