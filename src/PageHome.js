@@ -100,11 +100,6 @@ module.exports = React.createClass({
             });
         }
     },
-    _clearMonthHandler () {
-        this.setState({
-            selectedMonths: new Set()
-        });
-    },
     _clearBlockHandler () {
         this.setState({
             selectedBlocks: new Set()
@@ -118,16 +113,6 @@ module.exports = React.createClass({
     _clearNeighborhoodHandler () {
         this.setState({
             selectedNeighborhoods: new Set()
-        });
-    },
-    _clearYearHandler () {
-        this.setState({
-            selectedYears: new Set()
-        });
-    },
-    _clearDayHandler () {
-        this.setState({
-            selectedDays: new Set()
         });
     },
     _clear (key, data) {
@@ -232,9 +217,9 @@ module.exports = React.createClass({
     _getTagsData () {
         var data = [];
         var config = [
-            { key: 'selectedYears', label: 'Years', onDelete: this._clearYearHandler },
-            { key: 'selectedMonths', label: 'Months', onDelete: this._clearMonthHandler },
-            { key: 'selectedDays', label: 'Days', onDelete: this._clearDayHandler },
+            { key: 'selectedYears', label: 'Years', onDelete: () => this._clear('selectedYears') },
+            { key: 'selectedMonths', label: 'Months', onDelete: () => this._clear('selectedMonths') },
+            { key: 'selectedDays', label: 'Days', onDelete: () => this._clear('selectedDays') },
             { key: 'selectedCouncilDistricts', label: 'Council Districts', onDelete: () => {
                 this._clear('selectedCouncilDistricts');
             } },
@@ -304,7 +289,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('sortedYears')}
-                                            onChange={(val) => this._dateSelectChangeHandler('selectedYears', this._clearYearHandler, val)}
+                                            onChange={(val) => this._dateSelectChangeHandler('selectedYears', () => this._clear('selectedYears'), val)}
                                             value={Array.from(this.state.selectedYears.values())}
                                         />
                                     </div>
@@ -313,7 +298,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('months')}
-                                            onChange={(val) => this._dateSelectChangeHandler('selectedMonths', this._clearMonthHandler, val)}
+                                            onChange={(val) => this._dateSelectChangeHandler('selectedMonths', () => this._clear('selectedMonths'), val)}
                                             value={Array.from(this.state.selectedMonths.values())}
                                         />
                                     </div>
@@ -322,7 +307,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('days')}
-                                            onChange={(val) => { this._dateSelectChangeHandler('selectedDays', this._clearDayHandler, val) }}
+                                            onChange={(val) => { this._dateSelectChangeHandler('selectedDays', () => this._clear('selectedDays'), val) }}
                                             value={Array.from(this.state.selectedDays.values())}
                                         />
                                     </div>
