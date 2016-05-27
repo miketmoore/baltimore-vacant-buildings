@@ -1,6 +1,7 @@
 var React = require('react');
 var Layout = require('./Layout');
 var MapView = require('./MapView');
+var Spinner = require('react-spinkit');
 var Tags = require('./Tags');
 var BarGraphSmall = require('./BarGraphSmall');
 import ReactDataGrid from 'react-data-grid/addons';
@@ -55,6 +56,8 @@ module.exports = React.createClass({
     },
     getInitialState() {
         return {
+            entries: [],
+            isBusy: true,
             years: new Set(),
             months: new Set(),
             days: new Set(),
@@ -84,14 +87,16 @@ module.exports = React.createClass({
         this.setState(stateObj);
     },
     _clear (key, data) {
+        console.log('_clear ', key);
         var a = this.state[key];
         data ? a.delete(data.label) : a.clear();
-        var stateObj = {};
+        var stateObj = { isBusy: true };
         stateObj[key] = a;
         this.setState(stateObj);
     },
     // Update state with actual data
     _init () {
+        console.log('_init');
         var model = this.props.model;
         var byYear = model.index.get('year');
 
@@ -99,13 +104,21 @@ module.exports = React.createClass({
         var years = new Set([allYears[allYears.length-1]]);
         var months = new Set([Array.from(model.index.get('months'))[0]]);
 
+        console.log('_init 1');
         var filters = {};
-        if (this.state.years.size) filters.year = Array.from(this.state.years.values());
-        if (this.state.months.size) filters.month = Array.from(this.state.months.values());
-        if (this.state.days.size) filters.day = Array.from(this.state.days.values());
+
+        // Set this from local var since they aren't on state yet
+        filters.year = Array.from(years.values());
+        filters.month = Array.from(months.values());
+
+        if (this.state.selectedDays.size) filters.day = Array.from(this.state.selectedDays.values());
+
         var entries = this.props.model.filter(filters);
+        console.log('_init 2 ', entries.length);
 
         this.setState({
+            entries: entries,
+            isBusy: false,
             years: years,
             months: months
         });
@@ -203,7 +216,8 @@ module.exports = React.createClass({
         return data;
     },
     render () {
-        var entries = this._getEntries.call(this);
+        //var entries = this._getEntries.call(this);
+        var entries = this.state.entries;
         function gridRowGetter (i) {
             var row = entries[i];
             return {
@@ -220,18 +234,25 @@ module.exports = React.createClass({
         var mapData = this._getMapData(entries);
         var tagsData = this._getTagsData();
 
+        var mapSection = (<Spinner spinnerName="chasing-dots" />);
+        if (!this.state.isBusy) {
+            mapSection = entries.length;
+            {/*
+                mapSection = (
+                    <MapView
+                        width="100%"
+                        height="350px"
+                        data={mapData} />
+                );
+            */}
+        }
         return (
             <Layout>
                 <div className="row">
                     <div className="col-md-4">
                         <div className="panel panel-default">
                             <div className="panel-heading">Displaying {entries.length.toLocaleString()}/{this.props.model.rows.length.toLocaleString()} Vacancies</div>
-                            <div className="panel-body">
-                                <MapView
-                                    width="100%"
-                                    height="350px"
-                                    data={mapData} />
-                            </div>
+                            <div className="panel-body">{mapSection}</div>
                         </div>
                     </div>
                     <div className="col-md-8">
