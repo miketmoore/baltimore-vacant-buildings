@@ -78,28 +78,6 @@ module.exports = React.createClass({
         stateObj[key] = a;
         this.setState(stateObj);
     },
-    _blockChangeHandler (val) {
-        var key = 'blocks';
-        var a = this.state[key];
-        if (!val.length) {
-            this._clear(key);
-        } else {
-            var a = {};
-            a[key] = new Set(val);
-            this.setState(a);
-        }
-    },
-    _lotChangeHandler (val) {
-        var key = 'lots';
-        var a = this.state[key];
-        if (!val.length) {
-            this._clear(key);
-        } else {
-            var a = {};
-            a[key] = new Set(val);
-            this.setState(a);
-        }
-    },
     _clear (key, data) {
         var a = this.state[key];
         data ? a.delete(data.label) : a.clear();
@@ -310,7 +288,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('sortedBlocks')}
-                                            onChange={this._blockChangeHandler}
+                                            onChange={(val) => this._changeHandler('blocks', val)}
                                             value={Array.from(this.state.blocks.values())}
                                         />
                                     </div>
@@ -319,7 +297,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('sortedLots')}
-                                            onChange={this._lotChangeHandler}
+                                            onChange={(val) => this._changeHandler('lots', val)}
                                             value={Array.from(this.state.lots.values())}
                                         />
                                     </div>
