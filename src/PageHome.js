@@ -79,13 +79,14 @@ module.exports = React.createClass({
         this.setState(stateObj);
     },
     _neighborhoodChangeHandler (val) {
-        var a = this.state.selectedNeighborhoods;
+        var key = 'selectedNeighborhoods';
+        var a = this.state[key];
         if (!val.length) {
-            this._clearNeighborhoodHandler();
+            this._clear(key);
         } else {
-            this.setState({
-                selectedNeighborhoods: new Set(val)
-            });
+            var a = {};
+            a[key] = new Set(val);
+            this.setState(a);
         }
     },
     _blockChangeHandler (val) {
@@ -109,11 +110,6 @@ module.exports = React.createClass({
             a[key] = new Set(val);
             this.setState(a);
         }
-    },
-    _clearNeighborhoodHandler () {
-        this.setState({
-            selectedNeighborhoods: new Set()
-        });
     },
     _clear (key, data) {
         var a = this.state[key];
@@ -222,7 +218,7 @@ module.exports = React.createClass({
             { key: 'selectedDays', label: 'Days', onDelete: () => this._clear('selectedDays') },
             { key: 'selectedCouncilDistricts', label: 'Council Districts', onDelete: () => this._clear('selectedCouncilDistricts') },
             { key: 'selectedPoliceDistricts', label: 'Police Districts', onDelete: () => this._clear('selectedPoliceDistricts') },
-            { key: 'selectedNeighborhoods', label: 'Neighborhoods', onDelete: this._clearNeighborhoodHandler },
+            { key: 'selectedNeighborhoods', label: 'Neighborhoods', onDelete: () => this._clear('selectedNeighborhoods') },
             { key: 'selectedBlocks', label: 'Blocks', onDelete: () => this._clear('selectedBlocks') },
             { key: 'selectedLots', label: 'Lots', onDelete: () => this._clear('selectedLots') }
         ];
