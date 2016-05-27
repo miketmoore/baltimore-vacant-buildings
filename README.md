@@ -42,7 +42,7 @@ https://data.baltimorecity.gov/Housing-Development/Vacant-Buildings/qqcv-ihn5
     
 4. Open in browser at http://localhost:3000
 
-## Automated Tests
+## Automated Tests & Coverage
 
 Note: this uses PhantomJS
 
