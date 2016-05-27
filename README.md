@@ -40,50 +40,47 @@ https://data.baltimorecity.gov/Housing-Development/Vacant-Buildings/qqcv-ihn5
     
 4. Open in browser at http://localhost:3000
 
-## Under the Hood
+## About
 
-### React
+- React, UI, Single Page App
+    - This is the first time I've used React. I have experience with angular, backbone, bootstrap, and jquery
+    - I jumped in the deep end and didn't RTFM, so I tripped up on the virtual DOM and how jQuery "works" with React
+    - Ultimately, I chose to ditch jQuery and that is a special sort of feeling! 
+    - Ditching jQuery meant pulling in some UI libs for react, such as `react-widgets`
+    - I am using `react-router-component` to make this a single page app. First I tried using `react-router`, but had trouble implementing it. 
+    - I got to build some custom React components and this was a lot of fun - the props/state paradigm is really nice
+    
+- paper.js
+    - I used paper.js for drawing the custom bar graphs
+    - It was quite a challenge figuring out how to wire this component to render the graph on page load and when switching to the route from another 
+    - Another challenge was managing multiple `PaperScope` instances... I'm not totally satisfied with how I did this. The parent component has to pass a `PaperScope` instance right now. 
+    - Why draw a bar graph with paper.js... because it was fun. I've never written a custom bar graph and I had to learn about normalizing the data set.
+    - The bar graph is reusable, so right now there are four instances of the same component.
+    - I would like to learn how to make the canvas responsive, as the fixed size is a bit of a bummer
+    
+- Data model
+    - I created a simple JS constructor that handles indexing the raw data after the initial load
+    - The model exposes a `filter` method, which is used in the `PageHome` component for all of the ... filtering!
+    - The use of the filter method could be optimized, as well as the filter method itself
+    - I made use of some es6 `Map` and `Set` instances. I like these, especially `Set`, in accord with `Array.from()`
 
-- Since I didn't RTFM at first, I ran into some difficulty learning the React lifecycle
-- I initially tried to use jQuery, but ran into trouble. After reading more from the online community about jQuery and React, I chose to ditch jQuery completely. Everything worked much better after that.
-- I used a few different UI libs for React: 
-    - `react-widgets` for `DropdownList` and `MultiSelect`
-    - `react-google-maps`
-    - `react-router-component`
-    - `react-data-grid`
-- Custom React components
-  - This was the fun part!
-  
-### Data model
-
-- This is a simple JS constructor that is nice and intimate with the Open Baltimore data. They get along well together.
-- I implemented a filter method here that is used whenever a UI filter is interacted with. I think there are some optimizations I can make here at a later time.
-- The model indexes the data by it's fields/columns in some es6 `Map` and `Set` instances
-
-### CSS layout and styling 
-
-- Twitter bootstrap (CSS only)
- 
-### HTML5 Canvas Drawing
-
-- PaperJS for drawing custom visualizations on the HTML5 canvas
-- I struggled a bit learning how to maintain multiple `PaperScope` instances, but once this was ironed out, I was able to support two separate scopes and two separate canvases on screen at once.
+- CSS layout and styling 
+    - I went with Twitter Bootstrap (CSS only) here because I've used it and didn't wanted to focus on the functionality and data initially
+    - I'd love to replace this with something different or customize the existing theme/aesthetic 
    
-### Server application
+- Server application 
+    - Express
+    - I did a minimum of work here - just auto-generated an express app and updated the view
  
-- Express
-- I did a minimum of work here - just auto-generated an express app and updated the view
- 
-### Transpiling es6 to es5 
+- Transpiling 
+    - I am using webpack and babel to transpile my es6 code to es5
+    - This was the first time I've done this and was surprised that it can be debugged in the browser (with the map)
 
-- webpack and babel
-
-### Automated testing
-
-- Karma, mocha, chai, sinon, and PhantomJS for automated testing
-  - This was challenging for me because of the transpiling necessary
-
-The app is written with some es6 spattered about, so the browser code is transpiled to es5 via webpack and babel. 
+- Automated testing
+    - Karma, mocha, chai, sinon, and PhantomJS for automated testing
+    - This was challenging for me because of the transpiling that was necessary
+    - I still have a lot of tests to write - I only tested my custom model
+    - I need to learn how to test React components that render in the DOM 
 
 ## Automated Tests
 
