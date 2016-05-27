@@ -71,7 +71,7 @@ Model.prototype._mapColumns = function () {
         }
 
     }
-    console.log('_mapColumns final ', cols);
+    if (this._debug) console.log('_mapColumns final ', cols);
     this._mapped.columns = cols;
 };
 Model.prototype._indexRowDatePieces = function (row) {
