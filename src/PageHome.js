@@ -60,7 +60,7 @@ module.exports = React.createClass({
             neighborhoods: new Set()
         };
     },
-    _dateSelectChangeHandler (key, val) {
+    _changeHandler (key, val) {
         var a = this.state[key];
         if (!val.length) {
             this._clear(key);
@@ -281,7 +281,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('sortedYears')}
-                                            onChange={(val) => this._dateSelectChangeHandler('years', val)}
+                                            onChange={(val) => this._changeHandler('years', val)}
                                             value={Array.from(this.state.years.values())}
                                         />
                                     </div>
@@ -290,7 +290,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('months')}
-                                            onChange={(val) => this._dateSelectChangeHandler('months', val)}
+                                            onChange={(val) => this._changeHandler('months', val)}
                                             value={Array.from(this.state.months.values())}
                                         />
                                     </div>
@@ -299,7 +299,7 @@ module.exports = React.createClass({
                                         <Multiselect
                                             placeholder="Search..."
                                             data={this.props.model.index.get('days')}
-                                            onChange={(val) => { this._dateSelectChangeHandler('days', val) }}
+                                            onChange={(val) => { this._changeHandler('days', val) }}
                                             value={Array.from(this.state.days.values())}
                                         />
                                     </div>
