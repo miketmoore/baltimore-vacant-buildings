@@ -1,5 +1,9 @@
 # Baltimore Vacant Buildings - Data Visualization
 
+## Demo
+
+http://www.miketmoore.com:3000
+
 ## Description
 
 This is a web application that shows Baltimore City vacant buildings on Google Maps. It allows the user to filter the locations by variables such as date, neighborhood, and council district. 
