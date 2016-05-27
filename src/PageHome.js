@@ -1,7 +1,6 @@
 var React = require('react');
 var Layout = require('./Layout');
 var MapView = require('./MapView');
-var Button = require('./Button');
 var Tags = require('./Tags');
 var BarGraphSmall = require('./BarGraphSmall');
 import ReactDataGrid from 'react-data-grid/addons';
@@ -126,7 +125,7 @@ module.exports = React.createClass({
     _init () {
         var model = this.props.model;
         var byYear = model.index.get('year');
-        
+
         var allYears = model.index.get('sortedYears');
         var selectedYears = new Set([allYears[allYears.length-1]]);
         var selectedMonths = new Set([Array.from(model.index.get('months'))[0]]);
