@@ -40,6 +40,12 @@ https://data.baltimorecity.gov/Housing-Development/Vacant-Buildings/qqcv-ihn5
     
 4. Open in browser at http://localhost:3000
 
+## Automated Tests
+
+```
+npm test
+```
+
 ## About
 
 - React, UI, Single Page App
@@ -82,8 +88,3 @@ https://data.baltimorecity.gov/Housing-Development/Vacant-Buildings/qqcv-ihn5
     - I still have a lot of tests to write - I only tested my custom model
     - I need to learn how to test React components that render in the DOM 
 
-## Automated Tests
-
-```
-npm test
-```
