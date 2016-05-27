@@ -57,7 +57,6 @@ module.exports = React.createClass({
             selectedPoliceDistricts: new Set(),
             selectedBlocks: new Set(),
             selectedLots: new Set(),
-            neighborhoods: [],
             selectedNeighborhoods: new Set()
         };
     },
@@ -148,8 +147,7 @@ module.exports = React.createClass({
 
         this.setState({
             selectedYears: selectedYears,
-            selectedMonths: selectedMonths,
-            neighborhoods: Array.from(model.index.get('neighborhood').keys()).sort()
+            selectedMonths: selectedMonths
         });
     },
     componentWillReceiveProps (props) {
@@ -323,7 +321,7 @@ module.exports = React.createClass({
                                         <h5>Neighborhoods</h5>
                                         <Multiselect
                                             placeholder="Search..."
-                                            data={this.state.neighborhoods}
+                                            data={this.props.model.index.get('sortedNeighborhoods')}
                                             onChange={this._neighborhoodChangeHandler}
                                             value={Array.from(this.state.selectedNeighborhoods.values())}
                                         />

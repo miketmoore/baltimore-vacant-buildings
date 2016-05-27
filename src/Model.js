@@ -15,7 +15,8 @@ function Model (debug) {
             ['day', new Map()],
             ['sortedBlocks', []],
             ['sortedLots', []],
-            ['sortedYears', []]
+            ['sortedYears', []],
+            ['sortedNeighborhoods', []]
         ])
     };
 
@@ -48,6 +49,7 @@ Model.prototype.setRaw = function (raw) {
     this.index.set('sortedBlocks', Array.from(this.index.get('block').keys()).sort());
     this.index.set('sortedLots', Array.from(this.index.get('lot').keys()).sort());
     this.index.set('sortedYears', Array.from(this.index.get('year').keys()).sort());
+    this.index.set('sortedNeighborhoods', Array.from(this.index.get('neighborhood').keys()).sort());
     return Promise.resolve();
 };
 Model.prototype.map = function () {
