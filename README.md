@@ -86,9 +86,10 @@ npm test
     - I am using webpack and babel to transpile my es6 code to es5
     - This was the first time I've done this and was surprised that it can be debugged in the browser (with the map)
 
-- Automated testing
+- Automated testing & coverage
     - Karma, mocha, chai, sinon, and PhantomJS for automated testing
     - This was challenging for me because of the transpiling that was necessary
     - I still have a lot of tests to write - I only tested my custom model
-    - I need to learn how to test React components that render in the DOM 
+    - I need to learn how to test React components that render in the DOM
+    - I have used istanbul in the past, but this time had to use isparta (which uses istanbul) because of my use of es6
 
