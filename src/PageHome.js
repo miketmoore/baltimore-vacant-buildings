@@ -145,9 +145,6 @@ module.exports = React.createClass({
     componentWillReceiveProps (props) {
         this._init();
     },
-    componentWillMount () {
-        if (this.props.model.index.get('year').size) this._init();
-    },
     _getBarGraphData (key) {
         var model = this.props.model;
         if (!model.rows.length) return [];
