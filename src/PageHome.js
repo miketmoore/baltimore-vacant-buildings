@@ -185,17 +185,20 @@ module.exports = React.createClass({
     _getTagsData () {
         var data = [];
         var config = [
-            { key: 'years', label: 'Years', onDelete: () => this._clear('years') },
-            { key: 'months', label: 'Months', onDelete: () => this._clear('months') },
-            { key: 'days', label: 'Days', onDelete: () => this._clear('days') },
-            { key: 'councilDistricts', label: 'Council Districts', onDelete: () => this._clear('councilDistricts') },
-            { key: 'policeDistricts', label: 'Police Districts', onDelete: () => this._clear('policeDistricts') },
-            { key: 'neighborhoods', label: 'Neighborhoods', onDelete: () => this._clear('neighborhoods') },
-            { key: 'blocks', label: 'Blocks', onDelete: () => this._clear('blocks') },
-            { key: 'lots', label: 'Lots', onDelete: () => this._clear('lots') }
+            { key: 'years', label: 'Years' },
+            { key: 'months', label: 'Months' },
+            { key: 'days', label: 'Days' },
+            { key: 'councilDistricts', label: 'Council Districts' },
+            { key: 'policeDistricts', label: 'Police Districts' },
+            { key: 'neighborhoods', label: 'Neighborhoods' },
+            { key: 'blocks', label: 'Blocks' },
+            { key: 'lots', label: 'Lots' }
         ];
         config.forEach((c) => {
-            if (this.state[c.key].size) data.push(c);
+            if (this.state[c.key].size) {
+                c.onDelete = () => this._clear(c.key);
+                data.push(c);
+            }
         }, this);
         return data;
     },
