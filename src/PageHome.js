@@ -47,6 +47,7 @@ module.exports = React.createClass({
     },
     getInitialState() {
         return {
+            papers: [],
             years: new Set(),
             months: new Set(),
             days: new Set(),
@@ -54,8 +55,7 @@ module.exports = React.createClass({
             policeDistricts: new Set(),
             blocks: new Set(),
             lots: new Set(),
-            neighborhoods: new Set(),
-            papers: []
+            neighborhoods: new Set()
         };
     },
     _changeHandler (key, val) {
@@ -98,13 +98,15 @@ module.exports = React.createClass({
         if (this.state.days.size) filters.day = Array.from(this.state.days.values());
         var entries = this.props.model.filter(filters);
 
+        console.log('PageHome initializing PaperScope ', this.props.paper);
         var papers = [
-            new this.context.paper.PaperScope(),
-            new this.context.paper.PaperScope(),
-            new this.context.paper.PaperScope(),
-            new this.context.paper.PaperScope(),
-            new this.context.paper.PaperScope()
+            new this.props.paper.PaperScope(),
+            new this.props.paper.PaperScope(),
+            new this.props.paper.PaperScope(),
+            new this.props.paper.PaperScope(),
+            new this.props.paper.PaperScope()
         ];
+        console.log('PageHome initialized papers ', papers);
 
         this.setState({
             years: years,

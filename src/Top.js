@@ -7,16 +7,6 @@ var PageHome = require('./PageHome');
 var PageAbout = require('./PageAbout');
 
 module.exports = React.createClass({
-    getChildContext () {
-        return {
-            model: this.props.model,
-            XMLHttpRequest: this.props.XMLHttpRequest
-        }
-    },
-    childContextTypes: {
-        model: React.PropTypes.object,
-        XMLHttpRequest: React.PropTypes.func
-    },
     getInitialState () {
         return {
             title: 'Baltimore Vacant Buildings',
@@ -42,7 +32,7 @@ module.exports = React.createClass({
     },
     render () {
         return (
-            <Locations hash childProps={{model: this.props.model}}>
+            <Locations hash childProps={{model: this.props.model, paper: this.props.paper}}>
               <Location path="/" handler={PageHome} />
               <Location path="/about" handler={PageAbout} />
             </Locations>

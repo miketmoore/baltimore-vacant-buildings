@@ -226,24 +226,32 @@ module.exports = React.createClass({
         window.paper = this.props.paper;
         var pscope = this.props.paper;
         if (canvas) pscope.setup(canvas);
-        this._drawBackground(pscope);
-        var hoverLabel = this._drawHoverLabel(pscope);
-        var resp = this._map(this.props.data);
-        this._drawBars(pscope, resp, hoverLabel);
-        pscope.view.update();
-        var dims = {
-            width: this.props.viewWidth,
-            height: this.props.viewHeight
-        };
-        this.props.paper.project.view.viewSize = new paper.Size(dims);
-        this.props.paper.project.view.update();
+        if (pscope && pscope.project) {
+            // console.log('_draw w/pscope ', pscope);
+            // console.log(pscope);
+            this._drawBackground(pscope);
+            var hoverLabel = this._drawHoverLabel(pscope);
+            var resp = this._map(this.props.data);
+            this._drawBars(pscope, resp, hoverLabel);
+            pscope.view.update();
+            var dims = {
+                width: this.props.viewWidth,
+                height: this.props.viewHeight
+            };
+            this.props.paper.project.view.viewSize = new paper.Size(dims);
+            this.props.paper.project.view.update();
+        }
     },
     componentDidUpdate () {
-        if (this.props.paper) this._draw();
+        if (this.props.paper) {
+            var canvas = this.refs.canvas;
+            this._draw(canvas);
+        }
+    },
+    componentWillReceiveProps (props) {
+        // console.log('BarGraphSmall componentWillReceiveProps ', props);
     },
     componentDidMount () {
-        var canvas = this.refs.canvas;
-        if (this.props.paper) this._draw(canvas);
     },
     render () {
         return (
