@@ -9,6 +9,7 @@ describe('Top ', function() {
     var model;
     var XMLHttpRequest;
     var paper;
+    var PaperScope;
     beforeEach(function () {
         model = new Model();
 
@@ -17,7 +18,11 @@ describe('Top ', function() {
         XMLHttpRequest.prototype.onload = function () {};
         XMLHttpRequest.prototype.send = function () {};
 
-        paper = function () {};
+        PaperScope = function () {};
+        PaperScope.prototype.setup = function () {};
+        paper = {
+            PaperScope : PaperScope
+        };
     });
     it('should render', function () {
         var component = TestUtils.renderIntoDocument(
