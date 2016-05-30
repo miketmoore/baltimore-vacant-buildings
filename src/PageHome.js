@@ -54,7 +54,8 @@ module.exports = React.createClass({
             policeDistricts: new Set(),
             blocks: new Set(),
             lots: new Set(),
-            neighborhoods: new Set()
+            neighborhoods: new Set(),
+            papers: []
         };
     },
     _changeHandler (key, val) {
@@ -97,9 +98,18 @@ module.exports = React.createClass({
         if (this.state.days.size) filters.day = Array.from(this.state.days.values());
         var entries = this.props.model.filter(filters);
 
+        var papers = [
+            new this.context.paper.PaperScope(),
+            new this.context.paper.PaperScope(),
+            new this.context.paper.PaperScope(),
+            new this.context.paper.PaperScope(),
+            new this.context.paper.PaperScope()
+        ];
+
         this.setState({
             years: years,
-            months: months
+            months: months,
+            papers: papers
         });
     },
     componentWillReceiveProps (props) {
@@ -295,11 +305,50 @@ module.exports = React.createClass({
                                     <div className="col-md-12">
                                         <div className="col-md-6">
                                             <h5>Council Districts</h5>
+                                            <BarGraphSmall
+                                                data={this._getBarGraphData('councildistrict')}
+                                                selectedLabels={this.state.councilDistricts}
+                                                clickHandler={(data) => { this._graphClickHandler('councilDistricts', data.label) }}
+                                                clickHandlerB={(data) => { this._clear('councilDistricts', data) }}
+                                                bgroundClickHandler={(data) => { this._clear('councilDistricts', data) }}
+                                                paper={this.state.papers[0]}
+                                                sort={this._sortBarGraphData('councildistrict')}
+                                                {...this.props.barGraphProps}
+                                            />
                                             <h5>Police Districts</h5>
+                                            <BarGraphSmall
+                                                data={this._getBarGraphData('policedistrict')}
+                                                selectedLabels={this.state.policeDistricts}
+                                                clickHandler={(data) => { this._graphClickHandler('policeDistricts', data.label) }}
+                                                clickHandlerB={(data) => { this._clear('policeDistricts', data) }}
+                                                bgroundClickHandler={(data) => { this._clear('policeDistricts', data) }}
+                                                paper={this.state.papers[1]}
+                                                sort={this._sortBarGraphData('policedistrict')}
+                                                {...this.props.barGraphProps}
+                                            />
                                         </div>
                                         <div className="col-md-6">
                                             <h5>Years</h5>
+                                            <BarGraphSmall
+                                                data={this._getBarGraphData('year')}
+                                                selectedLabels={this.state.years}
+                                                clickHandler={(data) => { this._graphClickHandler('years', data.label) }}
+                                                clickHandlerB={(data) => { this._clear('years', data) }}
+                                                bgroundClickHandler={(data) => { this._clear('years', data) }}
+                                                paper={this.state.papers[2]}
+                                                sort={this._sortBarGraphData('year')}
+                                                {...this.props.barGraphProps}
+                                            />
                                             <h5>Months</h5>
+                                            <BarGraphSmall
+                                                data={this._getBarGraphData('month')}
+                                                selectedLabels={this.state.months}
+                                                clickHandler={(data) => { this._graphClickHandler('months', data.label) }}
+                                                clickHandlerB={(data) => { this._clear('months', data) }}
+                                                bgroundClickHandler={(data) => { this._clear('months', data) }}
+                                                paper={this.state.papers[3]}
+                                                sort={this._sortBarGraphData('month')}
+                                                {...this.props.barGraphProps}
                                             />
                                         </div>
                                     </div>

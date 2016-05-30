@@ -239,11 +239,11 @@ module.exports = React.createClass({
         this.props.paper.project.view.update();
     },
     componentDidUpdate () {
-        this._draw();
+        if (this.props.paper) this._draw();
     },
     componentDidMount () {
         var canvas = this.refs.canvas;
-        this._draw(canvas);
+        if (this.props.paper) this._draw(canvas);
     },
     render () {
         return (
