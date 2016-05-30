@@ -47,6 +47,7 @@ module.exports = React.createClass({
     },
     getInitialState() {
         return {
+            isInitialized: false,
             papers: [],
             years: new Set(),
             months: new Set(),
@@ -98,7 +99,6 @@ module.exports = React.createClass({
         if (this.state.days.size) filters.day = Array.from(this.state.days.values());
         var entries = this.props.model.filter(filters);
 
-        console.log('PageHome initializing PaperScope ', this.props.paper);
         var papers = [
             new this.props.paper.PaperScope(),
             new this.props.paper.PaperScope(),
@@ -106,16 +106,23 @@ module.exports = React.createClass({
             new this.props.paper.PaperScope(),
             new this.props.paper.PaperScope()
         ];
-        console.log('PageHome initialized papers ', papers);
 
         this.setState({
+            isInitialized: true,
             years: years,
             months: months,
             papers: papers
         });
     },
+    componentWillMount () {
+        if (!this.state.isInitialized) {
+            this._init();
+        }
+    },
     componentWillReceiveProps (props) {
-        this._init();
+        if (!this.state.isInitialized) {
+            this._init();
+        }
     },
     _getBarGraphData (key) {
         var model = this.props.model;

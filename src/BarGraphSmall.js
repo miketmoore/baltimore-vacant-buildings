@@ -227,8 +227,6 @@ module.exports = React.createClass({
         var pscope = this.props.paper;
         if (canvas) pscope.setup(canvas);
         if (pscope && pscope.project) {
-            // console.log('_draw w/pscope ', pscope);
-            // console.log(pscope);
             this._drawBackground(pscope);
             var hoverLabel = this._drawHoverLabel(pscope);
             var resp = this._map(this.props.data);
@@ -248,10 +246,9 @@ module.exports = React.createClass({
             this._draw(canvas);
         }
     },
-    componentWillReceiveProps (props) {
-        // console.log('BarGraphSmall componentWillReceiveProps ', props);
-    },
     componentDidMount () {
+        var canvas = this.refs.canvas;
+        this._draw(canvas);
     },
     render () {
         return (
