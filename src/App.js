@@ -1,6 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 require("react-data-grid/themes/react-data-grid.css");
+var paper = require('paper');
 
 var Top = require('./Top');
 var Model = require('./Model');
@@ -12,6 +13,7 @@ render(
         XMLHttpRequest={XMLHttpRequest}
         source={dataSource}
         model={model}
+        paper={paper}
     />,
     document.getElementById('app')
 );
