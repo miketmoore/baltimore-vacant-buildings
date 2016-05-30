@@ -3,18 +3,13 @@ var TestUtils = require('react/lib/ReactTestUtils');
 var expect = require('chai').expect;
 
 var Top = require('../Top');
+var Model = require('../Model');
 
 describe('Top ', function() {
-    var Model;
     var model;
     var XMLHttpRequest;
     var paper;
     beforeEach(function () {
-        Model = function () {
-            this.index = new Map();
-            this.filter = function () {};
-            this.rows = [];
-        };
         model = new Model();
 
         XMLHttpRequest = function () {};
