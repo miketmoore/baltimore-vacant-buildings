@@ -9,7 +9,7 @@ var dataSource = "data/baltimore-vacant-buildings.json";
 
 render(
     <Top 
-        xmlHttpRequest={XMLHttpRequest}
+        XMLHttpRequest={XMLHttpRequest}
         source={dataSource}
         model={model}
     />,
