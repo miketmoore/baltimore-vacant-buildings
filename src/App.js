@@ -7,7 +7,13 @@ var Top = require('./Top');
 
 var dataSource = "data/baltimore-vacant-buildings.json";
 
+var model = new Model();
+
 render(
-    <Top source={dataSource} />,
+    <Top 
+        xmlHttpRequest={XMLHttpRequest}
+        source={dataSource}
+        model={model}
+    />,
     document.getElementById('app')
 );

@@ -7,22 +7,31 @@ var PageHome = require('./PageHome');
 var PageAbout = require('./PageAbout');
 
 module.exports = React.createClass({
+    getChildContext () {
+        return {
+            model: this.props.model,
+            XMLHttpRequest: this.props.XMLHttpRequest
+        }
+    },
+    childContextTypes: {
+        model: React.PropTypes.object,
+        XMLHttpRequest: React.PropTypes.func
+    },
     getInitialState () {
         return {
             title: 'Baltimore Vacant Buildings',
-            model: new Model(),
             columns: []
         }
     },
     componentDidMount () {
-        var xhr = new XMLHttpRequest();
+        var xhr = new this.props.XMLHttpRequest();
         xhr.open('GET', encodeURI(this.props.source));
         xhr.onload = function() {
             if (xhr.status === 200) {
                 var data = JSON.parse(xhr.responseText);
-                this.state.model.setRaw(data);
+                this.props.model.setRaw(data);
                 this.setState({
-                    columns: this.state.model.columns
+                    columns: this.props.model.columns
                 });
             }
             else {
@@ -33,7 +42,7 @@ module.exports = React.createClass({
     },
     render () {
         return (
-            <Locations hash childProps={{model: this.state.model}}>
+            <Locations hash childProps={{model: this.props.model}}>
               <Location path="/" handler={PageHome} />
               <Location path="/about" handler={PageAbout} />
             </Locations>
