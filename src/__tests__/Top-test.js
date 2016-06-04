@@ -4,6 +4,7 @@ var expect = require('chai').expect;
 
 var Top = require('../Top');
 var Model = require('../Model');
+var ServerConnect = require('../ServerConnect');
 
 var sampleDataColDefs = [
     null, {
@@ -107,21 +108,11 @@ describe('Top ', function() {
     var XMLHttpRequest;
     var paper;
     var PaperScope;
-    var xhr;
     var server;
     beforeEach(function () {
         model = new Model();
 
         server = sinon.fakeServer.create();
-
-        // XMLHttpRequest = function () {
-        //     // xhr = this;
-        //     this.open = server.open;
-        //     return server;
-        // };
-        // XMLHttpRequest.prototype.open = function () {};
-        // XMLHttpRequest.prototype.onload = function () {};
-        // XMLHttpRequest.prototype.send = function () {};
 
         PaperScope = function () {};
         PaperScope.prototype.setup = function () {};
@@ -131,8 +122,7 @@ describe('Top ', function() {
 
     });
     it('should render', function () {
-        sinon.stub(Top.prototype, 'componentDidMount', function () {
-            console.error('blah');
+        sinon.stub(ServerConnect, 'connect', function () {
             this.props.model.setRaw(validData);
             this.setState({
                 columns: this.props.model.columns
@@ -145,6 +135,5 @@ describe('Top ', function() {
                 paper={paper}
             />
         );
-        xhr.onload();
     });
 });
