@@ -5,6 +5,7 @@ var Location = Router.Location;
 var Model = require('./Model');
 var PageHome = require('./PageHome');
 var PageAbout = require('./PageAbout');
+var ServerConnect = require('./ServerConnect');
 
 module.exports = React.createClass({
     getInitialState () {
@@ -14,21 +15,11 @@ module.exports = React.createClass({
         }
     },
     componentDidMount () {
-        var xhr = new this.props.XMLHttpRequest();
-        xhr.open('GET', encodeURI(this.props.source));
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                var data = JSON.parse(xhr.responseText);
-                this.props.model.setRaw(data);
-                this.setState({
-                    columns: this.props.model.columns
-                });
-            }
-            else {
-                throw new Error('Server request for data failed. Status: ' + xhr.status);
-            }
-        }.bind(this);
-        xhr.send();
+        ServerConnect.connect.call(this, {
+            model: this.props.model,
+            source: this.props.source,
+            XMLHttpRequest: this.props.XMLHttpRequest
+        });
     },
     render () {
         return (
