@@ -24,7 +24,8 @@ describe('Top ', function() {
     it('should render', function () {
         ServerConnect.connect({
             model: model,
-            XMLHttpRequest: xhr
+            XMLHttpRequest: xhr,
+            onload: function () {}
         });
         expect(requests.length).to.equal(1);
     });

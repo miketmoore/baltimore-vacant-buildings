@@ -19,16 +19,16 @@ module.exports = React.createClass({
             model: this.props.model,
             source: this.props.source,
             XMLHttpRequest: this.props.XMLHttpRequest,
-            onload: function (xhr) {
-                if (xhr.status === 200) {
-                    var data = JSON.parse(xhr.responseText);
+            onload: function () {
+                if (this.status === 200) {
+                    var data = JSON.parse(this.responseText);
                     params.model.setRaw(data);
                     this.setState({
                         columns: params.model.columns
                     });
                 }
                 else {
-                    throw new Error('Server request for data failed. Status: ' + xhr.status);
+                    throw new Error('Server request for data failed. Status: ' + this.status);
                 }
             }
         });
