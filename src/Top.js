@@ -15,6 +15,8 @@ module.exports = React.createClass({
         }
     },
     componentDidMount () {
+        var that = this;
+        var model = this.props.model;
         ServerConnect.connect.call(this, {
             model: this.props.model,
             source: this.props.source,
@@ -22,9 +24,9 @@ module.exports = React.createClass({
             onload: function () {
                 if (this.status === 200) {
                     var data = JSON.parse(this.responseText);
-                    params.model.setRaw(data);
-                    this.setState({
-                        columns: params.model.columns
+                    model.setRaw(data);
+                    that.setState({
+                        columns: model.columns
                     });
                 }
                 else {
