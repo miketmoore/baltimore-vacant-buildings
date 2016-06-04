@@ -1,8 +1,4 @@
 var React = require('react');
-//var TestUtils = require('react/lib/ReactTestUtils');
-//var expect = require('expect');
-//var should = require('should');
-//import {expect} from 'chai';
 var expect = require('chai').expect;
 
 var Model = require('../Model');
