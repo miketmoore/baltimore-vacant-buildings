@@ -35,6 +35,7 @@ module.exports = function(config) {
         frameworks: ['mocha', 'chai', 'sinon'],
 
         files: [
+            'test/common.js',
             'node_modules/es6-shim/es6-shim.min.js',
             'tests.webpack.js'
         ],
