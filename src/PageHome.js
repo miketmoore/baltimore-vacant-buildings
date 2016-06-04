@@ -47,7 +47,6 @@ module.exports = React.createClass({
     },
     getInitialState() {
         return {
-            isInitialized: false,
             papers: [],
             years: new Set(),
             months: new Set(),
@@ -87,10 +86,13 @@ module.exports = React.createClass({
     // Update state with actual data
     _init () {
         var model = this.props.model;
+        console.log('_init model ', model);
         var byYear = model.index.get('year');
 
         var allYears = model.index.get('sortedYears');
+        console.log('_init allYears ', allYears);
         var years = new Set([allYears[allYears.length-1]]);
+        console.log('_init years ', years);
         var months = new Set([Array.from(model.index.get('months'))[0]]);
 
         var filters = {};
@@ -108,21 +110,16 @@ module.exports = React.createClass({
         ];
 
         this.setState({
-            isInitialized: true,
             years: years,
             months: months,
             papers: papers
         });
     },
     componentWillMount () {
-        if (!this.state.isInitialized) {
-            this._init();
-        }
+        this._init();
     },
     componentWillReceiveProps (props) {
-        if (!this.state.isInitialized) {
-            this._init();
-        }
+        this._init();
     },
     _getBarGraphData (key) {
         var model = this.props.model;
