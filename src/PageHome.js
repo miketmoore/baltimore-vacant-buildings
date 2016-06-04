@@ -6,6 +6,7 @@ import ReactDataGrid from 'react-data-grid/addons';
 import 'react-widgets/lib/less/react-widgets.less';
 var DropdownList = require('react-widgets').DropdownList;
 var Multiselect = require('react-widgets').Multiselect;
+var MapView = require('./MapView');
 
 module.exports = React.createClass({
     getDefaultProps () {
