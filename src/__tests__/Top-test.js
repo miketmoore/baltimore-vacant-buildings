@@ -11,11 +11,8 @@ describe('Top ', function() {
     var XMLHttpRequest;
     var paper;
     var PaperScope;
-    var server;
     beforeEach(function () {
         model = new Model();
-
-        server = sinon.fakeServer.create();
 
         PaperScope = function () {};
         PaperScope.prototype.setup = function () {};
