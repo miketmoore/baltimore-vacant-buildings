@@ -4,13 +4,13 @@ var expect = require('chai').expect;
 
 var Top = require('../Top');
 var Model = require('../Model');
-var ServerConnect = require('../ServerConnect');
 
 describe('Top ', function() {
     var model;
     var XMLHttpRequest;
     var paper;
     var PaperScope;
+    var XMLHttpRequest;
     beforeEach(function () {
         model = new Model();
 
@@ -19,15 +19,10 @@ describe('Top ', function() {
         paper = {
             PaperScope : PaperScope
         };
-
+    
+        XMLHttpRequest = sinon.useFakeXMLHttpRequest();
     });
     it('should render', function () {
-        sinon.stub(ServerConnect, 'connect', function () {
-            this.props.model.setRaw(validData);
-            this.setState({
-                columns: this.props.model.columns
-            });
-        });
         var component = TestUtils.renderIntoDocument(
             <Top 
                 model={model} 

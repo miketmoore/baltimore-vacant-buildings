@@ -5,7 +5,6 @@ var Location = Router.Location;
 var Model = require('./Model');
 var PageHome = require('./PageHome');
 var PageAbout = require('./PageAbout');
-var ServerConnect = require('./ServerConnect');
 
 module.exports = React.createClass({
     getInitialState () {
@@ -17,23 +16,21 @@ module.exports = React.createClass({
     componentDidMount () {
         var that = this;
         var model = this.props.model;
-        ServerConnect.connect.call(this, {
-            model: this.props.model,
-            source: this.props.source,
-            XMLHttpRequest: this.props.XMLHttpRequest,
-            onload: function () {
-                if (this.status === 200) {
-                    var data = JSON.parse(this.responseText);
-                    model.setRaw(data);
-                    that.setState({
-                        columns: model.columns
-                    });
-                }
-                else {
-                    throw new Error('Server request for data failed. Status: ' + this.status);
-                }
+        var xhr = new this.props.XMLHttpRequest();
+        xhr.open('GET', encodeURI(this.props.source));
+        xhr.onload = function () {
+            if (this.status === 200) {
+                var data = JSON.parse(this.responseText);
+                model.setRaw(data);
+                that.setState({
+                    columns: model.columns
+                });
             }
-        });
+            else {
+                throw new Error('Server request for data failed. Status: ' + this.status);
+            }
+        };
+        xhr.send();
     },
     render () {
         return (
