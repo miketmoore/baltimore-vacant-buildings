@@ -11,6 +11,8 @@ describe('Top ', function() {
     var paper;
     var PaperScope;
     var XMLHttpRequest;
+    var server;
+    var requests = [];
     beforeEach(function () {
         model = new Model();
 
@@ -19,10 +21,24 @@ describe('Top ', function() {
         paper = {
             PaperScope : PaperScope
         };
-    
+   
+        server = sinon.fakeServer.create();
         XMLHttpRequest = sinon.useFakeXMLHttpRequest();
+        XMLHttpRequest.onCreate = function (xhr) {
+            requests.push(xhr);
+        };
     });
     it('should render', function () {
+        var src = '/public/data/baltimore-vacant-buildings.json';
+        var fakeBodyStr = JSON.stringify({
+            "meta": {
+                "view": {
+                    "columns": []
+                }
+            },
+            "data": []
+        });
+        server.respondWith('GET', src, [200, { "Content-Type": "application/json" }, fakeBodyStr]);
         var component = TestUtils.renderIntoDocument(
             <Top 
                 model={model} 
@@ -30,5 +46,13 @@ describe('Top ', function() {
                 paper={paper}
             />
         );
+        expect(requests.length).to.equal(1);
+        var req = requests[0];
+        console.error(Object.keys(req));
+        console.error(req.status);
+        // expect(server.requests.length).to.equal(1);
+        // expect(requests[0].onload).not.toHaveBeenCalled();
+        // server.respond();
+        // expect(requests[0].onload).toHaveBeenCalled();
     });
 });
