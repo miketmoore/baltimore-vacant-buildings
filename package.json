@@ -7,7 +7,7 @@
     "test": "karma start",
     "postinstall": "bower install && webpack -d",
     "build": "./node_modules/.bin/webpack -d",
-    "run": "DEBUG=baltimore-vacant-buildings-express:* npm start",
+    "run": "DEBUG=baltimore-vacant-buildings-express:* yarn start",
     "forever": "forever start --minUptime 1000 --spinSleepTime 1000 ./bin/www",
     "watch": "webpack -d --watch"
   },

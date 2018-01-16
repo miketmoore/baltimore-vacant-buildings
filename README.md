@@ -16,7 +16,7 @@ https://data.baltimorecity.gov/Housing-Development/Vacant-Buildings/qqcv-ihn5
 
 ## Dependencies
 
-- You will need `node.js` and the `npm` package manager
+- You will need `node.js` and the `yarn` (or `npm`) package manager
 
 ## Installation and Startup
 
@@ -26,18 +26,18 @@ https://data.baltimorecity.gov/Housing-Development/Vacant-Buildings/qqcv-ihn5
     git clone https://github.com/miketmoore/baltimore-vacant-buildings-app.git
     ```
 
-2. Install and build. This will install packages via `npm` and `bower` and it will also build the app.
+2. Install and build. This will install packages via `yarn` and `bower` and it will also build the app.
 
     Note: this will take a few minutes. It will also install PhantomJS, so that takes a bit of time
 
     ```
-    npm install
+    yarn install
     ```
     
 3. Start the web app
 
     ```
-    npm start
+    yarn start
     ```
     
 4. Open in browser at http://localhost:3000
@@ -47,15 +47,15 @@ https://data.baltimorecity.gov/Housing-Development/Vacant-Buildings/qqcv-ihn5
 Note: this uses PhantomJS
 
 ```
-npm test
+yarn test
 ```
 
 ## Developers
 
 ```
-npm run forever
+yarn run forever
 // This will run webpack with the --watch arg, so each change will trigger a rebuild
-npm run watch
+yarn run watch
 ```
 
 ## About
